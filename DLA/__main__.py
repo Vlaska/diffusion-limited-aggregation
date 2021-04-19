@@ -15,7 +15,7 @@ import pygame.surface as surface
 import pygame.time as time
 
 from loguru import logger
-from datetime import datetime
+from numpy import ma
 
 logger.add("logs/{time}.log", rotation="5MB",
            format="{time} | {level} | {message}")
@@ -48,14 +48,17 @@ def random_in_range(
 
 class Walker:
     color: RGB = WHITE
+    # stuck_value: bool = True
 
     def __init__(self, size: int) -> None:
-        self.pos = np.empty((size, 2), dtype=np.double)
-        self.stuck = np.zeros(size, dtype=np.bool8)
+        self.pos: ma.MaskedArray = ma.empty((size, 2), dtype=np.double)
+        # self.stuck = np.zeros(size, dtype=np.bool8)
         self.size = size
 
     def __iter__(self) -> Iterator[Vec]:
-        return iter(self.pos[~self.stuck])
+        t = self.pos.compressed()
+        return iter(t.reshape((t.shape[0] // 2, 2)))
+        # return iter(self.pos)
 
     def walk(self) -> None:
         raise NotImplementedError
@@ -82,6 +85,9 @@ class Walker:
     def __getitem__(self, i: Any) -> np.ndarray:
         return self.pos[i]
 
+    def __setitem__(self, i: Any, value: Any) -> None:
+        self.pos[i] = value
+
     @staticmethod
     def squared_distance(v: np.ndarray) -> np.ndarray:
         return np.sum(v * v, axis=1)  # type: ignore
@@ -89,20 +95,23 @@ class Walker:
 
 class StuckWalkers(Walker):
     color: RGB = GREEN
+    # stuck_value: bool = False
 
     def __init__(self, walkers: Walker, start_pos: Vec) -> None:
         super().__init__(walkers.size + 1)
-        self.pos = ((self.pos * 0) + 1) * start_pos
-        self.stuck[0] = True
+        self.pos[1:] = ma.masked
+        self.pos[0] = start_pos
+        # self.stuck[0] = True
         self.filled = 1
 
     def __iter__(self) -> Iterator[Vec]:
-        return iter(self.pos[self.stuck])
+        return iter(self.pos.compressed().reshape((self.filled, 2)))
 
     def does_collide(self, point: Vec) -> bool:
-        diffs: np.ndarray = np.abs(self.pos[self.stuck] - point)
+        diffs: np.ndarray = np.abs(self.pos - point)
         t = self.squared_distance(diffs) < (4 * RADIUS * RADIUS)
-        stuck_pos = diffs[t]
+        r = diffs[t].compressed()
+        stuck_pos = r.reshape((r.shape[0] // 2, 2))
         try:
             _ = stuck_pos[0]
         except IndexError:
@@ -114,7 +123,7 @@ class StuckWalkers(Walker):
 
     def add_stuck(self, new_point: Vec) -> None:
         logger.debug(f"Added point:  {new_point}")
-        self.stuck[self.filled] = True
+        # self.stuck[self.filled] = True
         self.pos[self.filled] = new_point
         self.filled += 1
 
@@ -134,19 +143,20 @@ class WalkerPopulation(Walker):
         other.add_stuck(point)
 
     def is_stuck(self, other: StuckWalkers) -> None:
-        removed_points: List[int] = []
-        removed: List[Vec] = []
-        for i, v in enumerate(self):
-            if other.does_collide(v):
+        # removed_points: List[int] = []
+        # removed: List[Vec] = []
+        for i, v in enumerate(self.pos):
+            if not v.mask.any() and other.does_collide(v):
                 self.pass_to_stuck(v, other)
-                removed.append(v)
-                removed_points.append(i)
+                self[i] = ma.masked
+                # removed.append(v)
+                # removed_points.append(i)
 
-        if removed:
-            logger.debug(f"Points to remove: {list(removed)}")
-            logger.debug(f"Removed points:   {self[~self.stuck][removed_points]}")
+        # if removed:
+            # logger.debug(f"Points to remove: {list(removed)}")
+            # logger.debug(f"Removed points:   {self[~self.stuck][removed_points]}")
         # self.stuck[removed_points] = True
-        self.stuck[~self.stuck][removed_points] = True
+        # self.stuck[~self.stuck][removed_points] = True
 
 
 walker_population: WalkerPopulation = WalkerPopulation(0)
