@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sys
 from functools import partial
-from typing import Final, Iterator, List, Tuple, TypeVar, Union, cast
+from typing import Any, Final, Iterator, List, NoReturn, Tuple, Type, TypeVar, Union, cast
 
 import numpy as np
 import numpy.typing as npt
@@ -14,18 +14,28 @@ import pygame.key
 import pygame.surface as surface
 import pygame.time as time
 
+from loguru import logger
+from datetime import datetime
+
+logger.add("logs/{time}.log", rotation="5MB",
+           format="{time} | {level} | {message}")
+
 # from .walker import Walker
 
 Vec = npt.ArrayLike
 RGB = Tuple[int, int, int]
 
+RADIUS: Final[float] = 5.0
 BLACK: Final[RGB] = (0, 0, 0)
 WHITE: Final[RGB] = (255, 255, 255)
+PINK: Final[RGB] = (255, 0, 255)
+RED: Final[RGB] = (255, 0, 0)
 GREEN: Final[RGB] = (0, 255, 0)
 FPS: Final[int] = 30
-WINDOW_SIZE: Final[Tuple[int, int]] = (1000, 1000)
+WINDOW_SIZE: Final[Tuple[int, int]] = (200, 200)
 SCREEN_CENTER: Final[Tuple[float, float]] = cast(
     Tuple[float, float], tuple(i / 2 for i in WINDOW_SIZE))
+NUM_OF_POINTS: Final[int] = 50
 
 
 def random_in_range(
@@ -47,12 +57,66 @@ class Walker:
     def __iter__(self) -> Iterator[Vec]:
         return iter(self.pos[~self.stuck])
 
-    def walk(self):
+    def walk(self) -> None:
         raise NotImplementedError
 
     def draw(self, surface: surface.Surface) -> None:
         for i in self:
-            draw.circle(surface, self.color, cast(Tuple[float, float], i), 1)
+            self.draw_circle(surface, i, self.color)
+
+    def draw_point(self, surface: surface.Surface, index: int, color: RGB = RED) -> None:
+        self.draw_circle(surface, self[index], color)
+
+    @staticmethod
+    def draw_circle(surface: surface.Surface, center: Vec, color: RGB) -> None:
+        draw.circle(
+            surface,
+            color,
+            cast(Tuple[float, float], center),
+            RADIUS
+        )
+
+    def is_stuck(self, other: Any) -> None:
+        raise NotImplementedError
+
+    def __getitem__(self, i: Any) -> np.ndarray:
+        return self.pos[i]
+
+    @staticmethod
+    def squared_distance(v: np.ndarray) -> np.ndarray:
+        return np.sum(v * v, axis=1)  # type: ignore
+
+
+class StuckWalkers(Walker):
+    color: RGB = GREEN
+
+    def __init__(self, walkers: Walker, start_pos: Vec) -> None:
+        super().__init__(walkers.size + 1)
+        self.pos = ((self.pos * 0) + 1) * start_pos
+        self.stuck[0] = True
+        self.filled = 1
+
+    def __iter__(self) -> Iterator[Vec]:
+        return iter(self.pos[self.stuck])
+
+    def does_collide(self, point: Vec) -> bool:
+        diffs: np.ndarray = np.abs(self.pos[self.stuck] - point)
+        t = self.squared_distance(diffs) < (4 * RADIUS * RADIUS)
+        stuck_pos = diffs[t]
+        try:
+            _ = stuck_pos[0]
+        except IndexError:
+            return False
+        else:
+            # print(point, _, self.squared_distance(_.reshape(1, 2)))
+            logger.debug(f"Point to add: {point}")
+            return True
+
+    def add_stuck(self, new_point: Vec) -> None:
+        logger.debug(f"Added point:  {new_point}")
+        self.stuck[self.filled] = True
+        self.pos[self.filled] = new_point
+        self.filled += 1
 
 
 class WalkerPopulation(Walker):
@@ -61,26 +125,28 @@ class WalkerPopulation(Walker):
         self.pos[:, 0] = random_in_range(0, WINDOW_SIZE[0], (size, ))
         self.pos[:, 1] = random_in_range(0, WINDOW_SIZE[1], (size, ))
 
-    def walk(self):
+    def walk(self) -> None:
         self.pos = self.pos + random_in_range(-5, 5, (self.size, 2))
         self.pos[:, 0] = np.clip(self.pos[:, 0], 0, WINDOW_SIZE[0])
         self.pos[:, 1] = np.clip(self.pos[:, 1], 0, WINDOW_SIZE[1])
 
+    def pass_to_stuck(self, point: Vec, other: StuckWalkers) -> None:
+        other.add_stuck(point)
 
-T = TypeVar('T', bound=WalkerPopulation, contravariant=True)
+    def is_stuck(self, other: StuckWalkers) -> None:
+        removed_points: List[int] = []
+        removed: List[Vec] = []
+        for i, v in enumerate(self):
+            if other.does_collide(v):
+                self.pass_to_stuck(v, other)
+                removed.append(v)
+                removed_points.append(i)
 
-
-class StuckWalkers(WalkerPopulation):
-    color: RGB = GREEN
-
-    def __init__(self, walkers: T, start_pos: Vec) -> None:
-        super().__init__(walkers.size + 1)
-        self.pos[0] = start_pos
-        self.stuck[0] = True
-        self.filled = 1
-
-    def __iter__(self) -> Iterator[Vec]:
-        return iter(self.pos[self.stuck])
+        if removed:
+            logger.debug(f"Points to remove: {list(removed)}")
+            logger.debug(f"Removed points:   {self[~self.stuck][removed_points]}")
+        # self.stuck[removed_points] = True
+        self.stuck[~self.stuck][removed_points] = True
 
 
 walker_population: WalkerPopulation = WalkerPopulation(0)
@@ -99,7 +165,7 @@ def init() -> Tuple[surface.Surface, time.Clock]:
     return (screen, clock)
 
 
-def render(surface: surface.Surface):
+def render(surface: surface.Surface) -> None:
     global walker_population
     surface.fill(BLACK)
 
@@ -108,13 +174,14 @@ def render(surface: surface.Surface):
     # for _ in range(15):
     #     walker_population.walk()
     walker_population.walk()
+    walker_population.is_stuck(stuck_points)
 
     walker_population.draw(surface)
 
     display.flip()
 
 
-def main():
+def main() -> NoReturn:
     global walker_population
     global stuck_points
     walker_population = WalkerPopulation(0)
@@ -131,7 +198,7 @@ def main():
         if keys[pygame.K_ESCAPE]:
             sys.exit(0)
         elif keys[pygame.K_SPACE]:
-            walker_population = WalkerPopulation(1000)
+            walker_population = WalkerPopulation(NUM_OF_POINTS)
             stuck_points = StuckWalkers(walker_population, SCREEN_CENTER)
 
         render(surface)
