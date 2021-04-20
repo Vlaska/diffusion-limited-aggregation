@@ -1,4 +1,5 @@
 from __future__ import annotations
+from numba import jit
 
 import sys
 from functools import partial
@@ -32,10 +33,10 @@ PINK: Final[RGB] = (255, 0, 255)
 RED: Final[RGB] = (255, 0, 0)
 GREEN: Final[RGB] = (0, 255, 0)
 FPS: Final[int] = 30
-WINDOW_SIZE: Final[Tuple[int, int]] = (200, 200)
+WINDOW_SIZE: Final[Tuple[int, int]] = (600, 600)
 SCREEN_CENTER: Final[Tuple[float, float]] = cast(
     Tuple[float, float], tuple(i / 2 for i in WINDOW_SIZE))
-NUM_OF_POINTS: Final[int] = 50
+NUM_OF_POINTS: Final[int] = 1000
 
 
 def random_in_range(
@@ -46,19 +47,39 @@ def random_in_range(
     return (b - a) * np.random.random_sample(shape) + a
 
 
+# @jit(nopython=True)
+def squared_distance(v: np.ndarray) -> np.ndarray:
+    return np.sum(v * v, axis=1)  # type: ignore
+
+
+def does_collide(pos: ma.MaskedArray, point: Vec) -> bool:
+    diffs: np.ndarray = np.abs(pos - point)
+    t = squared_distance(diffs) < (4 * RADIUS * RADIUS)
+    r = diffs[t].compressed()
+    stuck_pos = r.reshape((r.shape[0] // 2, 2))
+    if len(stuck_pos):
+        return True
+    return False
+
+
+def is_stuck(points, pos):
+    out = []
+    for i, v in enumerate(pos):
+        if not v.mask.any() and does_collide(points, v):
+            out.append(v)
+    return out
+
+
 class Walker:
     color: RGB = WHITE
-    # stuck_value: bool = True
 
     def __init__(self, size: int) -> None:
         self.pos: ma.MaskedArray = ma.empty((size, 2), dtype=np.double)
-        # self.stuck = np.zeros(size, dtype=np.bool8)
         self.size = size
 
     def __iter__(self) -> Iterator[Vec]:
         t = self.pos.compressed()
         return iter(t.reshape((t.shape[0] // 2, 2)))
-        # return iter(self.pos)
 
     def walk(self) -> None:
         raise NotImplementedError
@@ -95,13 +116,11 @@ class Walker:
 
 class StuckWalkers(Walker):
     color: RGB = GREEN
-    # stuck_value: bool = False
 
     def __init__(self, walkers: Walker, start_pos: Vec) -> None:
         super().__init__(walkers.size + 1)
         self.pos[1:] = ma.masked
         self.pos[0] = start_pos
-        # self.stuck[0] = True
         self.filled = 1
 
     def __iter__(self) -> Iterator[Vec]:
@@ -117,13 +136,11 @@ class StuckWalkers(Walker):
         except IndexError:
             return False
         else:
-            # print(point, _, self.squared_distance(_.reshape(1, 2)))
             logger.debug(f"Point to add: {point}")
             return True
 
     def add_stuck(self, new_point: Vec) -> None:
         logger.debug(f"Added point:  {new_point}")
-        # self.stuck[self.filled] = True
         self.pos[self.filled] = new_point
         self.filled += 1
 
@@ -143,20 +160,10 @@ class WalkerPopulation(Walker):
         other.add_stuck(point)
 
     def is_stuck(self, other: StuckWalkers) -> None:
-        # removed_points: List[int] = []
-        # removed: List[Vec] = []
         for i, v in enumerate(self.pos):
             if not v.mask.any() and other.does_collide(v):
                 self.pass_to_stuck(v, other)
                 self[i] = ma.masked
-                # removed.append(v)
-                # removed_points.append(i)
-
-        # if removed:
-            # logger.debug(f"Points to remove: {list(removed)}")
-            # logger.debug(f"Removed points:   {self[~self.stuck][removed_points]}")
-        # self.stuck[removed_points] = True
-        # self.stuck[~self.stuck][removed_points] = True
 
 
 walker_population: WalkerPopulation = WalkerPopulation(0)
