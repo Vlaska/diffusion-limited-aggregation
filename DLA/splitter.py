@@ -38,9 +38,6 @@ SCREEN_CENTER: Final[Tuple[float, float]] = cast(
     Tuple[float, float], tuple(i / 2 for i in WINDOW_SIZE)
 )
 MIN_BOX_SIZE: Final[float] = 64
-MAX_DEPTH: Final[int] = int(
-    np.log2(1 / MIN_BOX_SIZE * WINDOW_WIDTH_AND_HEIGHT)
-)
 
 
 class Plane:
@@ -48,13 +45,11 @@ class Plane:
         self,
         start: Tuple[float, float],
         size: Tuple[float, float],
-        depth: int = 0
     ) -> None:
         self.left, self.top = start
         self.width, self.height = size
         self.rect = pygame.Rect(self.left, self.top, self.width, self.height)
         self.children: List[Plane] = []
-        self.depth = depth
 
     @classmethod
     def new(cls) -> Plane:
@@ -68,8 +63,7 @@ class Plane:
     def split(self) -> None:
         if self.children:
             # logger.debug("Split children")
-            logger.debug((self.width / 2, self.height / 2))
-            if self.depth < MAX_DEPTH:
+            if self.width > MIN_BOX_SIZE:
                 for i in self.children:
                     i.split()
         else:
@@ -83,8 +77,7 @@ class Plane:
                 (self.left + new_width, self.top),
                 (self.left + new_width, self.top + new_height),
             ]
-            self.children.extend(Plane(i, new_size, self.depth + 1)
-                                 for i in lefts_and_tops)
+            self.children.extend(Plane(i, new_size) for i in lefts_and_tops)
 
 
 p = Plane.new()
