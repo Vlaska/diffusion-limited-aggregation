@@ -23,6 +23,7 @@ logger.add("logs/splitter - {time}.log", rotation="5MB",
 Vec = npt.ArrayLike
 RGB = Tuple[int, int, int]
 
+WINDOW_WIDTH_AND_HEIGHT: Final[int] = 1024
 RADIUS: Final[float] = 5.0
 BLACK: Final[RGB] = (0, 0, 0)
 WHITE: Final[RGB] = (255, 255, 255)
@@ -30,21 +31,30 @@ PINK: Final[RGB] = (255, 0, 255)
 RED: Final[RGB] = (255, 0, 0)
 GREEN: Final[RGB] = (0, 255, 0)
 FPS: Final[int] = 15
-WINDOW_SIZE: Final[Tuple[int, int]] = (600, 600)
+WINDOW_SIZE: Final[Tuple[int, int]] = (
+    WINDOW_WIDTH_AND_HEIGHT, WINDOW_WIDTH_AND_HEIGHT
+)
 SCREEN_CENTER: Final[Tuple[float, float]] = cast(
-    Tuple[float, float], tuple(i / 2 for i in WINDOW_SIZE))
+    Tuple[float, float], tuple(i / 2 for i in WINDOW_SIZE)
+)
+MIN_BOX_SIZE: Final[float] = 64
+MAX_DEPTH: Final[int] = int(
+    np.log2(1 / MIN_BOX_SIZE * WINDOW_WIDTH_AND_HEIGHT)
+)
 
 
 class Plane:
     def __init__(
         self,
         start: Tuple[float, float],
-        size: Tuple[float, float]
+        size: Tuple[float, float],
+        depth: int = 0
     ) -> None:
         self.left, self.top = start
         self.width, self.height = size
         self.rect = pygame.Rect(self.left, self.top, self.width, self.height)
         self.children: List[Plane] = []
+        self.depth = depth
 
     @classmethod
     def new(cls) -> Plane:
@@ -58,8 +68,10 @@ class Plane:
     def split(self) -> None:
         if self.children:
             # logger.debug("Split children")
-            for i in self.children:
-                i.split()
+            logger.debug((self.width / 2, self.height / 2))
+            if self.depth < MAX_DEPTH:
+                for i in self.children:
+                    i.split()
         else:
             # logger.debug("Split self")
             new_width = self.width / 2
@@ -71,7 +83,8 @@ class Plane:
                 (self.left + new_width, self.top),
                 (self.left + new_width, self.top + new_height),
             ]
-            self.children.extend(Plane(i, new_size) for i in lefts_and_tops)
+            self.children.extend(Plane(i, new_size, self.depth + 1)
+                                 for i in lefts_and_tops)
 
 
 p = Plane.new()
