@@ -13,6 +13,7 @@ import pygame.event as events
 import pygame.key
 import pygame.surface as surface
 import pygame.time as time
+import pygame.mouse as mouse
 
 from loguru import logger
 
@@ -30,7 +31,7 @@ WHITE: Final[RGB] = (255, 255, 255)
 PINK: Final[RGB] = (255, 0, 255)
 RED: Final[RGB] = (255, 0, 0)
 GREEN: Final[RGB] = (0, 255, 0)
-FPS: Final[int] = 15
+FPS: Final[int] = 60
 WINDOW_SIZE: Final[Tuple[int, int]] = (
     WINDOW_WIDTH_AND_HEIGHT, WINDOW_WIDTH_AND_HEIGHT
 )
@@ -105,6 +106,8 @@ def render(surface: surface.Surface) -> None:
 
 def main() -> NoReturn:
     surface, clock = init()
+    mouse_click_pos = None
+    split_event = False
 
     while True:
         clock.tick(FPS)
@@ -112,14 +115,30 @@ def main() -> NoReturn:
         for event in events.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                split_event = True
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                mouse_click_pos = event.pos
+            elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+                mouse_click_pos = None
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
             sys.exit(0)
-        elif keys[pygame.K_SPACE]:
+
+        if split_event:
             p.split()
+            split_event = False
+        # if mouse.get_pressed(pygame.)
 
         render(surface)
+
+        if mouse_click_pos:
+            # print(mouse_click_pos)
+            display.flip()
+            mouse_click_pos = mouse.get_pos() or mouse_click_pos
+            draw.circle(surface, GREEN, mouse_click_pos, 1)
+            display.flip()
 
 
 if __name__ == '__main__':
