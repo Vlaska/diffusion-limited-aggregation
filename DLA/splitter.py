@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from functools import cached_property
 import sys
-from typing import Any, Final, Iterator, List, NoReturn, Tuple, Union, cast
+from typing import Final, Iterator, List, NoReturn, Optional, Tuple, cast
 
 import numpy as np
 import numpy.typing as npt
@@ -22,6 +21,7 @@ logger.add("logs/splitter - {time}.log", rotation="5MB",
 
 
 Vec = npt.ArrayLike
+Vec2 = Tuple[float, float]
 RGB = Tuple[int, int, int]
 
 WINDOW_WIDTH_AND_HEIGHT: Final[int] = 1024
@@ -35,22 +35,100 @@ FPS: Final[int] = 60
 WINDOW_SIZE: Final[Tuple[int, int]] = (
     WINDOW_WIDTH_AND_HEIGHT, WINDOW_WIDTH_AND_HEIGHT
 )
-SCREEN_CENTER: Final[Tuple[float, float]] = cast(
-    Tuple[float, float], tuple(i / 2 for i in WINDOW_SIZE)
+SCREEN_CENTER: Final[Vec2] = cast(
+    Vec2, tuple(i / 2 for i in WINDOW_SIZE)
 )
 MIN_BOX_SIZE: Final[float] = 64
 
 
-class Plane:
-    def __init__(
+class ChunkMap:
+    """[summary]
+
+    Chunk assignment
+    ┌───────┬───────┐
+    │       │       │
+    │   0   │   1   │
+    │       │       │
+    ├───────┼───────┤
+    │       │       │
+    │   2   │   3   │
+    │       │       │
+    └───────┴───────┘
+    """
+
+    map = ((0, 1), (2, 3))
+    map_T = ((0, 2), (1, 3))
+
+    def __init__(self, start_pos: Vec2 | np.ndarray, size: float):
+        x, y = start_pos
+        self.size = size
+        self.start_pos = np.array(start_pos)
+        self.chunks: List[Optional[Plane]] = [None] * 4
+
+    # def __getitem__(self, value: Vec2 | np.ndarray) -> Optional[Plane]:
+    #     pass
+
+    def get_chunks_for_point(
         self,
-        start: Tuple[float, float],
-        size: Tuple[float, float],
-    ) -> None:
+        point: Vec2 | np.ndarray
+    ) -> Tuple[int, ...]:
+        x, y = point - self.start_pos - self.size
+        x, y = int(x), int(y)
+
+        if x == 0:
+            if y == 0:
+                return (0, 1, 2, 3)
+            return self.map[y > 0]
+        elif y == 0:
+            return self.map_T[x > 0]
+
+        return (
+            self.map[y > 0][x > 0],
+        )
+
+    class _ChunkView:
+        def __init__(self, chunks: List[Optional[Plane]], selected: Tuple[int, ...]):
+            self.chunks = chunks
+            self.selected = selected
+
+        def __getitem__(self, idx: int) -> Optional[Plane]:
+            return self.chunks[self.selected[idx]]
+
+        def __setitem__(self, idx: int, val: Optional[Plane]):
+            self.chunks[self.selected[idx]] = val
+
+        def __iter__(self) -> Iterator:
+            class _ChunkViewIterator(Iterator):
+                chunks = self.chunks
+                selected = self.selected
+
+                def __init__(self) -> None:
+                    self.idx: int = 0
+
+                def __next__(self) -> Optional[Plane]:
+                    if self.idx >= len(self.selected):
+                        raise StopIteration
+
+                    out = self.chunks[self.selected[self.idx]]
+                    self.idx += 1
+
+                    return out
+
+            return _ChunkViewIterator()
+
+    def get_chunks(self, point: Vec2 | np.ndarray) -> ChunkMap._ChunkView:
+        return self._ChunkView(self.chunks, self.get_chunks_for_point(point))
+
+    def __len__(self) -> int:
+        return 4 - self.chunks.count(None)
+
+
+class Plane:
+    def __init__(self, start: Vec2, size: Vec2) -> None:
         self.left, self.top = start
         self.width, self.height = size
         self.rect = pygame.Rect(self.left, self.top, self.width, self.height)
-        self.children: List[Plane] = []
+        self.chunks: List[Plane] = []
 
     @classmethod
     def new(cls) -> Plane:
@@ -58,14 +136,14 @@ class Plane:
 
     def draw(self, surface: surface.Surface) -> None:
         draw.rect(surface, WHITE, self.rect, 1)
-        for i in self.children:
+        for i in self.chunks:
             i.draw(surface)
 
     def split(self) -> None:
-        if self.children:
+        if self.chunks:
             # logger.debug("Split children")
             if self.width > MIN_BOX_SIZE:
-                for i in self.children:
+                for i in self.chunks:
                     i.split()
         else:
             # logger.debug("Split self")
@@ -78,10 +156,11 @@ class Plane:
                 (self.left + new_width, self.top),
                 (self.left + new_width, self.top + new_height),
             ]
-            self.children.extend(Plane(i, new_size) for i in lefts_and_tops)
+            self.chunks.extend(Plane(i, new_size) for i in lefts_and_tops)
 
 
 p = Plane.new()
+points = np.empty((1000, 2), dtype=np.double)
 
 
 def init() -> Tuple[surface.Surface, time.Clock]:
