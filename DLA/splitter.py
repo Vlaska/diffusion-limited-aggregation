@@ -103,7 +103,11 @@ class ChunkMap:
         )
 
     class _ChunkView:
-        def __init__(self, chunks: List[Optional[Plane]], selected: Tuple[int, ...]):
+        def __init__(
+            self,
+            chunks: List[Optional[Plane]],
+            selected: Tuple[int, ...]
+        ):
             self.chunks = chunks
             self.selected = selected
 
@@ -136,7 +140,10 @@ class ChunkMap:
             return _ChunkViewIterator()
 
     def get_chunks(self, point: Vec2 | np.ndarray) -> ChunkMap._ChunkView:
-        return self._ChunkView(self.chunks, self.get_subchunks_for_point(point))
+        return self._ChunkView(
+            self.chunks,
+            self.get_subchunks_for_point(point)
+        )
 
     def __len__(self) -> int:
         return 4 - self.chunks.count(None)
@@ -183,7 +190,10 @@ class Plane:
         for i, c in enumerate(sub_chunks):
             if not c:
                 logger.debug(
-                    f"Created chunk at: {self.chunks.get_sub_coords(sub_chunks.chunk_index(i))} of size: {self.size / 2}")
+                    "Created chunk at: "
+                    f"{self.chunks.get_sub_coords(sub_chunks.chunk_index(i))} "
+                    f"of size: {self.size / 2}"
+                )
                 sub_chunks[i] = c = Plane(
                     self.chunks.get_sub_coords(sub_chunks.chunk_index(i)),
                     self.size / 2
@@ -208,8 +218,14 @@ def init() -> Tuple[surface.Surface, time.Clock]:
     return (screen, clock)
 
 
-def render(surface: surface.Surface) -> None:
+def render(surface: surface.Surface, font: pygame.font.Font) -> None:
     p.draw(surface)
+
+    mouse_pos = mouse.get_pos()
+    text_surface = font.render(str(mouse_pos), True, WHITE)
+    text_rect = text_surface.get_rect()
+    text_rect.topleft = (mouse_pos[0] + 15, mouse_pos[1] + 15)
+    surface.blit(text_surface, text_rect)
 
 
 def main() -> NoReturn:
@@ -247,18 +263,12 @@ def main() -> NoReturn:
 
         surface.fill(BLACK)
 
-        render(surface)
-        mouse_pos = mouse.get_pos()
-        text_surface = font.render(str(mouse_pos), True, WHITE)
-        text_rect = text_surface.get_rect()
-        text_rect.topleft = (mouse_pos[0] + 15, mouse_pos[1] + 15)
+        render(surface, font)
 
         if mouse_click_pos:
             # print(mouse_click_pos)
             mouse_click_pos = mouse.get_pos() or mouse_click_pos
             draw.circle(surface, GREEN, mouse_click_pos, 1)
-
-        surface.blit(text_surface, text_rect)
 
         display.flip()
 
