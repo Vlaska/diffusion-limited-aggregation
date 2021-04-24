@@ -65,17 +65,30 @@ class ChunkMap:
         self.start_pos = np.array(start_pos)
         self.chunks: List[Optional[Plane]] = [None] * 4
 
+    def __getitem__(self, idx: int) -> Optional[Plane]:
+        return self.chunks[idx]
+
+    def __setitem__(self, idx: int, val: Optional[Plane]) -> None:
+        self.chunks[idx] = self.chunks[idx] or val
+
     def coords(self, idx: int) -> Tuple[float, float]:
+        halfed_size = self.size / 2
         return (
-            self.start_pos[0] + self.size * (idx & 0b1),
-            self.start_pos[1] + self.size * ((idx & 0b10) >> 1),
+            self.start_pos[0] + halfed_size * (idx & 0b1),
+            self.start_pos[1] + halfed_size * ((idx & 0b10) >> 1),
         )
+
+    def __iter__(self):
+        return iter(self.chunks)
+
+    def get_all_coords(self):
+        return [self.coords(i) for i in range(4)]
 
     def get_chunks_for_point(
         self,
         point: Vec2 | np.ndarray
     ) -> Tuple[int, ...]:
-        x, y = point - self.start_pos - self.size
+        x, y = point - self.start_pos - (self.size / 2)
         x, y = int(x), int(y)
 
         if x == 0:
@@ -93,6 +106,9 @@ class ChunkMap:
         def __init__(self, chunks: List[Optional[Plane]], selected: Tuple[int, ...]):
             self.chunks = chunks
             self.selected = selected
+
+        def chunk_index(self, idx: int) -> int:
+            return self.selected[idx]
 
         def __getitem__(self, idx: int) -> Optional[Plane]:
             return self.chunks[self.selected[idx]]
@@ -125,41 +141,55 @@ class ChunkMap:
     def __len__(self) -> int:
         return 4 - self.chunks.count(None)
 
+    # def __bool__(self) -> bool:
+    #     return len(self) > 0
+
 
 class Plane:
-    def __init__(self, start: Vec2, size: Vec2) -> None:
-        self.left, self.top = start
-        self.width, self.height = size
-        self.rect = pygame.Rect(self.left, self.top, self.width, self.height)
-        self.chunks: List[Plane] = []
+    def __init__(self, start: Vec2, size: float) -> None:
+        self.start_pos = start
+        self.size = size
+        self.rect = pygame.Rect(*self.start_pos, self.size, self.size)
+        # self.chunks: List[Plane] = []
+        self.chunks = ChunkMap(start, size)
 
     @classmethod
     def new(cls) -> Plane:
-        return cls((0, 0), WINDOW_SIZE)
+        return cls((0, 0), WINDOW_WIDTH_AND_HEIGHT)
 
     def draw(self, surface: surface.Surface) -> None:
         draw.rect(surface, WHITE, self.rect, 1)
         for i in self.chunks:
-            i.draw(surface)
+            if i:
+                i.draw(surface)
 
     def split(self) -> None:
         if self.chunks:
             # logger.debug("Split children")
-            if self.width > MIN_BOX_SIZE:
+            if self.size > MIN_BOX_SIZE:
                 for i in self.chunks:
                     i.split()
         else:
             # logger.debug("Split self")
-            new_width = self.width / 2
-            new_height = self.height / 2
-            new_size = (new_width, new_height)
-            lefts_and_tops = [
-                (self.left, self.top),
-                (self.left, self.top + new_height),
-                (self.left + new_width, self.top),
-                (self.left + new_width, self.top + new_height),
-            ]
-            self.chunks.extend(Plane(i, new_size) for i in lefts_and_tops)
+            halfed_size = self.size / 2
+            for i, co in enumerate(self.chunks.get_all_coords()):
+                self.chunks[i] = Plane(co, halfed_size)
+
+    def split_at_point(self, point: Vec2 | np.ndarray) -> None:
+        if self.size <= MIN_BOX_SIZE:
+            return
+        sub_chunks = self.chunks.get_chunks(point)
+        logger.debug(f"Selected chunks: {tuple(sub_chunks.selected)}")
+        for i, c in enumerate(sub_chunks):
+            if not c:
+                logger.debug(
+                    f"Created chunk at: {self.chunks.coords(sub_chunks.chunk_index(i))} of size: {self.size / 2}")
+                sub_chunks[i] = c = Plane(
+                    self.chunks.coords(sub_chunks.chunk_index(i)),
+                    self.size / 2
+                )
+            c.split_at_point(point)
+            # add point ?
 
 
 p = Plane.new()
@@ -179,17 +209,14 @@ def init() -> Tuple[surface.Surface, time.Clock]:
 
 
 def render(surface: surface.Surface) -> None:
-    surface.fill(BLACK)
-
     p.draw(surface)
-
-    display.flip()
 
 
 def main() -> NoReturn:
     surface, clock = init()
     mouse_click_pos = None
     split_event = False
+    font = pygame.font.SysFont('arial', 16)
 
     while True:
         clock.tick(FPS)
@@ -197,10 +224,15 @@ def main() -> NoReturn:
         for event in events.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                split_event = True
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    split_event = True
+                elif event.key == pygame.K_r:
+                    p.chunks = ChunkMap((0, 0), WINDOW_WIDTH_AND_HEIGHT)
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 mouse_click_pos = event.pos
+                logger.debug(f"Clicked at: {mouse_click_pos}")
+                p.split_at_point(mouse_click_pos)
             elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                 mouse_click_pos = None
 
@@ -213,14 +245,22 @@ def main() -> NoReturn:
             split_event = False
         # if mouse.get_pressed(pygame.)
 
+        surface.fill(BLACK)
+
         render(surface)
+        mouse_pos = mouse.get_pos()
+        text_surface = font.render(str(mouse_pos), True, WHITE)
+        text_rect = text_surface.get_rect()
+        text_rect.topleft = (mouse_pos[0] + 15, mouse_pos[1] + 15)
 
         if mouse_click_pos:
             # print(mouse_click_pos)
-            display.flip()
             mouse_click_pos = mouse.get_pos() or mouse_click_pos
             draw.circle(surface, GREEN, mouse_click_pos, 1)
-            display.flip()
+
+        surface.blit(text_surface, text_rect)
+
+        display.flip()
 
 
 if __name__ == '__main__':
