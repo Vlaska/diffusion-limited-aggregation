@@ -6,14 +6,14 @@ from DLA.splitter import ChunkMap, Plane
 POINTS_TO_TEST = [
     [(0, 0), (0, )],
     [(1, 1), (0, )],
-    [(33, 0), (1, )],
-    [(0, 33), (2, )],
-    [(33, 33), (3, )],
-    [(32, 32), (0, 1, 2, 3)],
-    [(32, 0), (0, 1)],
-    [(32, 33), (2, 3)],
-    [(0, 32), (0, 2)],
-    [(33, 32), (1, 3)],
+    [(17, 0), (1, )],
+    [(0, 17), (2, )],
+    [(17, 17), (3, )],
+    [(16, 16), (0, 1, 2, 3)],
+    [(16, 0), (0, 1)],
+    [(16, 17), (2, 3)],
+    [(0, 16), (0, 2)],
+    [(17, 16), (1, 3)],
 ]
 offset = np.array((15, 15))
 
@@ -42,23 +42,23 @@ def test_ChunkMap_view():
 
 
 def test_ChunkMap_iteration():
-    chunk_map = ChunkMap(offset, 32)
+    chunk_map = ChunkMap((0, 0), 32)
     for i in range(4):
         chunk_map.chunks[i] = i + 10
 
-    assert list(chunk_map.get_chunks((16, 16))) == [10]
-    assert list(chunk_map.get_chunks((48, 48))) == [13]
-    assert list(chunk_map.get_chunks((47, 16))) == [10, 11]
-    assert list(chunk_map.get_chunks((16, 47))) == [10, 12]
-    assert list(chunk_map.get_chunks((47, 47))) == [10, 11, 12, 13]
+    assert list(chunk_map.get_chunks((0, 0))) == [10]
+    assert list(chunk_map.get_chunks((17, 17))) == [13]
+    assert list(chunk_map.get_chunks((16, 15))) == [10, 11]
+    assert list(chunk_map.get_chunks((15, 16))) == [10, 12]
+    assert list(chunk_map.get_chunks((16, 16))) == [10, 11, 12, 13]
 
 
 def test_ChunkMap_coords():
     chunk_map = ChunkMap(offset, 32)
-    assert chunk_map.coords(0) == tuple(offset)
-    assert chunk_map.coords(1) == (offset[0] + 16, offset[1])
-    assert chunk_map.coords(2) == (offset[0], offset[1] + 16)
-    assert chunk_map.coords(3) == (offset[0] + 16, offset[1] + 16)
+    assert chunk_map.get_sub_coords(0) == tuple(offset)
+    assert chunk_map.get_sub_coords(1) == (offset[0] + 16, offset[1])
+    assert chunk_map.get_sub_coords(2) == (offset[0], offset[1] + 16)
+    assert chunk_map.get_sub_coords(3) == (offset[0] + 16, offset[1] + 16)
 
 
 def test_spliting_at_point():
@@ -68,5 +68,5 @@ def test_spliting_at_point():
     assert p.chunks[0]
     assert p.chunks[0].chunks[0]
     assert p.chunks[0].chunks[0].chunks[3]
-    assert p.chunks[0].chunks[0].chunks[3].chunk[2]
-    assert len(p.chunks[0].chunks[0].chunks[3].chunk[2].chunk) == 0
+    assert p.chunks[0].chunks[0].chunks[3].chunks[1]
+    assert len(p.chunks[0].chunks[0].chunks[3].chunks[1].chunks) == 0

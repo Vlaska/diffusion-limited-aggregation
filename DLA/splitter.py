@@ -71,7 +71,7 @@ class ChunkMap:
     def __setitem__(self, idx: int, val: Optional[Plane]) -> None:
         self.chunks[idx] = self.chunks[idx] or val
 
-    def coords(self, idx: int) -> Tuple[float, float]:
+    def get_sub_coords(self, idx: int) -> Tuple[float, float]:
         halfed_size = self.size / 2
         return (
             self.start_pos[0] + halfed_size * (idx & 0b1),
@@ -82,9 +82,9 @@ class ChunkMap:
         return iter(self.chunks)
 
     def get_all_coords(self):
-        return [self.coords(i) for i in range(4)]
+        return [self.get_sub_coords(i) for i in range(4)]
 
-    def get_chunks_for_point(
+    def get_subchunks_for_point(
         self,
         point: Vec2 | np.ndarray
     ) -> Tuple[int, ...]:
@@ -136,7 +136,7 @@ class ChunkMap:
             return _ChunkViewIterator()
 
     def get_chunks(self, point: Vec2 | np.ndarray) -> ChunkMap._ChunkView:
-        return self._ChunkView(self.chunks, self.get_chunks_for_point(point))
+        return self._ChunkView(self.chunks, self.get_subchunks_for_point(point))
 
     def __len__(self) -> int:
         return 4 - self.chunks.count(None)
@@ -183,9 +183,9 @@ class Plane:
         for i, c in enumerate(sub_chunks):
             if not c:
                 logger.debug(
-                    f"Created chunk at: {self.chunks.coords(sub_chunks.chunk_index(i))} of size: {self.size / 2}")
+                    f"Created chunk at: {self.chunks.get_sub_coords(sub_chunks.chunk_index(i))} of size: {self.size / 2}")
                 sub_chunks[i] = c = Plane(
-                    self.chunks.coords(sub_chunks.chunk_index(i)),
+                    self.chunks.get_sub_coords(sub_chunks.chunk_index(i)),
                     self.size / 2
                 )
             c.split_at_point(point)
