@@ -65,8 +65,11 @@ class ChunkMap:
         self.start_pos = np.array(start_pos)
         self.chunks: List[Optional[Plane]] = [None] * 4
 
-    # def __getitem__(self, value: Vec2 | np.ndarray) -> Optional[Plane]:
-    #     pass
+    def coords(self, idx: int) -> Tuple[float, float]:
+        return (
+            self.start_pos[0] + self.size * (idx & 0b1),
+            self.start_pos[1] + self.size * ((idx & 0b10) >> 1),
+        )
 
     def get_chunks_for_point(
         self,

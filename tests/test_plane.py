@@ -51,3 +51,11 @@ def test_ChunkMap_iteration():
     assert list(chunk_map.get_chunks((47, 16))) == [10, 11]
     assert list(chunk_map.get_chunks((16, 47))) == [10, 12]
     assert list(chunk_map.get_chunks((47, 47))) == [10, 11, 12, 13]
+
+
+def test_ChunkMap_coords():
+    chunk_map = ChunkMap(offset, 32)
+    assert chunk_map.coords(0) == tuple(offset)
+    assert chunk_map.coords(1) == (offset[0] + 32, offset[1])
+    assert chunk_map.coords(2) == (offset[0], offset[1] + 32)
+    assert chunk_map.coords(3) == (offset[0] + 32, offset[1] + 32)
