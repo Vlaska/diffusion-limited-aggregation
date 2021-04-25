@@ -1,0 +1,5 @@
+window_size: 1024
+point_radius: 5.0
+num_of_points: 1000
+fps: 60
+min_box_size: 16

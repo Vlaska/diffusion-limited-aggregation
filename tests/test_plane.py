@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
-from DLA.splitter import ChunkMap, Plane
-
+from DLA.plane.plane import Plane
+from DLA.plane.chunks import Chunks
 
 POINTS_TO_TEST = [
     [(0, 0), (0, )],
@@ -20,18 +20,18 @@ offset = np.array((15, 15))
 
 @pytest.mark.parametrize('coord,result', POINTS_TO_TEST)
 def test_get_chunk_for_point(coord, result):
-    chunk_map = ChunkMap((0, 0), 32)
-    assert chunk_map.get_subchunks_for_point(coord) == result
+    chunk_map = Chunks((0, 0), 32)
+    assert chunk_map.get_sub_chunks_for_point(coord) == result
 
 
 @pytest.mark.parametrize('coord,result', POINTS_TO_TEST)
 def test_get_chunk_for_point_with_offset(coord, result):
-    chunk_map_offset = ChunkMap(offset, 32)
-    assert chunk_map_offset.get_subchunks_for_point(coord + offset) == result
+    chunk_map_offset = Chunks(offset, 32)
+    assert chunk_map_offset.get_sub_chunks_for_point(coord + offset) == result
 
 
 def test_ChunkMap_len():
-    chunk_map = ChunkMap(offset, 32)
+    chunk_map = Chunks(offset, 32)
     assert len(chunk_map) == 0
     chunk_map.chunks[0] = ""
     assert len(chunk_map) == 1
@@ -42,7 +42,7 @@ def test_ChunkMap_view():
 
 
 def test_ChunkMap_iteration():
-    chunk_map = ChunkMap((0, 0), 32)
+    chunk_map = Chunks((0, 0), 32)
     for i in range(4):
         chunk_map.chunks[i] = i + 10
 
@@ -54,7 +54,7 @@ def test_ChunkMap_iteration():
 
 
 def test_ChunkMap_coords():
-    chunk_map = ChunkMap(offset, 32)
+    chunk_map = Chunks(offset, 32)
     assert chunk_map.get_sub_coords(0) == tuple(offset)
     assert chunk_map.get_sub_coords(1) == (offset[0] + 16, offset[1])
     assert chunk_map.get_sub_coords(2) == (offset[0], offset[1] + 16)
