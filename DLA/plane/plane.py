@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Final, List, TYPE_CHECKING
+from typing import TYPE_CHECKING, Final, List
 
 import numpy as np
 import pygame
@@ -25,11 +25,16 @@ class Plane:
         self.size = size
         self.rect = pygame.Rect(*self.start_pos, self.size, self.size)
         self.chunks = Chunks(start, size)
-        self.points: List[int] = []
+        self._points: List[int] = []
 
     @classmethod
-    def new(cls) -> Plane:
-        return cls((0, 0), WINDOW_WIDTH_AND_HEIGHT)
+    def new(cls, stuck_points: StuckWalkers) -> Plane:
+        cls._stuck_points = stuck_points
+
+        obj = cls((0, 0), WINDOW_WIDTH_AND_HEIGHT)
+        # for i in enumerate
+
+        return obj
 
     def draw(self, surface: Surface) -> None:
         draw.rect(surface, WHITE, self.rect, 1)
@@ -51,8 +56,7 @@ class Plane:
             # ? add point ?
 
     def __bool__(self) -> bool:
-        return len(self.points) > 0
+        return len(self._points) > 0
 
-    @classmethod
-    def set_static_points(cls, stuck_points: StuckWalkers) -> None:
-        cls._stuck_points = stuck_points
+    def add_point(self, point: int) -> None:
+        self._points.append(point)

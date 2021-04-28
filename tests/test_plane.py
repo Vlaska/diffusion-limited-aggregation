@@ -65,8 +65,8 @@ def test_spliting_at_point():
     p = Plane((0, 0), 1024)
     split_point = (227, 163)
     p.split_at_point(split_point)
-    assert p.chunks[0]
-    assert p.chunks[0].chunks[0]
-    assert p.chunks[0].chunks[0].chunks[3]
-    assert p.chunks[0].chunks[0].chunks[3].chunks[1]
+    assert isinstance(p.chunks[0], Plane)
+    assert isinstance(p.chunks[0].chunks[0], Plane)
+    assert isinstance(p.chunks[0].chunks[0].chunks[3], Plane)
+    assert isinstance(p.chunks[0].chunks[0].chunks[3].chunks[1], Plane)
     assert len(p.chunks[0].chunks[0].chunks[3].chunks[1].chunks) == 0

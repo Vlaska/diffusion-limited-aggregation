@@ -4,6 +4,8 @@ from typing import TYPE_CHECKING, List, Optional, Tuple
 
 import numpy as np
 from DLA import Vec2
+# DLA/utils.pyx
+from DLA.utils import one_subchunk_coords, subchunk_coords
 from DLA.plane.chunk_view import _ChunkView
 
 if TYPE_CHECKING:
@@ -30,7 +32,7 @@ class Chunks:
     def __init__(self, start_pos: Vec2 | np.ndarray, size: float):
         x, y = start_pos
         self.size = size
-        self.start_pos = np.array(start_pos)
+        self.start_pos = np.array(start_pos, dtype=np.double)
         self.chunks: List[Optional[Plane]] = [None] * 4
 
     def __getitem__(self, idx: int) -> Optional[Plane]:
@@ -40,17 +42,13 @@ class Chunks:
         self.chunks[idx] = self.chunks[idx] or val
 
     def get_sub_coords(self, idx: int) -> Tuple[float, float]:
-        halved_size = self.size / 2
-        return (
-            self.start_pos[0] + halved_size * (idx & 0b1),
-            self.start_pos[1] + halved_size * ((idx & 0b10) >> 1),
-        )
+        return one_subchunk_coords(self.start_pos, self.size, idx)
 
     def __iter__(self):
         return iter(self.chunks)
 
     def get_all_coords(self):
-        return [self.get_sub_coords(i) for i in range(4)]
+        return subchunk_coords(self.start_pos, self.size)
 
     def get_sub_chunks_for_point(
             self,

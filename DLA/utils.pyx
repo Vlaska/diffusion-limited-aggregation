@@ -5,10 +5,16 @@
 
 import numpy as np
 cimport numpy as np
+cimport cython
 from cython.view cimport array as cvarray
 
 ctypedef np.double_t DFLOAT
 ctypedef np.npy_bool DBOOL
+
+ctypedef fused number:
+    int
+    long
+    double
 
 
 cpdef np.ndarray[double, ndim=1] squared_distance(double[:, :] v):
@@ -21,7 +27,7 @@ cpdef np.ndarray[double, ndim=1] squared_distance(double[:, :] v):
     return np.asarray(out)
 
 
-def does_collide(double[:, :] pos, double[:, :] point, float radius):
+def does_collide(double[:, :] pos, double[:, :] point, number radius):
     #cdef double[:, :] diffs
     #cdef bool[:] t
     #cdef double[:] r
@@ -41,7 +47,7 @@ def does_collide(double[:, :] pos, double[:, :] point, float radius):
     return False
 
 
-def test_collisions(np.ndarray[DFLOAT, ndim=2] pos, np.ndarray[DFLOAT, ndim=2] points, float radius):
+def test_collisions(np.ndarray[DFLOAT, ndim=2] pos, np.ndarray[DFLOAT, ndim=2] points, number radius):
     cdef int i
     cdef np.ndarray v
     cdef list out = []
@@ -56,34 +62,69 @@ cpdef bint in_square(double[:] a, double[:] b, double[:] point):
 
 
 # cdef bint circle_square_collision((double, double) s_pos, double[:] c_pos, double s_size, double radius):
-cdef bint circle_square_collision((double, double) s_pos, double[:] c_pos, double s_size, double radius):
+cdef bint circle_square_collision(number s_x, number s_y, double[:] c_pos, number s_size, number radius):
     cdef double tX = c_pos[0], tY = c_pos[1]
     cdef double dX, dY
 
-    if c_pos[0] < s_pos[0]:
-        tX = s_pos[0]
-    elif c_pos[0] > s_pos[0] + s_size:
-        tX = s_pos[0] + s_size
+    if c_pos[0] < s_x:
+        tX = s_x
+    elif c_pos[0] > s_x + s_size:
+        tX = s_x + s_size
 
-    if c_pos[1] < s_pos[1]:
-        tY = s_pos[1]
-    elif c_pos[1] > s_pos[1] + s_size:
-        tY = s_pos[1] + s_size
+    if c_pos[1] < s_y:
+        tY = s_y
+    elif c_pos[1] > s_y + s_size:
+        tY = s_y + s_size
 
     dX = c_pos[0] - tX
     dY = c_pos[1] - tY
 
-    return (dX * dX) + (dY * dY) < radius * radius
+    return (dX * dX) + (dY * dY) <= radius * radius
 
 
-#cdef iter_chunks(double x, double y, double size):
-#    for i in range(4):
-#        yield (
-#            x + size * (i & 0b1),
-#            y + size * ((i & 0b10) >> 1),
-#        )
-#
-#
-#cpdef bint circle_in_subchunks((double, double) start, double[:] circle_pos, double size, double radius):
-#    cdef double x = start[0], y = start[1]
+cdef _one_subchunk_coords(number x, number y, number size, int idx):
+    cdef double[2] out
+    out = [
+        x + size * (idx & 0b1),
+        y + size * ((idx & 0b10) >> 1)
+    ]
+    return out
+
+
+cpdef (double, double) one_subchunk_coords(double[:] coords, number size, int idx):
+    cdef double[2] tmp = _one_subchunk_coords(coords[0], coords[1], size / 2, idx)
+    return (tmp[0], tmp[1])
+
+
+cdef _subchunk_coords(number x, number y, number size):
+    cdef double[4][2] out
+    cdef int i
+    for i in range(4):
+        out[i] = _one_subchunk_coords(x, y, size, i)
+    return out
+
+
+cpdef list subchunk_coords(double[:] coords, number size):
+    cdef list out = []
+    cdef int i
+    cdef double[4][2] subchunks = _subchunk_coords(coords[0], coords[1], size / 2)
+    for i in range(4):
+        out.append((subchunks[i][0], subchunks[i][1]))
+    return out
+
+
+cpdef list circle_in_subchunks(double[:] start, double[:] circle_pos, number size, number radius):
+    cdef double x = start[0], y = start[1]
+    cdef list out = []
+    cdef int idx = 0
+    size /= 2
+    cdef double[4][2] subchunks = _subchunk_coords(x, y, size)
+
+
+    for i in range(4):
+        if circle_square_collision(subchunks[i][0], subchunks[i][1], circle_pos, size, radius):
+            out.append(idx)
+        idx += 1
+
+    return out
     
