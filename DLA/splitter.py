@@ -61,7 +61,6 @@ def render(surface_: surface.Surface, font_: font.Font) -> None:
 def main() -> NoReturn:
     surface_, clock = init()
     mouse_click_pos = None
-    split_event = False
     font_ = font.SysFont('arial', 16)
 
     while True:
@@ -71,9 +70,7 @@ def main() -> NoReturn:
             if event.type == pygame.QUIT:
                 sys.exit(0)
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    split_event = True
-                elif event.key == pygame.K_r:
+                if event.key == pygame.K_r:
                     p.chunks = plane.Chunks((0, 0), config['window_size'])
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 mouse_click_pos = event.pos
@@ -86,17 +83,11 @@ def main() -> NoReturn:
         if keys[pygame.K_ESCAPE]:
             sys.exit(0)
 
-        if split_event:
-            p.split()
-            split_event = False
-        # if mouse.get_pressed(pygame.)
-
         surface_.fill(BLACK)
 
         render(surface_, font_)
 
         if mouse_click_pos:
-            # print(mouse_click_pos)
             mouse_click_pos = mouse.get_pos() or mouse_click_pos
             draw.circle(surface_, GREEN, mouse_click_pos, 1)
 

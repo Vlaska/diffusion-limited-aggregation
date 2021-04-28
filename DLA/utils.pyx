@@ -55,37 +55,35 @@ cpdef bint in_square(double[:] a, double[:] b, double[:] point):
     return a[0] <= point[0] and point[0] <= b[0] and a[1] <= point[1] and point[1] <= b[1]
 
 
-cdef class ChunkIndex:
-    cdef int size
-    cdef int[:] _chunks
+# cdef bint circle_square_collision((double, double) s_pos, double[:] c_pos, double s_size, double radius):
+cdef bint circle_square_collision((double, double) s_pos, double[:] c_pos, double s_size, double radius):
+    cdef double tX = c_pos[0], tY = c_pos[1]
+    cdef double dX, dY
 
-    def __init__(self):
-        self.size = 0
-        self._chunks = cvarray(shape=(4, ), itemsize=sizeof(int), format="i")
+    if c_pos[0] < s_pos[0]:
+        tX = s_pos[0]
+    elif c_pos[0] > s_pos[0] + s_size:
+        tX = s_pos[0] + s_size
 
-    def set_chunks(self, int[:] chunks):
-        for i in chunks:
-            self.set_chunk(i)
+    if c_pos[1] < s_pos[1]:
+        tY = s_pos[1]
+    elif c_pos[1] > s_pos[1] + s_size:
+        tY = s_pos[1] + s_size
 
-    def set_chunk(self, int chunk):
-        self._chunks[chunk] = 1
-        self.size += 1
+    dX = c_pos[0] - tX
+    dY = c_pos[1] - tY
 
-    def get_result(self):
-        # cdef int[:] out = cvarray(shape=(self.size, ), itemsize=sizeof(int), format="i")
-        cdef np.ndarray[int, ndim=1] out = np.empty(self.size, dtype=int)
-        cdef int idx = 0
-        cdef int chunk_idx = 0
-        cdef int i
-        for i in self._chunks:
-            if i:
-                out[idx] = chunk_idx
-                idx += 1
-            chunk_idx += 1
-        return out
+    return (dX * dX) + (dY * dY) < radius * radius
 
 
-#cpdef get_chunk_indexes(double[:] pos, double[:] start_pos, double size):
-    # cdef int[:] out = cvarray
-    # cdef int
-#    return 0
+#cdef iter_chunks(double x, double y, double size):
+#    for i in range(4):
+#        yield (
+#            x + size * (i & 0b1),
+#            y + size * ((i & 0b10) >> 1),
+#        )
+#
+#
+#cpdef bint circle_in_subchunks((double, double) start, double[:] circle_pos, double size, double radius):
+#    cdef double x = start[0], y = start[1]
+    
