@@ -17,6 +17,9 @@ ctypedef fused number:
     double
 
 
+cdef double INF = float('inf')
+
+
 cpdef np.ndarray[double, ndim=1] squared_distance(double[:, :] v):
     cdef Py_ssize_t i, size = v.shape[0]
     # cdef double[:] out = np.empty(size, dtype=np.double)
@@ -61,7 +64,6 @@ cpdef bint in_square(double[:] a, double[:] b, double[:] point):
     return a[0] <= point[0] and point[0] <= b[0] and a[1] <= point[1] and point[1] <= b[1]
 
 
-# cdef bint circle_square_collision((double, double) s_pos, double[:] c_pos, double s_size, double radius):
 cdef bint circle_square_collision(number s_x, number s_y, double[:] c_pos, number s_size, number radius):
     cdef double tX = c_pos[0], tY = c_pos[1]
     cdef double dX, dY
@@ -119,7 +121,6 @@ cpdef list circle_in_subchunks(double[:] start, double[:] circle_pos, number siz
     cdef int idx = 0
     size /= 2
     cdef double[4][2] subchunks = _subchunk_coords(x, y, size)
-
 
     for i in range(4):
         if circle_square_collision(subchunks[i][0], subchunks[i][1], circle_pos, size, radius):

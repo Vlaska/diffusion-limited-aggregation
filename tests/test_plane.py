@@ -1,5 +1,9 @@
+from DLA.walker.walker_population import WalkerPopulation
+from DLA.walker.stuck_walkers import StuckWalkers
 import numpy as np
 import pytest
+from pytest import MonkeyPatch
+from DLA import config
 from DLA.plane.plane import Plane
 from DLA.plane.chunks import Chunks
 
@@ -70,3 +74,31 @@ def test_spliting_at_point():
     assert isinstance(p.chunks[0].chunks[0].chunks[3], Plane)
     assert isinstance(p.chunks[0].chunks[0].chunks[3].chunks[1], Plane)
     assert len(p.chunks[0].chunks[0].chunks[3].chunks[1].chunks) == 0
+
+
+# @pytest.mark.parametrize('stuck_points', [
+#     [np.array([[15, 16]]), ]
+# ])
+# def test_add_point(stuck_points):
+def test_add_point(monkeypatch: MonkeyPatch):
+    # stuck_points = np.array([[15, 16]])
+    from DLA.plane import plane
+    monkeypatch.setattr(plane, 'WINDOW_WIDTH_AND_HEIGHT', 512)
+    monkeypatch.setattr(plane, 'RADIUS', 1)
+    monkeypatch.setattr(plane, 'MIN_BOX_SIZE', 16)
+    w = WalkerPopulation(0)
+    s = StuckWalkers(w, (14, 16))
+    p = Plane.new(s)
+    assert len(p.chunks) == 1  # type: ignore
+    assert p.chunks[0]  # type: ignore
+    assert len(p.chunks[0].chunks) == 1  # type: ignore
+    assert p.chunks[0].chunks[0]  # type: ignore
+    assert len(p.chunks[0].chunks[0].chunks) == 1  # type: ignore
+    assert p.chunks[0].chunks[0].chunks[0]  # type: ignore
+    assert len(p.chunks[0].chunks[0].chunks[0].chunks) == 1  # type: ignore
+    assert p.chunks[0].chunks[0].chunks[0].chunks[0]  # type: ignore
+    assert len(
+        p.chunks[0].chunks[0].chunks[0].chunks[0].chunks  # type: ignore
+    ) == 2
+    assert p.chunks[0].chunks[0].chunks[0].chunks[0].chunks[0]  # type: ignore
+    assert p.chunks[0].chunks[0].chunks[0].chunks[0].chunks[2]  # type: ignore
