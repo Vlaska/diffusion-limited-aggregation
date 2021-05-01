@@ -4,7 +4,7 @@ from typing import Iterable, TYPE_CHECKING, Final, List, Tuple, cast
 
 import numpy as np
 import pygame
-from DLA import WHITE, Vec2, config
+from DLA import LIGHT_GRAY, WHITE, Vec2, config
 from DLA.utils import circle_in_subchunks
 from DLA.walker import StuckWalkers, WalkerPopulation
 from pygame import draw
@@ -15,7 +15,6 @@ from .chunks import Chunks
 WINDOW_WIDTH_AND_HEIGHT: Final[int] = config['window_size']
 MIN_BOX_SIZE: Final[float] = config['min_box_size']
 RADIUS: Final[float] = config['point_radius']
-
 
 # if TYPE_CHECKING:
 #     from DLA.walker import StuckWalkers
@@ -56,13 +55,16 @@ class Plane:
         except Exception:
             pass
 
-    def draw(self, surface: Surface) -> None:
+    def _draw(self, surface: Surface) -> None:
         if self.size <= 2:
             return
-        draw.rect(surface, WHITE, self.rect, 1)
+        draw.rect(surface, LIGHT_GRAY, self.rect, 1)
         for i in self.chunks:
             if i:
-                i.draw(surface)
+                i._draw(surface)
+
+    def draw(self, surface: Surface) -> None:
+        self._draw(surface)
 
         try:
             self._walking_points.draw(surface)

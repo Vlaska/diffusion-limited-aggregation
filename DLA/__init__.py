@@ -5,7 +5,7 @@ from typing import Final
 
 import yaml
 
-from DLA.types import RGB, Vec, Vec2
+from DLA.types import RGB, RGBA, Vec, Vec2
 
 
 _config_data = get_data('DLA', 'config.yml')
@@ -19,5 +19,6 @@ WHITE: Final[RGB] = (255, 255, 255)
 PINK: Final[RGB] = (255, 0, 255)
 RED: Final[RGB] = (255, 0, 0)
 GREEN: Final[RGB] = (0, 255, 0)
+LIGHT_GRAY: Final[RGBA] = (66, 66, 66, 100)
 
 __all__ = ['RGB', 'Vec', 'Vec2', ]
