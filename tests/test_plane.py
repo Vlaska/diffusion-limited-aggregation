@@ -1,5 +1,3 @@
-from DLA.walker.walker_population import WalkerPopulation
-from DLA.walker.stuck_walkers import StuckWalkers
 import numpy as np
 import pytest
 from pytest import MonkeyPatch

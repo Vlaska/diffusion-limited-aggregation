@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from typing import Final, cast
+from typing import Final
 
 import numpy as np
-from DLA import Vec, Vec2, config
+from DLA import Vec, config
 from numpy import ma
 
 from .stuck_walkers import StuckWalkers

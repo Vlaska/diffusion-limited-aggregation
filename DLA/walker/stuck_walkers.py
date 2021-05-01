@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from typing import Iterator, Optional, TYPE_CHECKING
+from typing import Iterator, TYPE_CHECKING
 
 import numpy as np
-# from loguru import logger
 from numpy import ma
 
 from DLA import GREEN, Vec, RGB
@@ -44,11 +43,9 @@ class StuckWalkers(Walker):
         except IndexError:
             return False
         else:
-            # logger.debug(f"Point to add: {point}")
             return True
 
     def add_stuck(self, new_point: Vec) -> None:
-        # logger.debug(f"Added point:  {new_point}")
         self.pos[self.filled] = new_point
         self._plane.add_point(self.filled)
         self.filled += 1

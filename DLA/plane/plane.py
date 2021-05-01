@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import Iterable, TYPE_CHECKING, Final, List, Tuple, cast
+from typing import Iterable, Final, List, Tuple, cast
 
 import numpy as np
 import pygame
-from DLA import LIGHT_GRAY, WHITE, Vec2, config
+from DLA import LIGHT_GRAY, Vec2, config
 from DLA.utils import circle_in_subchunks
 from DLA.walker import StuckWalkers, WalkerPopulation
 from pygame import draw
@@ -15,9 +15,6 @@ from .chunks import Chunks
 WINDOW_WIDTH_AND_HEIGHT: Final[int] = config['window_size']
 MIN_BOX_SIZE: Final[float] = config['min_box_size']
 RADIUS: Final[float] = config['point_radius']
-
-# if TYPE_CHECKING:
-#     from DLA.walker import StuckWalkers
 
 
 class Plane:

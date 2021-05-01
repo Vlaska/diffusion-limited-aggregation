@@ -6,16 +6,13 @@ from typing import Final, NoReturn, Tuple, cast
 import numpy as np
 import pygame
 import pygame.display as display
-import pygame.draw as draw
 import pygame.event as events
-import pygame.font as font
 import pygame.key
-import pygame.mouse as mouse
 import pygame.surface as surface
 import pygame.time as time
 from loguru import logger
 
-from DLA import BLACK, GREEN, WHITE, config, plane
+from DLA import BLACK, config, plane
 from DLA.plane.dimension import Dimension
 from DLA.types import Vec2
 
@@ -47,14 +44,8 @@ def init() -> Tuple[surface.Surface, time.Clock]:
     return screen, clock
 
 
-def render(surface_: surface.Surface, font_: font.Font) -> None:
+def render(surface_: surface.Surface) -> None:
     p.draw(surface_)
-
-    # mouse_pos = mouse.get_pos()
-    # text_surface = font_.render(str(mouse_pos), True, WHITE)
-    # text_rect = text_surface.get_rect()
-    # text_rect.topleft = (mouse_pos[0] + 15, mouse_pos[1] + 15)
-    # surface_.blit(text_surface, text_rect)
 
 
 def print_dim():
@@ -66,8 +57,6 @@ def print_dim():
 
 def main() -> NoReturn:
     surface_, clock = init()
-    mouse_click_pos = None
-    font_ = font.SysFont('arial', 16)
     global p
 
     while True:
@@ -80,12 +69,6 @@ def main() -> NoReturn:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     p = plane.Plane.new()
-            # elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            #     mouse_click_pos = event.pos
-            #     logger.debug(f"Clicked at: {mouse_click_pos}")
-            #     p.split_at_point(mouse_click_pos)
-            # elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            #     mouse_click_pos = None
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
@@ -96,11 +79,7 @@ def main() -> NoReturn:
 
         surface_.fill(BLACK)
 
-        render(surface_, font_)
-
-        # if mouse_click_pos:
-        #     mouse_click_pos = mouse.get_pos() or mouse_click_pos
-        #     draw.circle(surface_, GREEN, mouse_click_pos, 1)
+        render(surface_)
 
         display.flip()
 
