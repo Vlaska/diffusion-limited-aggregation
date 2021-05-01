@@ -57,6 +57,8 @@ class Plane:
             pass
 
     def draw(self, surface: Surface) -> None:
+        if self.size <= 2:
+            return
         draw.rect(surface, WHITE, self.rect, 1)
         for i in self.chunks:
             if i:

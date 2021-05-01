@@ -8,16 +8,15 @@ import pygame
 import pygame.display as display
 import pygame.draw as draw
 import pygame.event as events
+import pygame.font as font
 import pygame.key
+import pygame.mouse as mouse
 import pygame.surface as surface
 import pygame.time as time
-import pygame.mouse as mouse
-import pygame.font as font
-
 from loguru import logger
 
-
-from DLA import plane, config, BLACK, WHITE, GREEN
+from DLA import BLACK, GREEN, WHITE, config, plane
+from DLA.plane.dimension import Dimension
 from DLA.types import Vec2
 
 logger.add("logs/splitter - {time}.log", rotation="5MB",
@@ -58,6 +57,13 @@ def render(surface_: surface.Surface, font_: font.Font) -> None:
     # surface_.blit(text_surface, text_rect)
 
 
+def print_dim():
+    dim = Dimension(p)
+    dim.count()
+    print(dim)
+    print(dim.dim())
+
+
 def main() -> NoReturn:
     surface_, clock = init()
     mouse_click_pos = None
@@ -69,6 +75,7 @@ def main() -> NoReturn:
 
         for event in events.get():
             if event.type == pygame.QUIT:
+                print_dim()
                 sys.exit(0)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
@@ -82,6 +89,7 @@ def main() -> NoReturn:
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
+            print_dim()
             sys.exit(0)
 
         p.update()
