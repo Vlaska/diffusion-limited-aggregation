@@ -3,32 +3,37 @@ from __future__ import annotations
 import sys
 from typing import Final, NoReturn, Tuple, cast
 
+import numpy as np
 import pygame
 import pygame.display as display
+import pygame.draw as draw
 import pygame.event as events
 import pygame.key
 import pygame.surface as surface
 import pygame.time as time
+import pygame.mouse as mouse
+import pygame.font as font
+
 from loguru import logger
 
-from DLA import config, BLACK
-from DLA.walker import StuckWalkers, WalkerPopulation
 
-logger.add("logs/{time}.log", rotation="5MB",
+from DLA import plane, config, BLACK, WHITE, GREEN
+from DLA.types import Vec2
+
+logger.add("logs/splitter - {time}.log", rotation="5MB",
            format="{time} | {level} | {message}")
 
-RADIUS: Final[float] = config['point_radius']
-FPS: Final[int] = config['fps']
-WINDOW_SIZE: Final[Tuple[int, int]] = cast(
-    Tuple[int, int],
-    (config['window_size'],) * 2
+FPS: Final[int] = 60
+WINDOW_SIZE: Final[Tuple[int, int]] = (
+    config['window_size'], config['window_size']
 )
-SCREEN_CENTER: Final[Tuple[float, float]] = cast(
-    Tuple[float, float], tuple(i / 2 for i in WINDOW_SIZE))
-NUM_OF_POINTS: Final[int] = config['num_of_points']
+SCREEN_CENTER: Final[Vec2] = cast(
+    Vec2, tuple(i / 2 for i in WINDOW_SIZE)
+)
+MIN_BOX_SIZE: Final[float] = 64
 
-walker_population: WalkerPopulation = WalkerPopulation(0)
-stuck_points: StuckWalkers = StuckWalkers(walker_population, SCREEN_CENTER)
+p = plane.Plane.new()
+points = np.empty((1000, 2), dtype=np.double)
 
 
 def init() -> Tuple[surface.Surface, time.Clock]:
@@ -43,27 +48,21 @@ def init() -> Tuple[surface.Surface, time.Clock]:
     return screen, clock
 
 
-def render(surface_: surface.Surface) -> None:
-    global walker_population
-    surface_.fill(BLACK)
+def render(surface_: surface.Surface, font_: font.Font) -> None:
+    p.draw(surface_)
 
-    stuck_points.draw(surface_)
-
-    # for _ in range(15):
-    #     walker_population.walk()
-    walker_population.walk()
-    walker_population.is_stuck(stuck_points)
-
-    walker_population.draw(surface_)
-
-    display.flip()
+    # mouse_pos = mouse.get_pos()
+    # text_surface = font_.render(str(mouse_pos), True, WHITE)
+    # text_rect = text_surface.get_rect()
+    # text_rect.topleft = (mouse_pos[0] + 15, mouse_pos[1] + 15)
+    # surface_.blit(text_surface, text_rect)
 
 
 def main() -> NoReturn:
-    global walker_population
-    global stuck_points
-    walker_population = WalkerPopulation(0)
     surface_, clock = init()
+    mouse_click_pos = None
+    font_ = font.SysFont('arial', 16)
+    global p
 
     while True:
         clock.tick(FPS)
@@ -71,15 +70,31 @@ def main() -> NoReturn:
         for event in events.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    p = plane.Plane.new()
+            # elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            #     mouse_click_pos = event.pos
+            #     logger.debug(f"Clicked at: {mouse_click_pos}")
+            #     p.split_at_point(mouse_click_pos)
+            # elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            #     mouse_click_pos = None
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
             sys.exit(0)
-        elif keys[pygame.K_SPACE]:
-            walker_population = WalkerPopulation(NUM_OF_POINTS)
-            stuck_points = StuckWalkers(walker_population, SCREEN_CENTER)
 
-        render(surface_)
+        p.update()
+
+        surface_.fill(BLACK)
+
+        render(surface_, font_)
+
+        # if mouse_click_pos:
+        #     mouse_click_pos = mouse.get_pos() or mouse_click_pos
+        #     draw.circle(surface_, GREEN, mouse_click_pos, 1)
+
+        display.flip()
 
 
 if __name__ == '__main__':

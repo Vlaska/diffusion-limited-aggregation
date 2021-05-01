@@ -86,9 +86,9 @@ def test_add_point(monkeypatch: MonkeyPatch):
     monkeypatch.setattr(plane, 'WINDOW_WIDTH_AND_HEIGHT', 512)
     monkeypatch.setattr(plane, 'RADIUS', 1)
     monkeypatch.setattr(plane, 'MIN_BOX_SIZE', 16)
-    w = WalkerPopulation(0)
-    s = StuckWalkers(w, (14, 16))
-    p = Plane.new(s)
+    monkeypatch.setitem(config, 'start_pos', (14, 16))
+    monkeypatch.setitem(config, 'num_of_points', 0)
+    p = Plane.new()
     assert len(p.chunks) == 1  # type: ignore
     assert p.chunks[0]  # type: ignore
     assert len(p.chunks[0].chunks) == 1  # type: ignore

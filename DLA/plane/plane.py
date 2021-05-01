@@ -6,6 +6,7 @@ import numpy as np
 import pygame
 from DLA import WHITE, Vec2, config
 from DLA.utils import circle_in_subchunks
+from DLA.walker import StuckWalkers, WalkerPopulation
 from pygame import draw
 from pygame.surface import Surface
 
@@ -15,12 +16,14 @@ WINDOW_WIDTH_AND_HEIGHT: Final[int] = config['window_size']
 MIN_BOX_SIZE: Final[float] = config['min_box_size']
 RADIUS: Final[float] = config['point_radius']
 
-if TYPE_CHECKING:
-    from DLA.walker import StuckWalkers
+
+# if TYPE_CHECKING:
+#     from DLA.walker import StuckWalkers
 
 
 class Plane:
     _stuck_points: StuckWalkers
+    _walking_points: WalkerPopulation
 
     def __init__(self, start: Vec2, size: float) -> None:
         self.start_pos = np.array(start, dtype=np.double)
@@ -32,24 +35,38 @@ class Plane:
         self._points: List[int] = []
 
     @classmethod
-    def new(cls, stuck_points: StuckWalkers) -> Plane:
-        cls._stuck_points = stuck_points
-
+    def new(cls) -> Plane:
         obj = cls((0, 0), WINDOW_WIDTH_AND_HEIGHT)
+
+        cls._walking_points = WalkerPopulation(config['num_of_points'])
+        cls._stuck_points = StuckWalkers(
+            cls._walking_points, config['start_pos'], obj
+        )
+
         # * Method called at initialization of simulation;
         # * There is only one point present
         obj.add_point(0)
-        # for i, v in enumerate(cls._stuck_points.pos):
-        #     if v[0] is not ma.masked:
-        #         obj.add_point(i)
 
         return obj
+
+    def update(self):
+        try:
+            self._walking_points.walk()
+            self._walking_points.is_stuck(self._stuck_points)
+        except Exception:
+            pass
 
     def draw(self, surface: Surface) -> None:
         draw.rect(surface, WHITE, self.rect, 1)
         for i in self.chunks:
             if i:
                 i.draw(surface)
+
+        try:
+            self._walking_points.draw(surface)
+            self._stuck_points.draw(surface)
+        except Exception:
+            pass
 
     def split_at_point(self, point: Vec2 | np.ndarray) -> None:
         if self.size <= MIN_BOX_SIZE:
