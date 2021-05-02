@@ -1,6 +1,8 @@
-window_size: 256
-point_radius: 3.0
-num_of_points: 300
+# window_size: 256
+window_size: 1024
+point_radius: 5.0
+num_of_points: 2000
 fps: 60
 min_box_size: 4
-start_pos: !!python/tuple [128, 128]
+# start_pos: !!python/tuple [128, 128]
+start_pos: !!python/tuple [512, 512]

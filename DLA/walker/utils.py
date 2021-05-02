@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import Tuple, Union, cast
+from typing import Tuple, Union
 
 import numpy as np
 from DLA import Vec
-from numpy import ma
+from DLA.utils import squared_distance
 
 from .config import RADIUS
 
@@ -13,19 +13,14 @@ def random_in_range(
         a: float,
         b: float,
         shape: Union[Vec, Tuple[float, ...]]
-) -> Vec:
+) -> np.ndarray:
     return (b - a) * np.random.random_sample(shape) + a
 
 
-def squared_distance(v: np.ndarray) -> np.ndarray:
-    return cast(np.ndarray, np.sum(v * v, axis=1))
-
-
-def does_collide(pos: ma.MaskedArray, point: Vec) -> bool:
+def does_collide(pos: np.ndarray, point: Vec) -> bool:
     diffs: np.ndarray = np.abs(pos - point)
     t = squared_distance(diffs) < (4 * RADIUS * RADIUS)
-    r = diffs[t].compressed()
-    stuck_pos = r.reshape((r.shape[0] // 2, 2))
+    stuck_pos = diffs[t]
     if len(stuck_pos):
         return True
     return False
@@ -34,6 +29,6 @@ def does_collide(pos: ma.MaskedArray, point: Vec) -> bool:
 def is_stuck(points, pos):
     out = []
     for i, v in enumerate(pos):
-        if not v.mask.any() and does_collide(points, v):
+        if not v[0] is np.NAN and does_collide(points, v):
             out.append(v)
     return out

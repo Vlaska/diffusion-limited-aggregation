@@ -4,7 +4,7 @@ from typing import Final
 
 import numpy as np
 from DLA import Vec, config
-from numpy import ma
+from numpy import NaN
 
 from .stuck_walkers import StuckWalkers
 from .utils import random_in_range
@@ -20,10 +20,12 @@ class WalkerPopulation(Walker):
     def __init__(self, size: int) -> None:
         super().__init__(size)
         self.pos[:, :] = random_in_range(0, WINDOW_SIZE, (size, 2))
+        self.last_walk_vec: np.ndarray
 
     def walk(self) -> None:
+        self.last_walk_vec = random_in_range(-5, 5, (self.size, 2))
         np.clip(
-            self.pos + random_in_range(-5, 5, (self.size, 2)),
+            self.pos + self.last_walk_vec,
             BORDER_U_L,
             BORDER_D_R,
             out=self.pos
@@ -35,6 +37,6 @@ class WalkerPopulation(Walker):
 
     def is_stuck(self, other: StuckWalkers) -> None:
         for i, v in enumerate(self.pos):
-            if not v.mask.any() and other.does_collide(v):
+            if v[0] is not NaN and other.does_collide(v):
                 self.pass_to_stuck(v, other)
-                self[i] = ma.masked
+                self[i] = NaN

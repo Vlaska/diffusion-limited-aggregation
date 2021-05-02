@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import Iterator, TYPE_CHECKING
 
 import numpy as np
-from numpy import ma
 
 from DLA import GREEN, Vec, RGB
+from DLA.utils import squared_distance
 from .config import RADIUS
 from .walker import Walker
 
@@ -25,19 +25,21 @@ class StuckWalkers(Walker):
         plane: Plane
     ) -> None:
         super().__init__(walkers.size + 1)
-        self.pos[1:] = ma.masked
         self.pos[0] = start_pos
         self.filled = 1
         self._plane = plane
 
-    def __iter__(self) -> Iterator[Vec]:
-        return iter(self.pos.compressed().reshape((self.filled, 2)))
+    def __iter__(self) -> Iterator[np.ndarray]:
+        return iter(self.pos[:self.filled])
+
+    @property
+    def view(self) -> np.ndarray:
+        return self.pos[:self.filled]
 
     def does_collide(self, point: Vec) -> bool:
-        diffs: np.ndarray = np.abs(self.pos - point)
-        t = self.squared_distance(diffs) < (4 * RADIUS * RADIUS)
-        r = diffs[t].compressed()
-        stuck_pos = r.reshape((r.shape[0] // 2, 2))
+        diffs: np.ndarray = np.abs(self.view - point)
+        t = squared_distance(diffs) < (4 * RADIUS * RADIUS)
+        stuck_pos = diffs[t]
         try:
             _ = stuck_pos[0]
         except IndexError:

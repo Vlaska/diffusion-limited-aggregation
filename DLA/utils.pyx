@@ -4,12 +4,13 @@
 #cython: nonecheck=False
 
 import numpy as np
+from numpy import NAN, INF
 cimport numpy as np
 cimport cython
 from cython.view cimport array as cvarray
 
-ctypedef np.double_t DFLOAT
-ctypedef np.npy_bool DBOOL
+# ctypedef np.double_t DFLOAT
+# ctypedef np.npy_bool DBOOL
 
 ctypedef fused number:
     int
@@ -17,28 +18,29 @@ ctypedef fused number:
     double
 
 
-cdef double INF = float('inf')
-
-
-cpdef np.ndarray[double, ndim=1] squared_distance(double[:, :] v):
+cdef double[:] _squared_distance(double[:, :] v):
     cdef Py_ssize_t i, size = v.shape[0]
-    # cdef double[:] out = np.empty(size, dtype=np.double)
     cdef double[:] out = cvarray(shape=(size, ), itemsize=sizeof(double), format="d")
+
     for i in range(size):
         out[i] = v[i, 0] * v[i, 0] + v[i, 1] * v[i, 1]
 
-    return np.asarray(out)
+    return out
 
 
-def does_collide(double[:, :] pos, double[:, :] point, number radius):
-    #cdef double[:, :] diffs
-    #cdef bool[:] t
-    #cdef double[:] r
-    cdef double[:, :] stuck_pos
+cpdef np.ndarray[double, ndim=1] squared_distance(double[:, :] v):
+    return np.asarray(_squared_distance(v))
 
-    cdef Py_ssize_t pos_size = pos.shape[0]
+
+cpdef does_collide(double[:, :] static_points, double[:] point, number radius):
+    cdef double[:] min_dist_pos
+    cdef double min_dist = INF
+
+    cdef Py_ssize_t pos_size = static_points.shape[0]
     cdef Py_ssize_t i
     # for i in range(pos_size):
+    cdef double[:] dists
+        
         
     #diffs = np.abs(pos - point)
     #t = squared_distance(diffs) < (4 * radius * radius)
@@ -50,13 +52,19 @@ def does_collide(double[:, :] pos, double[:, :] point, number radius):
     return False
 
 
-def test_collisions(np.ndarray[DFLOAT, ndim=2] pos, np.ndarray[DFLOAT, ndim=2] points, number radius):
-    cdef int i
-    cdef np.ndarray v
+# cpdef test_collisions(np.ndarray[DFLOAT, ndim=2] pos, np.ndarray[DFLOAT, ndim=2] points, number radius):
+cpdef test_collisions(double[:, :] pos, double[:, :] points, number radius):
+    cdef Py_ssize_t i, size = points.shape[0]
+    # cdef np.ndarray v
+    cdef double[:] v
     cdef list out = []
-    for i, v in enumerate(points):
-        if not v[0] is np.ma.masked and does_collide(pos, v, radius):
-            out.append(v)
+    # for i, v in enumerate(points):
+    for i in range(size):
+        v = points[i]
+        print(v[0])
+        print(v[0] is )
+        # if not v[0] is np.ma.masked and does_collide(pos, v, radius):
+        #     out.append(v)
     return out
 
 

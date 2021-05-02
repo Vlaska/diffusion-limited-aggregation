@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Iterator, cast, Tuple, Any
 
 import numpy as np
-from numpy import ma
+from numpy import NaN
 from pygame import surface as surface, draw as draw
 
 from DLA import WHITE, RED, RGB, Vec
@@ -14,19 +14,19 @@ class Walker:
     color: RGB = WHITE
 
     def __init__(self, size: int) -> None:
-        self.pos: ma.MaskedArray = ma.empty((size, 2), dtype=np.double)
+        self.pos: np.ndarray = np.empty((size, 2), dtype=np.double)
         self.size = size
 
-    def __iter__(self) -> Iterator[Vec]:
-        t = self.pos.compressed()
-        return iter(t.reshape((t.shape[0] // 2, 2)))
+    def __iter__(self) -> Iterator[np.ndarray]:
+        return iter(self.pos)
 
     def walk(self) -> None:
         raise NotImplementedError
 
     def draw(self, surface_: surface.Surface) -> None:
         for i in self:
-            self.draw_circle(surface_, i, self.color)
+            if i[0] is not NaN:
+                self.draw_circle(surface_, i, self.color)
 
     def draw_point(
         self,
