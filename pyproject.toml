@@ -32,6 +32,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.autopep8]
 max_line_length = 79
-
-[tool.mypy]
-warn_no_return = false
+in-place = true
+recursive = true
+aggresive = 3
