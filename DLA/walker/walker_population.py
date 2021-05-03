@@ -6,7 +6,6 @@ import numpy as np
 from DLA import Vec, config
 from DLA.utils import correct_circle_pos
 from numpy import NaN
-from loguru import logger
 
 from .stuck_walkers import StuckWalkers
 from .utils import random_in_range
@@ -17,15 +16,12 @@ RADIUS: Final[float] = config['point_radius']
 BORDER_U_L: Final[float] = RADIUS
 BORDER_D_R: Final[float] = config['window_size'] - RADIUS
 
-logger.add("logs/utils-{time}.log",
-           format="{time} | {level} | {message}")
-
 
 class WalkerPopulation(Walker):
     def __init__(self, size: int) -> None:
         super().__init__(size)
         self.pos[:, :] = random_in_range(0, WINDOW_SIZE, (size, 2))
-        self.last_walk_vec: np.ndarray
+        self.last_step: np.ndarray
 
     def walk(self) -> None:
         self.last_step = random_in_range(-5, 5, (self.size, 2))
@@ -51,7 +47,6 @@ class WalkerPopulation(Walker):
             colliding,
             RADIUS
         )
-        logger.debug(f'Receved value: {tuple(receved_value)}')
         other.add_stuck(receved_value)
 
     def is_stuck(self, other: StuckWalkers) -> None:

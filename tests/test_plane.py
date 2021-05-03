@@ -63,21 +63,6 @@ def test_ChunkMap_coords():
     assert chunk_map.get_sub_coords(3) == (offset[0] + 16, offset[1] + 16)
 
 
-def test_spliting_at_point():
-    p = Plane((0, 0), 1024)
-    split_point = (227, 163)
-    p.split_at_point(split_point)
-    assert isinstance(p.chunks[0], Plane)
-    assert isinstance(p.chunks[0].chunks[0], Plane)
-    assert isinstance(p.chunks[0].chunks[0].chunks[3], Plane)
-    assert isinstance(p.chunks[0].chunks[0].chunks[3].chunks[1], Plane)
-    assert len(p.chunks[0].chunks[0].chunks[3].chunks[1].chunks) == 0
-
-
-# @pytest.mark.parametrize('stuck_points', [
-#     [np.array([[15, 16]]), ]
-# ])
-# def test_add_point(stuck_points):
 def test_add_point(monkeypatch: MonkeyPatch):
     # stuck_points = np.array([[15, 16]])
     from DLA.plane import plane

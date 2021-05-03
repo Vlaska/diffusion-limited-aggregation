@@ -7,9 +7,7 @@ import numpy as np
 cimport numpy as np
 cimport cython
 from cython.view cimport array as cvarray
-from loguru import logger
-# ctypedef np.double_t DFLOAT
-# ctypedef np.npy_bool DBOOL
+
 
 cdef double INF = float('inf')
 cdef double NAN = float('nan')
@@ -18,10 +16,6 @@ ctypedef fused number:
     int
     long
     double
-
-
-logger.add("logs/utils-{time}.log",
-           format="{time} | {level} | {message}")
 
 
 cdef double[:] _squared_distance(double[:, :] v):
@@ -150,7 +144,7 @@ cdef inline double dot(double[:] a, double[:] b):
 
 @cython.cdivision(True)
 cdef double[:] _correct_circle_pos(double[:] new_pos, double[:] step, double[:] stuck_point, number radius):
-    cdef double[:] A = step
+    cdef double[:] A = cvarray(shape=(2, ), itemsize=sizeof(double), format='d')
     cdef double[:] B = cvarray(shape=(2, ), itemsize=sizeof(double), format='d')
     cdef double[:] out_1 = cvarray(shape=(2, ), itemsize=sizeof(double), format='d')
     cdef double[:] out_2 = cvarray(shape=(2, ), itemsize=sizeof(double), format='d')
@@ -161,14 +155,14 @@ cdef double[:] _correct_circle_pos(double[:] new_pos, double[:] step, double[:] 
     cdef double a_1
     cdef double a_2
 
+    A[:] = step
+
     B[0] = new_pos[0] - stuck_point[0]
     B[1] = new_pos[1] - stuck_point[1]
 
     theta = 2 * dot(A, B)
     psi = dot(B, B) - 4 * radius * radius
     chi = dot(A, A)
-
-    logger.debug(f"Delta: {theta * theta - 4 * psi * chi}, Theta: {theta}, Psi: {psi}, Chi: {chi}, B: ({B[0]}, {B[1]}), new_pos: ({new_pos[0]}, {new_pos[1]}), stuck_point: ({stuck_point[0]}, {stuck_point[1]}), step: ({step[0]}, {step[1]})")
 
     sqrt_delta = np.sqrt(theta * theta - 4 * psi * chi)
 
@@ -187,8 +181,6 @@ cdef double[:] _correct_circle_pos(double[:] new_pos, double[:] step, double[:] 
     B[0] = out_2[0] - new_pos[0] + step[0]
     B[1] = out_2[1] - new_pos[1] + step[1]
 
-    logger.debug(f"Out_1: ({out_1[0]}, {out_1[1]}), Out_2: ({out_2[0]}, {out_2[1]})")
-
     if dot(A, A) < dot(B, B):
         return out_1
 
@@ -196,6 +188,4 @@ cdef double[:] _correct_circle_pos(double[:] new_pos, double[:] step, double[:] 
 
 
 cpdef np.ndarray correct_circle_pos(double[:] new_pos, double[:] step, double[:] stuck_point, number radius):
-    cdef double[:] t = _correct_circle_pos(new_pos, step, stuck_point, radius)
-    logger.debug(f"Value to be returned: ({t[0]}, {t[1]})")
-    return np.asarray(t)
+    return np.asarray(_correct_circle_pos(new_pos, step, stuck_point, radius))

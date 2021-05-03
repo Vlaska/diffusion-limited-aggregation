@@ -1,15 +1,17 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Optional, Tuple
+from typing import Final, TYPE_CHECKING, List, Optional, Tuple
 
 import numpy as np
-from DLA import Vec2
+from DLA import Vec2, config
 # DLA/utils.pyx
-from DLA.utils import one_subchunk_coords, subchunk_coords
+from DLA.utils import circle_in_subchunks, one_subchunk_coords, subchunk_coords
 from DLA.plane.chunk_view import _ChunkView
 
 if TYPE_CHECKING:
     from .plane import Plane
+
+RADIUS: Final[float] = config['point_radius']
 
 
 class Chunks:
@@ -50,6 +52,15 @@ class Chunks:
     def get_all_coords(self):
         return subchunk_coords(self.start_pos, self.size)
 
+    def chunks_coll_with_particle(self, part_pos: np.ndarray) -> _ChunkView:
+        return _ChunkView(self.chunks, circle_in_subchunks(
+            self.start_pos,
+            part_pos,
+            self.size / 2,
+            RADIUS)
+        )
+
+    # ! Unused
     def get_sub_chunks_for_point(
             self,
             point: Vec2 | np.ndarray
@@ -68,6 +79,7 @@ class Chunks:
             self.map[y > 0][x > 0],
         )
 
+    # ! Unused
     def get_chunks(self, point: Vec2 | np.ndarray) -> _ChunkView:
         return _ChunkView(
             self.chunks,

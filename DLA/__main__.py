@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from typing import Final, NoReturn, Tuple, cast
+from typing import Final, NoReturn, Tuple
 
 import numpy as np
 import pygame
@@ -10,22 +10,14 @@ import pygame.event as events
 import pygame.key
 import pygame.surface as surface
 import pygame.time as time
-from loguru import logger
 
 from DLA import BLACK, config, plane
 from DLA.plane.dimension import Dimension
-from DLA.types import Vec2
 
-# logger.add("logs/{time}.log", rotation="5MB",
-#            format="{time} | {level} | {message}")
-logger.remove()
 
 FPS: Final[int] = 60
 WINDOW_SIZE: Final[Tuple[int, int]] = (
     config['window_size'], config['window_size']
-)
-SCREEN_CENTER: Final[Vec2] = cast(
-    Vec2, tuple(i / 2 for i in WINDOW_SIZE)
 )
 MIN_BOX_SIZE: Final[float] = 64
 

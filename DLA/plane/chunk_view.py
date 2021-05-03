@@ -1,17 +1,20 @@
 from __future__ import annotations
 
-from typing import List, Optional, Tuple, Iterator
+from typing import List, Optional, Iterator, Tuple, Union
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .plane import Plane
 
 
+T = Union[List[int], Tuple[int, ...]]
+
+
 class _ChunkView:
     def __init__(
             self,
             chunks: List[Optional[Plane]],
-            selected: Tuple[int, ...]
+            selected: T
     ):
         self.chunks = chunks
         self.selected = selected

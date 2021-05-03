@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Iterable, Final, List, Tuple, cast
+from typing import Iterable, Final, List, Set, Tuple, cast
 
 import numpy as np
 import pygame
@@ -28,7 +28,7 @@ class Plane:
             *cast(Tuple[float, float], self.start_pos), self.size, self.size
         )
         self.chunks = Chunks(start, size)
-        self._points: List[int] = []
+        self._points: Set[int] = set()
 
     @classmethod
     def new(cls) -> Plane:
@@ -69,19 +69,6 @@ class Plane:
         except Exception:
             pass
 
-    def split_at_point(self, point: Vec2 | np.ndarray) -> None:
-        if self.size <= MIN_BOX_SIZE:
-            return
-        sub_chunks = self.chunks.get_chunks(point)
-        for i, c in enumerate(sub_chunks):
-            if not c:
-                sub_chunks[i] = c = Plane(
-                    self.chunks.get_sub_coords(sub_chunks.chunk_index(i)),
-                    self.size / 2
-                )
-            c.split_at_point(point)
-            # ? add point ?
-
     def add_sub_chunks(self, chunks: Iterable[int]) -> None:
         for i in chunks:
             if not self.chunks[i]:
@@ -94,7 +81,7 @@ class Plane:
         return len(self._points) > 0
 
     def add_point(self, point: int) -> None:
-        self._points.append(point)
+        self._points.add(point)
 
         if self.size <= MIN_BOX_SIZE:
             return

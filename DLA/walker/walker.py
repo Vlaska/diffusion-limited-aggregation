@@ -28,14 +28,6 @@ class Walker:
             if i[0] is not NaN:
                 self.draw_circle(surface_, i, self.color)
 
-    def draw_point(
-        self,
-        surface_: surface.Surface,
-        index: int,
-        color: RGB = RED
-    ) -> None:
-        self.draw_circle(surface_, self[index], color)
-
     @staticmethod
     def draw_circle(
         surface_: surface.Surface,
