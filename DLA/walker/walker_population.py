@@ -36,18 +36,26 @@ class WalkerPopulation(Walker):
     def pass_to_stuck(
         point: Vec,
         colliding: Vec,
+        eq_dist: bool,
         step: Vec,
         other: StuckWalkers
     ) -> None:
         # ? Maybe check/push out multiple times, if particle is now colliding
         # ? with another solid particle
-        receved_value = correct_circle_pos(
-            point,
-            step,
-            colliding,
-            RADIUS
-        )
-        other.add_stuck(receved_value)
+        # while not eq_dist and point is not None:
+        moved_point = point
+        tries = 5
+        while not (eq_dist or point is None) and tries:
+            moved_point = correct_circle_pos(
+                point,
+                step,
+                colliding,
+                RADIUS
+            )
+            point, eq_dist = other.does_collide(moved_point)  # type: ignore
+            tries -= 1
+        logger.debug(f'Receved value: {tuple(moved_point)}')
+        other.add_stuck(moved_point)
 
     # ? Idea: reset check, if any particle gets stuck
     # ? Best to use custom "tail recursion": in case of break, return boolean
@@ -57,6 +65,9 @@ class WalkerPopulation(Walker):
     def is_stuck(self, other: StuckWalkers) -> None:
         for i, v in enumerate(self.pos):
             if not np.isnan(v[0]):
-                if (colliding := other.does_collide(v)) is not None:
-                    self.pass_to_stuck(v, colliding, self.last_step[i], other)
+                colliding, eq_dist = other.does_collide(v)
+                if colliding is not None:
+                    self.pass_to_stuck(
+                        v, colliding, eq_dist, self.last_step[i], other
+                    )
                     self[i] = NaN

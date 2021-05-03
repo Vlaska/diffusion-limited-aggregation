@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Iterator, Optional
+from typing import TYPE_CHECKING, Final, Iterator, Optional, Tuple
 
 import numpy as np
-from DLA import GREEN, RGB, Vec
+from DLA import GREEN, RGB, Vec, config
 from DLA.utils import squared_distance
 
 from .config import RADIUS
@@ -12,6 +12,10 @@ from .walker import Walker
 if TYPE_CHECKING:
     from DLA.plane import Plane
     from .walker_population import WalkerPopulation
+
+
+SQUARED_PARTICLE_DISTANCE: Final[float] = 4 * RADIUS * RADIUS
+EPSILON: Final[float] = config['epsilon']
 
 
 class StuckWalkers(Walker):
@@ -36,14 +40,19 @@ class StuckWalkers(Walker):
     def view(self) -> np.ndarray:
         return self.pos[:self.filled]
 
-    def does_collide(self, point: Vec) -> Optional[Vec]:
+    def does_collide(self, point: Vec) -> Tuple[Optional[Vec], bool]:
         diffs: np.ndarray = np.abs(self.view - point)
         dist: np.ndarray = squared_distance(diffs)
 
         t = np.argmin(dist)
         stuck_pos = self.pos[t]
 
-        return None if dist[t] > 4 * RADIUS * RADIUS else stuck_pos
+        is_equal = -EPSILON <= dist[t] - SQUARED_PARTICLE_DISTANCE <= EPSILON
+
+        return (
+            None if dist[t] > SQUARED_PARTICLE_DISTANCE else stuck_pos,
+            is_equal
+        )
 
     def add_stuck(self, new_point: Vec) -> None:
         self.pos[self.filled] = new_point
