@@ -8,7 +8,6 @@ cimport numpy as np
 cimport cython
 from cython.view cimport array as cvarray
 
-
 cdef double INF = float('inf')
 cdef double NAN = float('nan')
 

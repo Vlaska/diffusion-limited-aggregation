@@ -28,7 +28,7 @@ class _ChunkView:
     def __setitem__(self, idx: int, val: Optional[Plane]):
         self.chunks[self.selected[idx]] = val
 
-    def __iter__(self) -> Iterator:
+    def __iter__(self) -> Iterator[Optional[Plane]]:
         class _ChunkViewIterator(Iterator):
             chunks = self.chunks
             selected = self.selected

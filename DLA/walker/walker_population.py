@@ -49,6 +49,11 @@ class WalkerPopulation(Walker):
         )
         other.add_stuck(receved_value)
 
+    # ? Idea: reset check, if any particle gets stuck
+    # ? Best to use custom "tail recursion": in case of break, return boolean
+    # ? that symbolizes restart
+    # ? Might not be necessary, if only ~3 particles per update get stuck,
+    # ? but better be safe than sorry
     def is_stuck(self, other: StuckWalkers) -> None:
         for i, v in enumerate(self.pos):
             if not np.isnan(v[0]):

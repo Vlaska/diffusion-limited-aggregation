@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import Iterable, Final, List, Set, Tuple, cast
+from typing import Final, Iterable, List, Set, Tuple, cast
 
 import numpy as np
 import pygame
-from DLA import LIGHT_GRAY, Vec2, config
+from DLA import LIGHT_GRAY, Vec, Vec2, config
 from DLA.utils import circle_in_subchunks
 from DLA.walker import StuckWalkers, WalkerPopulation
 from pygame import draw
@@ -92,3 +92,23 @@ class Plane:
         self.add_sub_chunks(sub_chunks)
         for i in sub_chunks:
             cast(Plane, self.chunks[i]).add_point(point)
+
+    def _collect_stuck_particles(
+        self,
+        particle: Vec,
+        collector: Set[int]
+    ) -> None:
+        if self.size == MIN_BOX_SIZE:
+            collector.update(self._points)
+            return
+
+        sub_planes = self.chunks.chunks_coll_with_particle(particle)
+        for i in sub_planes:
+            if i:
+                i._collect_stuck_particles(particle, collector)
+
+    def collect_stuck_particles(self, particle: Vec, step: Vec) -> List[int]:
+        out: Set[int] = set()
+        self._collect_stuck_particles(particle, out)
+        self._collect_stuck_particles(particle - step, out)
+        return list(out)

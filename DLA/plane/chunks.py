@@ -56,7 +56,7 @@ class Chunks:
         return _ChunkView(self.chunks, circle_in_subchunks(
             self.start_pos,
             part_pos,
-            self.size / 2,
+            self.size,
             RADIUS)
         )
 
