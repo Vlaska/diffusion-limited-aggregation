@@ -16,8 +16,9 @@ from DLA import BLACK, config, plane
 from DLA.plane.dimension import Dimension
 from DLA.types import Vec2
 
-logger.add("logs/splitter - {time}.log", rotation="5MB",
-           format="{time} | {level} | {message}")
+# logger.add("logs/{time}.log", rotation="5MB",
+#            format="{time} | {level} | {message}")
+logger.remove()
 
 FPS: Final[int] = 60
 WINDOW_SIZE: Final[Tuple[int, int]] = (

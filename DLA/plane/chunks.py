@@ -61,7 +61,7 @@ class Chunks:
             if y == 0:
                 return 0, 1, 2, 3
             return self.map[y > 0]
-        elif y == 0:
+        if y == 0:
             return self.map_T[x > 0]
 
         return (

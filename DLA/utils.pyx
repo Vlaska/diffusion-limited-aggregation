@@ -4,18 +4,24 @@
 #cython: nonecheck=False
 
 import numpy as np
-from numpy import NAN, INF
 cimport numpy as np
 cimport cython
 from cython.view cimport array as cvarray
-
+from loguru import logger
 # ctypedef np.double_t DFLOAT
 # ctypedef np.npy_bool DBOOL
+
+cdef double INF = float('inf')
+cdef double NAN = float('nan')
 
 ctypedef fused number:
     int
     long
     double
+
+
+logger.add("logs/utils-{time}.log",
+           format="{time} | {level} | {message}")
 
 
 cdef double[:] _squared_distance(double[:, :] v):
@@ -62,7 +68,7 @@ cpdef test_collisions(double[:, :] pos, double[:, :] points, number radius):
     for i in range(size):
         v = points[i]
         print(v[0])
-        print(v[0] is )
+        print(v[0] is NAN)
         # if not v[0] is np.ma.masked and does_collide(pos, v, radius):
         #     out.append(v)
     return out
@@ -136,4 +142,60 @@ cpdef list circle_in_subchunks(double[:] start, double[:] circle_pos, number siz
         idx += 1
 
     return out
-    
+
+
+cdef inline double dot(double[:] a, double[:] b):
+    return a[0] * b[0] + a[1] * b[1]
+
+
+@cython.cdivision(True)
+cdef double[:] _correct_circle_pos(double[:] new_pos, double[:] step, double[:] stuck_point, number radius):
+    cdef double[:] A = step
+    cdef double[:] B = cvarray(shape=(2, ), itemsize=sizeof(double), format='d')
+    cdef double[:] out_1 = cvarray(shape=(2, ), itemsize=sizeof(double), format='d')
+    cdef double[:] out_2 = cvarray(shape=(2, ), itemsize=sizeof(double), format='d')
+    cdef double theta
+    cdef double psi
+    cdef double chi
+    cdef double sqrt_delta
+    cdef double a_1
+    cdef double a_2
+
+    B[0] = new_pos[0] - stuck_point[0]
+    B[1] = new_pos[1] - stuck_point[1]
+
+    theta = 2 * dot(A, B)
+    psi = dot(B, B) - 4 * radius * radius
+    chi = dot(A, A)
+
+    logger.debug(f"Delta: {theta * theta - 4 * psi * chi}, Theta: {theta}, Psi: {psi}, Chi: {chi}, B: ({B[0]}, {B[1]}), new_pos: ({new_pos[0]}, {new_pos[1]}), stuck_point: ({stuck_point[0]}, {stuck_point[1]}), step: ({step[0]}, {step[1]})")
+
+    sqrt_delta = np.sqrt(theta * theta - 4 * psi * chi)
+
+    # Chi cannot be == 0, because that would mean, that og_point didn't move
+    # therefore would not collide with stuck_point
+    a_1 = (-theta + sqrt_delta) / (2 * chi)
+    a_2 = (-theta - sqrt_delta) / (2 * chi)
+
+    out_1[0] = stuck_point[0] + B[0] + a_1 * A[0]
+    out_1[1] = stuck_point[1] + B[1] + a_1 * A[1]
+    out_2[0] = stuck_point[0] + B[0] + a_2 * A[0]
+    out_2[1] = stuck_point[1] + B[1] + a_2 * A[1]
+
+    A[0] = out_1[0] - new_pos[0] + step[0]
+    A[1] = out_1[1] - new_pos[1] + step[1]
+    B[0] = out_2[0] - new_pos[0] + step[0]
+    B[1] = out_2[1] - new_pos[1] + step[1]
+
+    logger.debug(f"Out_1: ({out_1[0]}, {out_1[1]}), Out_2: ({out_2[0]}, {out_2[1]})")
+
+    if dot(A, A) < dot(B, B):
+        return out_1
+
+    return out_2
+
+
+cpdef np.ndarray correct_circle_pos(double[:] new_pos, double[:] step, double[:] stuck_point, number radius):
+    cdef double[:] t = _correct_circle_pos(new_pos, step, stuck_point, radius)
+    logger.debug(f"Value to be returned: ({t[0]}, {t[1]})")
+    return np.asarray(t)

@@ -29,3 +29,11 @@ def subchunk_coords(start: np.ndarray,
 
 def circle_in_subchunks(start: np.ndarray, circle_pos: np.ndarray,
                         suze: float, raduis: float) -> List[int]: ...
+
+
+def correct_circle_pos(
+    new_pos: np.ndarray,
+    step: np.ndarray,
+    stuck_point: np.ndarray,
+    radius: float
+) -> np.ndarray: ...
