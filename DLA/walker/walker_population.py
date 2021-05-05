@@ -61,7 +61,7 @@ class WalkerPopulation(Walker):
     # ? that symbolizes restart
     # ? Might not be necessary, if only ~3 particles per update get stuck,
     # ? but better be safe than sorry
-    def is_stuck(self, other: StuckWalkers) -> None:
+    def _is_stuck(self, other: StuckWalkers) -> bool:
         for i, v in enumerate(self.pos):
             if not np.isnan(v[0]):
                 colliding, eq_dist = other.does_collide(v)
@@ -70,3 +70,9 @@ class WalkerPopulation(Walker):
                         v, colliding, eq_dist, self.last_step[i], other
                     )
                     self[i] = NaN
+                    return True
+        return False
+
+    def is_stuck(self, other: StuckWalkers) -> None:
+        while self._is_stuck(other):
+            pass

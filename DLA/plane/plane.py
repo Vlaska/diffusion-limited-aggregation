@@ -69,6 +69,7 @@ class Plane:
         except Exception:
             pass
 
+    # ? Offload using multithreading + some sort of queue ?
     def add_sub_chunks(self, chunks: Iterable[int]) -> None:
         for i in chunks:
             if not self.chunks[i]:
