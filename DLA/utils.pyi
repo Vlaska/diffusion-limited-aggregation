@@ -8,15 +8,12 @@ import numpy as np
 def squared_distance(v: np.ndarray) -> np.ndarray: ...
 
 
-def does_collide(pos: np.ndarray, point: np.ndarray,
-                 radius: float) -> bool: ...
+# def does_collide(pos: np.ndarray, point: np.ndarray,
+#                  radius: float) -> bool: ...
 
 
-def test_collisions(pos: np.ndarray, point: np.ndarray,
-                    radius: float) -> List[bool]: ...
-
-
-def in_square(a: np.ndarray, b: np.ndarray, c: np.ndarray) -> bool: ...
+# def test_collisions(pos: np.ndarray, point: np.ndarray,
+#                     radius: float) -> List[bool]: ...
 
 
 def one_subchunk_coords(start: np.ndarray, size: float,

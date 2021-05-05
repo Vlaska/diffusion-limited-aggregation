@@ -5,3 +5,5 @@ num_of_points: 2000
 fps: 60
 min_box_size: 128
 start_pos: !!python/tuple [512, 512]
+epsilon: !!python/float 1e-10
+push_out_tries: 10

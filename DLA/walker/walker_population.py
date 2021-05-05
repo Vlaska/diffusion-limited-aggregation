@@ -11,6 +11,7 @@ from .stuck_walkers import StuckWalkers
 from .utils import random_in_range
 from .walker import Walker
 
+PUSH_OUT_TRIES: Final[int] = config['push_out_tries']
 WINDOW_SIZE: Final[float] = config['window_size']
 RADIUS: Final[float] = config['point_radius']
 BORDER_U_L: Final[float] = RADIUS
@@ -43,19 +44,17 @@ class WalkerPopulation(Walker):
         # ? Maybe check/push out multiple times, if particle is now colliding
         # ? with another solid particle
         # while not eq_dist and point is not None:
-        moved_point = point
-        tries = 5
+        tries = PUSH_OUT_TRIES
         while not (eq_dist or point is None) and tries:
-            moved_point = correct_circle_pos(
+            point = correct_circle_pos(
                 point,
                 step,
                 colliding,
                 RADIUS
             )
-            point, eq_dist = other.does_collide(moved_point)  # type: ignore
+            colliding, eq_dist = other.does_collide(point)  # type: ignore
             tries -= 1
-        logger.debug(f'Receved value: {tuple(moved_point)}')
-        other.add_stuck(moved_point)
+        other.add_stuck(point)
 
     # ? Idea: reset check, if any particle gets stuck
     # ? Best to use custom "tail recursion": in case of break, return boolean

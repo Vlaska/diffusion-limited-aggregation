@@ -31,46 +31,6 @@ cpdef np.ndarray[double, ndim=1] squared_distance(double[:, :] v):
     return np.asarray(_squared_distance(v))
 
 
-cpdef does_collide(double[:, :] static_points, double[:] point, number radius):
-    cdef double[:] min_dist_pos
-    cdef double min_dist = INF
-
-    cdef Py_ssize_t pos_size = static_points.shape[0]
-    cdef Py_ssize_t i
-    # for i in range(pos_size):
-    cdef double[:] dists
-        
-        
-    #diffs = np.abs(pos - point)
-    #t = squared_distance(diffs) < (4 * radius * radius)
-    #r = diffs[t].compressed()
-    #stuck_pos = r.reshape((r.shape[0] // 2, 2))
-
-    #if stuck_pos.any():
-    #    return True
-    return False
-
-
-# cpdef test_collisions(np.ndarray[DFLOAT, ndim=2] pos, np.ndarray[DFLOAT, ndim=2] points, number radius):
-cpdef test_collisions(double[:, :] pos, double[:, :] points, number radius):
-    cdef Py_ssize_t i, size = points.shape[0]
-    # cdef np.ndarray v
-    cdef double[:] v
-    cdef list out = []
-    # for i, v in enumerate(points):
-    for i in range(size):
-        v = points[i]
-        print(v[0])
-        print(v[0] is NAN)
-        # if not v[0] is np.ma.masked and does_collide(pos, v, radius):
-        #     out.append(v)
-    return out
-
-
-cpdef bint in_square(double[:] a, double[:] b, double[:] point):
-    return a[0] <= point[0] and point[0] <= b[0] and a[1] <= point[1] and point[1] <= b[1]
-
-
 cdef bint circle_square_collision(number s_x, number s_y, double[:] c_pos, number s_size, number radius):
     cdef double tX = c_pos[0], tY = c_pos[1]
     cdef double dX, dY
@@ -180,11 +140,15 @@ cdef double[:] _correct_circle_pos(double[:] new_pos, double[:] step, double[:] 
     B[0] = out_2[0] - new_pos[0] + step[0]
     B[1] = out_2[1] - new_pos[1] + step[1]
 
-    if dot(A, A) < dot(B, B):
-        return out_1
+    if dot(A, A) > dot(B, B):
+        out_1 = out_2
 
-    return out_2
+    # Shorthen step to end at the new position (in place)
+    step[0] = step[0] - out_1[0] + new_pos[0]
+    step[1] = step[1] - out_1[1] + new_pos[1]
+
+    return out_1
 
 
-cpdef np.ndarray correct_circle_pos(double[:] new_pos, double[:] step, double[:] stuck_point, number radius):
+cpdef np.ndarray[double, ndim=1] correct_circle_pos(double[:] new_pos, double[:] step, double[:] stuck_point, number radius):
     return np.asarray(_correct_circle_pos(new_pos, step, stuck_point, radius))
