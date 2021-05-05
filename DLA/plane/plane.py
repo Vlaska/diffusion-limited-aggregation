@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from typing import Final, Generator, Iterable, Iterator, List, Optional, TYPE_CHECKING, Tuple, cast
+from typing import (TYPE_CHECKING, Final, Generator, Iterable, List, Optional,
+                    Tuple, cast)
 
 import numpy as np
 from DLA import LIGHT_GRAY, Vec2, config
 from DLA.utils import circle_in_subchunks, one_subchunk_coords
 from DLA.walker import StuckWalkers, WalkerPopulation
-
 
 WINDOW_WIDTH_AND_HEIGHT: Final[int] = config['window_size']
 MIN_BOX_SIZE: Final[float] = config['min_box_size']
@@ -95,7 +95,6 @@ class Plane:
             self._sub_planes[idx] = val
 
     def __iter__(self) -> Generator[Plane, None, None]:
-        # self._iter_idx = 0
         return (i for i in self._sub_planes if i)
 
     if USE_PYGAME:  # noqa: C901

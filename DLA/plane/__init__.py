@@ -1,4 +1,4 @@
-from .chunks import Chunks
 from .plane import Plane
+from .dimension import Dimension
 
-__all__ = ['Chunks', 'Plane']
+__all__ = ['Dimension', 'Plane']

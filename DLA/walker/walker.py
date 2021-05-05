@@ -6,7 +6,7 @@ import numpy as np
 from numpy import NaN
 from pygame import surface as surface, draw as draw
 
-from DLA import WHITE, RED, RGB, Vec
+from DLA import WHITE, RGB, Vec
 from .config import RADIUS
 
 

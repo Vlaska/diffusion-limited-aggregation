@@ -41,9 +41,6 @@ class WalkerPopulation(Walker):
         step: Vec,
         other: StuckWalkers
     ) -> None:
-        # ? Maybe check/push out multiple times, if particle is now colliding
-        # ? with another solid particle
-        # while not eq_dist and point is not None:
         tries = PUSH_OUT_TRIES
         while not (eq_dist or point is None) and tries:
             point = correct_circle_pos(
@@ -56,11 +53,6 @@ class WalkerPopulation(Walker):
             tries -= 1
         other.add_stuck(point)
 
-    # ? Idea: reset check, if any particle gets stuck
-    # ? Best to use custom "tail recursion": in case of break, return boolean
-    # ? that symbolizes restart
-    # ? Might not be necessary, if only ~3 particles per update get stuck,
-    # ? but better be safe than sorry
     def _is_stuck(self, other: StuckWalkers) -> bool:
         for i, v in enumerate(self.pos):
             if not np.isnan(v[0]):
