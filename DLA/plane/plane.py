@@ -42,6 +42,30 @@ class Plane:
         self._init_pygame(start, size)
         self._sub_planes: List[Optional[Plane]] = [None] * 4
 
+    def update(self):
+        self._walking_points.walk()
+        self._walking_points.is_stuck(self._stuck_points)
+
+    # ? Offload using multithreading + some sort of queue ?
+    def add_sub_chunks(self, chunks: Iterable[int]) -> None:
+        for i in chunks:
+            if not self._sub_planes[i]:
+                self._sub_planes[i] = Plane(
+                    one_subchunk_coords(self.start_pos, self.size, i),
+                    self.size / 2
+                )
+
+    def add_point(self, point: int) -> None:
+        if self.size <= MIN_BOX_SIZE:
+            return
+
+        sub_chunks = circle_in_subchunks(
+            self.start_pos, self._stuck_points[point], self.size, RADIUS
+        )
+        self.add_sub_chunks(sub_chunks)
+        for i in sub_chunks:
+            cast(Plane, self._sub_planes[i]).add_point(point)
+
     @classmethod
     def new(cls) -> Plane:
         obj = cls((0, 0), WINDOW_WIDTH_AND_HEIGHT)
@@ -57,32 +81,9 @@ class Plane:
 
         return obj
 
-    def update(self):
-        self._walking_points.walk()
-        self._walking_points.is_stuck(self._stuck_points)
-
-    # ? Offload using multithreading + some sort of queue ?
-    def add_sub_chunks(self, chunks: Iterable[int]) -> None:
-        for i in chunks:
-            if not self._sub_planes[i]:
-                self._sub_planes[i] = Plane(
-                    one_subchunk_coords(self.start_pos, self.size, i),
-                    self.size / 2
-                )
-
+    # region Magic Methods
     def __bool__(self) -> bool:
         return True
-
-    def add_point(self, point: int) -> None:
-        if self.size <= MIN_BOX_SIZE:
-            return
-
-        sub_chunks = circle_in_subchunks(
-            self.start_pos, self._stuck_points[point], self.size, RADIUS
-        )
-        self.add_sub_chunks(sub_chunks)
-        for i in sub_chunks:
-            cast(Plane, self._sub_planes[i]).add_point(point)
 
     def __len__(self) -> int:
         return 4 - self._sub_planes.count(None)
@@ -96,7 +97,9 @@ class Plane:
 
     def __iter__(self) -> Generator[Plane, None, None]:
         return (i for i in self._sub_planes if i)
+    # endregion
 
+    # region PyGame stuff
     if USE_PYGAME:  # noqa: C901
         def _init_pygame(self, start: Vec2, size: float) -> None:
             self.rect = pygame.Rect(
@@ -121,3 +124,4 @@ class Plane:
         def _init_pygame(self, start: Vec2, size: float) -> None: ...
         def draw(self, surface: Surface) -> None: ...
         def _draw(self, surface: Surface) -> None: ...
+    # endregion
