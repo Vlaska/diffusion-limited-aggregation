@@ -101,6 +101,14 @@ cdef inline double dot(double[:] a, double[:] b):
     return a[0] * b[0] + a[1] * b[1]
 
 
+cdef double _dot_self(double[:] a):
+    return a[0] * a[0] + a[1] * a[1]
+
+
+cpdef double dot_self(double[:] a):
+    return _dot_self(a)
+
+
 @cython.cdivision(True)
 cdef double[:] _correct_circle_pos(double[:] new_pos, double[:] step, double[:] stuck_point, number radius):
     cdef double[:] A = cvarray(shape=(2, ), itemsize=sizeof(double), format='d')
@@ -120,8 +128,8 @@ cdef double[:] _correct_circle_pos(double[:] new_pos, double[:] step, double[:] 
     B[1] = new_pos[1] - stuck_point[1]
 
     theta = 2 * dot(A, B)
-    psi = dot(B, B) - 4 * radius * radius
-    chi = dot(A, A)
+    psi = _dot_self(B) - 4 * radius * radius
+    chi = _dot_self(A)
 
     sqrt_delta = np.sqrt(theta * theta - 4 * psi * chi)
 
@@ -140,7 +148,7 @@ cdef double[:] _correct_circle_pos(double[:] new_pos, double[:] step, double[:] 
     B[0] = out_2[0] - new_pos[0] + step[0]
     B[1] = out_2[1] - new_pos[1] + step[1]
 
-    if dot(A, A) > dot(B, B):
+    if _dot_self(A) > _dot_self(B):
         out_1 = out_2
 
     # Shorthen step to end at the new position (in place)

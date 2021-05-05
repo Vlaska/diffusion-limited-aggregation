@@ -34,3 +34,6 @@ def correct_circle_pos(
     stuck_point: np.ndarray,
     radius: float
 ) -> np.ndarray: ...
+
+
+def dot_self(a: np.ndarray) -> float: ...
