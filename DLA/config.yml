@@ -7,6 +7,7 @@ min_box_size: 128
 start_pos: !!python/tuple [512, 512]
 epsilon: !!python/float 1e-10
 push_out_tries: 10
+use_pygame: true
 
 # multiple of 'point_radius' which will be used while checking collision; min = 0
 radius_check: 2

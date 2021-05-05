@@ -72,16 +72,16 @@ def test_add_point(monkeypatch: MonkeyPatch):
     monkeypatch.setitem(config, 'start_pos', (14, 16))
     monkeypatch.setitem(config, 'num_of_points', 0)
     p = Plane.new()
-    assert len(p.chunks) == 1  # type: ignore
-    assert p.chunks[0]  # type: ignore
-    assert len(p.chunks[0].chunks) == 1  # type: ignore
-    assert p.chunks[0].chunks[0]  # type: ignore
-    assert len(p.chunks[0].chunks[0].chunks) == 1  # type: ignore
-    assert p.chunks[0].chunks[0].chunks[0]  # type: ignore
-    assert len(p.chunks[0].chunks[0].chunks[0].chunks) == 1  # type: ignore
-    assert p.chunks[0].chunks[0].chunks[0].chunks[0]  # type: ignore
+    assert len(p) == 1  # type: ignore
+    assert p[0]  # type: ignore
+    assert len(p[0]) == 1  # type: ignore
+    assert p[0][0]  # type: ignore
+    assert len(p[0][0]) == 1  # type: ignore
+    assert p[0][0][0]  # type: ignore
+    assert len(p[0][0][0]) == 1  # type: ignore
+    assert p[0][0][0][0]  # type: ignore
     assert len(
-        p.chunks[0].chunks[0].chunks[0].chunks[0].chunks  # type: ignore
+        p[0][0][0][0]  # type: ignore
     ) == 2
-    assert p.chunks[0].chunks[0].chunks[0].chunks[0].chunks[0]  # type: ignore
-    assert p.chunks[0].chunks[0].chunks[0].chunks[0].chunks[2]  # type: ignore
+    assert p[0][0][0][0][0]  # type: ignore
+    assert p[0][0][0][0][2]  # type: ignore
