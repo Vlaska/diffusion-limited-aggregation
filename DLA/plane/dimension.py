@@ -23,8 +23,8 @@ class Dimension(OrderedDict[_KT, _VT]):
     def _count(self, plane: Plane):
         if plane.size <= MIN_BOX_SIZE:
             return
-        self[plane.size / 2] += len(plane.chunks)
-        for i in plane.chunks:
+        self[plane.size / 2] += len(plane)
+        for i in plane:
             if i:
                 self._count(i)
 
