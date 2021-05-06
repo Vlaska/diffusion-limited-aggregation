@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from typing import (TYPE_CHECKING, Final, Generator, Iterable, List, Optional,
-                    Tuple, cast)
+from typing import (Dict, TYPE_CHECKING, Final, Generator, Iterable, List, Optional,
+                    Tuple, Type, cast, no_type_check)
 
 import numpy as np
 from DLA import LIGHT_GRAY, Vec2, config
@@ -10,6 +10,7 @@ from DLA.walker import StuckWalkers, WalkerPopulation
 
 WINDOW_WIDTH_AND_HEIGHT: Final[int] = config['window_size']
 MIN_BOX_SIZE: Final[float] = config['min_box_size']
+SECOND_MIN_BOX_SIZE: Final[float] = config['second_min_box_size']
 RADIUS: Final[float] = config['point_radius']
 USE_PYGAME: Final[bool] = config['use_pygame']
 
@@ -41,6 +42,8 @@ class Plane:
         self.size = size
         self._init_pygame(start, size)
         self._sub_planes: List[Optional[Plane]] = [None] * 4
+        self.full = False
+        self._new_plane_creator: Type[Plane] = SecondSmallestPlane if SECOND_MIN_BOX_SIZE == self.size / 2 else Plane
 
     def update(self):
         self._walking_points.walk()
@@ -50,21 +53,42 @@ class Plane:
     def add_sub_chunks(self, chunks: Iterable[int]) -> None:
         for i in chunks:
             if not self._sub_planes[i]:
-                self._sub_planes[i] = Plane(
+                self._sub_planes[i] = self._new_plane_creator(
                     one_subchunk_coords(self.start_pos, self.size, i),
                     self.size / 2
                 )
 
-    def add_point(self, point: int) -> None:
-        if self.size <= MIN_BOX_SIZE:
-            return
+    def add_point(self, point: int) -> bool:
+        if self.full:
+            return True
 
         sub_chunks = circle_in_subchunks(
             self.start_pos, self._stuck_points[point], self.size, RADIUS
         )
+
         self.add_sub_chunks(sub_chunks)
         for i in sub_chunks:
             cast(Plane, self._sub_planes[i]).add_point(point)
+
+        if self.are_full():
+            self.full = True
+            del self._sub_planes
+            return True
+
+        return False
+
+    @no_type_check
+    def are_full(self) -> bool:
+        return self.full or (
+            self._sub_planes[0] and
+            self._sub_planes[0].full and
+            self._sub_planes[1] and
+            self._sub_planes[1].full and
+            self._sub_planes[2] and
+            self._sub_planes[2].full and
+            self._sub_planes[3] and
+            self._sub_planes[3].full
+        )
 
     @classmethod
     def new(cls) -> Plane:
@@ -117,6 +141,8 @@ class Plane:
             if self.size <= 2:
                 return
             draw.rect(surface, LIGHT_GRAY, self.rect, 1)
+            if self.full:
+                return
             for i in self._sub_planes:
                 if i:
                     i._draw(surface)
@@ -125,3 +151,38 @@ class Plane:
         def draw(self, surface: Surface) -> None: ...
         def _draw(self, surface: Surface) -> None: ...
     # endregion
+
+
+class SecondSmallestPlane(Plane):
+    _sub_planes: List[Optional[bool]]  # type: ignore
+
+    def add_sub_chunks(self, chunks: Iterable[int]) -> None:
+        for i in chunks:
+            self._sub_planes[i] = True
+
+    def add_point(self, point: int) -> bool:
+        if self.full:
+            return True
+
+        sub_chunks = circle_in_subchunks(
+            self.start_pos, self._stuck_points[point], self.size, RADIUS
+        )
+
+        if len(sub_chunks) == 4:
+            self.full = True
+            del self._sub_planes
+            return True
+
+        self.add_sub_chunks(sub_chunks)
+
+        if len(self) == 4:
+            self.full = True
+            del self._sub_planes
+
+        return self.full
+
+    def _draw(self, surface: Surface) -> None:
+        draw.rect(surface, LIGHT_GRAY, self.rect, 1)
+
+    def are_full(self) -> bool:
+        return self.full

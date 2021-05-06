@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 _KT = float
 _VT = float
 MIN_BOX_SIZE: Final[float] = config['min_box_size']
+SECOND_MIN_BOX_SIZE: Final[float] = config['second_min_box_size']
 
 
 class Dimension(OrderedDict[_KT, _VT]):
@@ -21,8 +22,10 @@ class Dimension(OrderedDict[_KT, _VT]):
         self._count(self.plane)
 
     def _count(self, plane: Plane):
-        if plane.size <= MIN_BOX_SIZE:
+        if plane.size == SECOND_MIN_BOX_SIZE:
+            self[MIN_BOX_SIZE] += 4 if plane.full else len(plane)
             return
+
         self[plane.size / 2] += len(plane)
         for i in plane:
             if i:
