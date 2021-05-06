@@ -52,9 +52,12 @@ def main() -> NoReturn:
     surface_, clock = init()
     global p
 
+    up_num = 0
+
     while True:
         clock.tick(FPS)
-
+        display.set_caption(f"Diffusion Limited Aggregation - {up_num}")
+        up_num += 1
         for event in events.get():
             if event.type == pygame.QUIT:
                 print_dim()
