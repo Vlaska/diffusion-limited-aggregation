@@ -10,3 +10,4 @@ push_out_tries: 10
 
 # multiple of 'point_radius' which will be used while checking collision; min = 0
 radius_check: 2
+regen_after_updates: 150
