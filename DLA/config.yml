@@ -3,8 +3,8 @@ window_size: 1024
 point_radius: 5.0
 num_of_points: 2000
 fps: 120
-min_box_size: 0.015625
-second_min_box_size: 0.03125
+min_box_size: 0.0078125
+second_min_box_size: 0.015625
 
 # 1/2 = 0.5
 # 1/4 = 0.25

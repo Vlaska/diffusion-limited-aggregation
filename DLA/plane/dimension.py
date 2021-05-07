@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from typing import Final, OrderedDict, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, Final, OrderedDict
 
 import numpy as np
 from DLA import config
+from DLA.walker.stuck_walkers import WINDOW_SIZE
 
 if TYPE_CHECKING:
     from .plane import Plane
@@ -15,6 +16,23 @@ SECOND_MIN_BOX_SIZE: Final[float] = config['second_min_box_size']
 
 
 class Dimension(OrderedDict[_KT, _VT]):
+    lookup_tab: Dict[float, Dict[float, int]]
+
+    @classmethod
+    def init_lookup(cls):
+        cls.lookup_tab = {
+            2 ** i: {}
+            for i in range(
+                int(np.log2(MIN_BOX_SIZE)) + 1, int(np.log2(WINDOW_SIZE)) + 1
+            )
+        }
+        o = int(np.log2(MIN_BOX_SIZE)) - 1
+        for k, v in cls.lookup_tab.items():
+            u = 4
+            for j in range(int(np.log2(k)) - 1, o, -1):
+                v[2 ** j] = u
+                u *= 4
+
     def __init__(self, plane: Plane) -> None:
         self.plane = plane
 
@@ -22,14 +40,27 @@ class Dimension(OrderedDict[_KT, _VT]):
         self._count(self.plane)
 
     def _count(self, plane: Plane):
-        if plane.size == SECOND_MIN_BOX_SIZE:
-            self[MIN_BOX_SIZE] += 4 if plane.full else len(plane)
+
+        if plane.full:
+            self._count_full(plane.size)
             return
 
+        # if plane.size == SECOND_MIN_BOX_SIZE:
+        #     self[MIN_BOX_SIZE] += 4 if plane.full else len(plane)
+        #     return
+
         self[plane.size / 2] += len(plane)
+
+        if plane.size == SECOND_MIN_BOX_SIZE:
+            return
+
         for i in plane:
             if i:
                 self._count(i)
+
+    def _count_full(self, size: float):
+        for k, v in self.lookup_tab[size].items():
+            self[k] += v
 
     def dim(self) -> OrderedDict[_KT, _VT]:
         out = OrderedDict()
@@ -45,3 +76,6 @@ class Dimension(OrderedDict[_KT, _VT]):
             return super().__getitem__(k)
         except KeyError:
             return 0
+
+
+Dimension.init_lookup()
