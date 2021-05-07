@@ -37,3 +37,11 @@ def correct_circle_pos(
 
 
 def dot_self(a: np.ndarray) -> float: ...
+
+
+def is_in_circle(
+    pos: np.ndarray,
+    c_pos: np.ndarray,
+    size: float,
+    radius: float
+) -> bool: ...

@@ -160,3 +160,15 @@ cdef double[:] _correct_circle_pos(double[:] new_pos, double[:] step, double[:] 
 
 cpdef np.ndarray[double, ndim=1] correct_circle_pos(double[:] new_pos, double[:] step, double[:] stuck_point, number radius):
     return np.asarray(_correct_circle_pos(new_pos, step, stuck_point, radius))
+
+
+cpdef bint is_in_circle(double[:] pos, double[:] c_pos, double size, double radius):
+    cdef double[2] tmp
+    cdef double r_sqruared = radius * radius
+    for i in range(4):
+        tmp = _one_subchunk_coords(pos[0], pos[1], size, i)
+        tmp[0] -= c_pos[0]
+        tmp[1] -= c_pos[1]
+        if _dot_self(tmp) > r_sqruared:
+            return False
+    return True
