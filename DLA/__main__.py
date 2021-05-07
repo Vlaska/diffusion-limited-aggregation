@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from gc import collect
 import sys
 from typing import Final, NoReturn, Tuple
 
@@ -55,29 +56,31 @@ def main() -> NoReturn:
     up_num = 0
 
     while True:
-        clock.tick(FPS)
-        display.set_caption(f"Diffusion Limited Aggregation - {up_num}")
-        up_num += 1
-        for event in events.get():
-            if event.type == pygame.QUIT:
+        for i in range(50):
+            clock.tick(FPS)
+            display.set_caption(f"Diffusion Limited Aggregation - {up_num}")
+            up_num += 1
+            for event in events.get():
+                if event.type == pygame.QUIT:
+                    print_dim()
+                    sys.exit(0)
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_r:
+                        p = plane.Plane.new()
+
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_ESCAPE]:
                 print_dim()
                 sys.exit(0)
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_r:
-                    p = plane.Plane.new()
 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_ESCAPE]:
-            print_dim()
-            sys.exit(0)
+            p.update()
 
-        p.update()
+            surface_.fill(BLACK)
 
-        surface_.fill(BLACK)
+            render(surface_)
 
-        render(surface_)
-
-        display.flip()
+            display.flip()
+        collect()
 
 
 if __name__ == '__main__':
