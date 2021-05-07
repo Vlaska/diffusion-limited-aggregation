@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from typing import (Dict, TYPE_CHECKING, Final, Generator, Iterable, List, Optional,
-                    Tuple, Type, cast, no_type_check)
+from typing import (TYPE_CHECKING, Dict, Final, Generator, Iterable, List,
+                    Optional, Tuple, Type, cast, no_type_check)
 
 import numpy as np
 from DLA import LIGHT_GRAY, Vec2, config
@@ -58,6 +58,10 @@ class Plane:
                     self.size / 2
                 )
 
+    def set_full(self) -> None:
+        self.full = True
+        del self._sub_planes
+
     def add_point(self, point: int) -> bool:
         if self.full:
             return True
@@ -68,8 +72,7 @@ class Plane:
             self.size,
             RADIUS
         ):
-            self.full = True
-            del self._sub_planes
+            self.set_full()
             return True
 
         sub_chunks = circle_in_subchunks(
@@ -81,11 +84,9 @@ class Plane:
             cast(Plane, self._sub_planes[i]).add_point(point)
 
         if self.are_full():
-            self.full = True
-            del self._sub_planes
-            return True
+            self.set_full()
 
-        return False
+        return self.full
 
     @no_type_check
     def are_full(self) -> bool:
@@ -180,24 +181,17 @@ class SecondSmallestPlane(Plane):
             self.size,
             RADIUS
         ):
-            self.full = True
-            del self._sub_planes
+            self.set_full()
             return True
 
         sub_chunks = circle_in_subchunks(
             self.start_pos, self._stuck_points[point], self.size, RADIUS
         )
 
-        if len(sub_chunks) == 4:
-            self.full = True
-            del self._sub_planes
-            return True
-
         self.add_sub_chunks(sub_chunks)
 
         if len(self) == 4:
-            self.full = True
-            del self._sub_planes
+            self.set_full()
 
         return self.full
 
