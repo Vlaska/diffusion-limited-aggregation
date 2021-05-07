@@ -5,7 +5,7 @@ from typing import (Dict, TYPE_CHECKING, Final, Generator, Iterable, List, Optio
 
 import numpy as np
 from DLA import LIGHT_GRAY, Vec2, config
-from DLA.utils import circle_in_subchunks, one_subchunk_coords
+from DLA.utils import circle_in_subchunks, is_in_circle, one_subchunk_coords
 from DLA.walker import StuckWalkers, WalkerPopulation
 
 WINDOW_WIDTH_AND_HEIGHT: Final[int] = config['window_size']
@@ -60,6 +60,16 @@ class Plane:
 
     def add_point(self, point: int) -> bool:
         if self.full:
+            return True
+
+        if is_in_circle(
+            self.start_pos,
+            self._stuck_points[point],
+            self.size,
+            RADIUS
+        ):
+            self.full = True
+            del self._sub_planes
             return True
 
         sub_chunks = circle_in_subchunks(
@@ -162,6 +172,16 @@ class SecondSmallestPlane(Plane):
 
     def add_point(self, point: int) -> bool:
         if self.full:
+            return True
+
+        if is_in_circle(
+            self.start_pos,
+            self._stuck_points[point],
+            self.size,
+            RADIUS
+        ):
+            self.full = True
+            del self._sub_planes
             return True
 
         sub_chunks = circle_in_subchunks(
