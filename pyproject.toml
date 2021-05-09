@@ -12,7 +12,6 @@ Pillow = "^8.2.0"
 matplotlib = "^3.4.1"
 imageio = "^2.9.0"
 pygame = "^2.0.1"
-numba = "^0.53.1"
 PyYAML = "^5.4.1"
 
 [tool.poetry.dev-dependencies]
