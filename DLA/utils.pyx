@@ -13,7 +13,6 @@ cdef double NAN = float('nan')
 
 ctypedef fused number:
     int
-    long
     double
 
 

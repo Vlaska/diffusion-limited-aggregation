@@ -3,7 +3,7 @@ from Cython.Build import cythonize
 import numpy as np
 
 setup(
-    name="utils",
+    name="dla",
     ext_modules=cythonize("DLA/utils.pyx"),
     # zip_safe=False,
     include_dirs=[np.get_include()],

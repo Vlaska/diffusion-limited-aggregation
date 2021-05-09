@@ -45,10 +45,6 @@ class Dimension(OrderedDict[_KT, _VT]):
             self._count_full(plane.size)
             return
 
-        # if plane.size == SECOND_MIN_BOX_SIZE:
-        #     self[MIN_BOX_SIZE] += 4 if plane.full else len(plane)
-        #     return
-
         self[plane.size / 2] += len(plane)
 
         if plane.size == SECOND_MIN_BOX_SIZE:

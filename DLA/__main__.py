@@ -4,6 +4,7 @@ from gc import collect
 import sys
 from typing import Final, NoReturn, Tuple
 
+from beautifultable import BeautifulTable
 import numpy as np
 import pygame
 import pygame.display as display
@@ -45,8 +46,14 @@ def render(surface_: surface.Surface) -> None:
 def print_dim():
     dim = Dimension(p)
     dim.count()
-    print(dim)
-    print(dim.dim())
+
+    tab = BeautifulTable(precision=6)
+    tab.columns.header = ['Box size', 'Num of squares', 'Dimension']
+
+    for k, v in dim.dim().items():
+        tab.rows.append([f'1/{int(1 / k)}', dim[k], v])
+
+    print(tab)
 
 
 def main() -> NoReturn:

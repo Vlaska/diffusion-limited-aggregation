@@ -70,7 +70,7 @@ def test_add_point(monkeypatch: MonkeyPatch):
     monkeypatch.setattr(plane, 'RADIUS', 1)
     monkeypatch.setattr(plane, 'MIN_BOX_SIZE', 16)
     monkeypatch.setitem(config, 'start_pos', (14, 16))
-    monkeypatch.setitem(config, 'num_of_points', 0)
+    monkeypatch.setitem(config, 'num_of_particles', 0)
     p = Plane.new()
     assert len(p) == 1  # type: ignore
     assert p[0]  # type: ignore

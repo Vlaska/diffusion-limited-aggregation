@@ -3,14 +3,15 @@ from __future__ import annotations
 from pkgutil import get_data
 from typing import Final
 
+import numpy as np
 import yaml
 
 from DLA.types import RGB, RGBA, Vec, Vec2
 
-
 _config_data = get_data('DLA', 'config.yml')
 if _config_data:
     config = yaml.full_load(_config_data.decode('utf-8'))
+    config['second_min_box_size'] = 2 ** (np.log2(config['min_box_size']) + 1)
 else:
     raise Exception("Missing configuration data")
 

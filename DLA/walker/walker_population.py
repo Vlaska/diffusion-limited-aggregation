@@ -13,7 +13,7 @@ from .walker import Walker
 
 PUSH_OUT_TRIES: Final[int] = config['push_out_tries']
 WINDOW_SIZE: Final[float] = config['window_size']
-RADIUS: Final[float] = config['point_radius']
+RADIUS: Final[float] = config['particle_radius']
 BORDER_U_L: Final[float] = RADIUS
 BORDER_D_R: Final[float] = config['window_size'] - RADIUS
 REGENERATE_AFTER: Final[int] = config['regen_after_updates']

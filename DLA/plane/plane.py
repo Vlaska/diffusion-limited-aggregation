@@ -11,7 +11,7 @@ from DLA.walker import StuckWalkers, WalkerPopulation
 WINDOW_WIDTH_AND_HEIGHT: Final[int] = config['window_size']
 MIN_BOX_SIZE: Final[float] = config['min_box_size']
 SECOND_MIN_BOX_SIZE: Final[float] = config['second_min_box_size']
-RADIUS: Final[float] = config['point_radius']
+RADIUS: Final[float] = config['particle_radius']
 USE_PYGAME: Final[bool] = config['use_pygame']
 
 if USE_PYGAME or TYPE_CHECKING:
@@ -105,7 +105,7 @@ class Plane:
     def new(cls) -> Plane:
         obj = cls((0, 0), WINDOW_WIDTH_AND_HEIGHT)
 
-        cls._walking_points = WalkerPopulation(config['num_of_points'])
+        cls._walking_points = WalkerPopulation(config['num_of_particles'])
         cls._stuck_points = StuckWalkers(
             cls._walking_points, config['start_pos'], obj
         )
