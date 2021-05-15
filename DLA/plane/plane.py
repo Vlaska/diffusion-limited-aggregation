@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from typing import (TYPE_CHECKING, Dict, Final, Generator, Iterable, List,
-                    Optional, Tuple, Type, cast, no_type_check)
+from functools import cached_property
+from typing import (TYPE_CHECKING, Final, Generator, Iterable, List, Optional,
+                    Tuple, Type, cast, no_type_check)
 
 import numpy as np
 from DLA import LIGHT_GRAY, Vec2, config
@@ -43,13 +44,22 @@ class Plane:
         self._init_pygame(start, size)
         self._sub_planes: List[Optional[Plane]] = [None] * 4
         self.full = False
-        self._new_plane_creator: Type[Plane] = SecondSmallestPlane if SECOND_MIN_BOX_SIZE == self.size / 2 else Plane
+        self._new_plane_creator: Type[Plane] = (
+            self._indivisible_plane
+            if SECOND_MIN_BOX_SIZE == self.size / 2 else Plane
+        )
+
+    def __new__(cls, start: Vec2, size: float) -> Plane:
+        return super().__new__(cls)
+
+    @cached_property
+    def _indivisible_plane(self) -> Type[Plane]:
+        from DLA.plane.indivisible_plane import IndivisiblePlane
+        return IndivisiblePlane
 
     def update(self):
-        self._walking_points.walk()
-        self._walking_points.is_stuck(self._stuck_points)
+        self._walking_points.update(self._stuck_points)
 
-    # ? Offload using multithreading + some sort of queue ?
     def add_sub_chunks(self, chunks: Iterable[int]) -> None:
         for i in chunks:
             if not self._sub_planes[i]:
@@ -62,9 +72,9 @@ class Plane:
         self.full = True
         del self._sub_planes
 
-    def add_point(self, point: int) -> bool:
+    def _add_point(self, point: int) -> Tuple[bool, Optional[List[int]]]:
         if self.full:
-            return True
+            return True, None
 
         if is_in_circle(
             self.start_pos,
@@ -73,32 +83,38 @@ class Plane:
             RADIUS
         ):
             self.set_full()
-            return True
+            return True, None
 
         sub_chunks = circle_in_subchunks(
             self.start_pos, self._stuck_points[point], self.size, RADIUS
         )
 
         self.add_sub_chunks(sub_chunks)
-        for i in sub_chunks:
+
+        return False, sub_chunks
+
+    def add_point(self, point: int) -> None:
+        done, sub_chunks = self._add_point(point)
+
+        if done:
+            return
+
+        for i in cast(List[int], sub_chunks):
             cast(Plane, self._sub_planes[i]).add_point(point)
 
         if self.are_full():
             self.set_full()
 
-        return self.full
+        return
+
+    @staticmethod
+    def _check_is_full(v: Optional[Plane]) -> bool:
+        return v and v.full  # type: ignore
 
     @no_type_check
     def are_full(self) -> bool:
-        return self.full or (
-            self._sub_planes[0] and
-            self._sub_planes[0].full and
-            self._sub_planes[1] and
-            self._sub_planes[1].full and
-            self._sub_planes[2] and
-            self._sub_planes[2].full and
-            self._sub_planes[3] and
-            self._sub_planes[3].full
+        return self.full or all(
+            self._check_is_full(self._sub_planes[i]) for i in range(4)
         )
 
     @classmethod
@@ -162,41 +178,3 @@ class Plane:
         def draw(self, surface: Surface) -> None: ...
         def _draw(self, surface: Surface) -> None: ...
     # endregion
-
-
-class SecondSmallestPlane(Plane):
-    _sub_planes: List[Optional[bool]]  # type: ignore
-
-    def add_sub_chunks(self, chunks: Iterable[int]) -> None:
-        for i in chunks:
-            self._sub_planes[i] = True
-
-    def add_point(self, point: int) -> bool:
-        if self.full:
-            return True
-
-        if is_in_circle(
-            self.start_pos,
-            self._stuck_points[point],
-            self.size,
-            RADIUS
-        ):
-            self.set_full()
-            return True
-
-        sub_chunks = circle_in_subchunks(
-            self.start_pos, self._stuck_points[point], self.size, RADIUS
-        )
-
-        self.add_sub_chunks(sub_chunks)
-
-        if len(self) == 4:
-            self.set_full()
-
-        return self.full
-
-    def _draw(self, surface: Surface) -> None:
-        draw.rect(surface, LIGHT_GRAY, self.rect, 1)
-
-    def are_full(self) -> bool:
-        return self.full

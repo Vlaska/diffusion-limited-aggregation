@@ -68,6 +68,7 @@ class WalkerPopulation(Walker):
         return False
 
     def is_stuck(self, other: StuckWalkers) -> None:
+        # * replacement for tail recursion
         while self._is_stuck(other):
             pass
 
@@ -79,3 +80,7 @@ class WalkerPopulation(Walker):
             self.last_regen = -1
             self.size = self.pos.shape[0]
         self.last_regen += 1
+
+    def update(self, other: StuckWalkers) -> None:
+        self.walk()
+        self.is_stuck(other)
