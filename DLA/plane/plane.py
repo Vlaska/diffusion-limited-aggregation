@@ -55,11 +55,12 @@ class Plane(BasePlane):
         for i in self._sub_planes:
             if i:
                 i._reset()
+        self._sub_planes.clear()
 
     def add_point(self, point: int) -> None:
         sub_planes = self._add_point(point)
 
-        if sub_planes is None or self.disabled:
+        if sub_planes is None:
             return
 
         for i in sub_planes:
@@ -67,10 +68,6 @@ class Plane(BasePlane):
 
         if self.is_full():
             self.set_full()
-
-    @staticmethod
-    def _check_is_full(v: Optional[BasePlane]) -> bool:
-        return v and v.is_full()  # type: ignore
 
     def is_full(self) -> bool:
         return self.full or all(
@@ -93,3 +90,16 @@ class Plane(BasePlane):
         obj.add_point(0)
 
         return obj
+
+    # region Private Methods
+    def _reset(self) -> None:
+        for i in self._sub_planes:
+            if isinstance(i, BasePlane):
+                i._reset()
+
+        super()._reset()
+
+    @staticmethod
+    def _check_is_full(v: Optional[BasePlane]) -> bool:
+        return v and v.is_full()  # type: ignore
+    # endregion

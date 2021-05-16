@@ -2,13 +2,25 @@ from typing import Iterable, List, Optional
 
 from pygame import draw
 from pygame.surface import Surface
-from loguru import logger
 
 from DLA import LIGHT_GRAY
 from DLA.plane.base_plane import USE_PYGAME, BasePlane
 
 
 class IndivisiblePlane(BasePlane):
+    """
+    Sub planes assignment
+    ┌───────┬───────┐
+    │       │       │
+    │   0   │   1   │
+    │       │       │
+    ├───────┼───────┤
+    │       │       │
+    │   2   │   3   │
+    │       │       │
+    └───────┴───────┘
+    """
+
     _sub_planes: List[Optional[bool]]  # type: ignore
 
     def add_sub_chunks(self, chunks: Iterable[int]) -> None:
@@ -26,13 +38,9 @@ class IndivisiblePlane(BasePlane):
 
         return
 
-    if USE_PYGAME:
-        def _draw(self, surface: Surface) -> None:
-            draw.rect(surface, LIGHT_GRAY, self.rect, 1)
-
     def are_full(self) -> bool:
         return self.full
 
-    def _reset(self) -> None:
-        self._object_pool[self.__class__].add(self)
-        self._sub_planes.clear()
+    if USE_PYGAME:
+        def _draw(self, surface: Surface) -> None:
+            draw.rect(surface, LIGHT_GRAY, self.rect, 1)

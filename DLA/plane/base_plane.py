@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Dict, Set, TYPE_CHECKING, Final, Generator, List, Optional, Tuple, Type, TypeVar, cast
+from typing import (TYPE_CHECKING, Dict, Final, Generator, List, Optional, Set,
+                    Tuple, Type, TypeVar, cast)
 
 import numpy as np
 
@@ -39,14 +40,7 @@ class PlaneFactory(type):
 
         if pool:
             obj = pool.pop()
-            while not (obj.disabled and pool):
-                if not pool:
-                    obj = super(PlaneFactory, cls).__call__(
-                        start=start, size=size)
-                    break
-                obj = pool.pop()
-            else:
-                obj._init(start, size)
+            obj._init(start, size)
         else:
             obj = super(PlaneFactory, cls).__call__(start=start, size=size)
 
@@ -54,6 +48,19 @@ class PlaneFactory(type):
 
 
 class BasePlane(metaclass=PlaneFactory):
+    """
+    Sub planes assignment
+    ┌───────┬───────┐
+    │       │       │
+    │   0   │   1   │
+    │       │       │
+    ├───────┼───────┤
+    │       │       │
+    │   2   │   3   │
+    │       │       │
+    └───────┴───────┘
+    """
+
     _stuck_points: StuckWalkers
     _walking_points: WalkerPopulation
     _sub_planes: List[Optional[BasePlane]]
@@ -71,16 +78,16 @@ class BasePlane(metaclass=PlaneFactory):
     def size(self, size: float) -> None:
         self._size = size
 
+    def set_full(self) -> None:
+        self.full = True
+
+    # region Private Methods
     def _init(self, start: Vec2, size: float) -> None:
         self.start_pos[:] = start
         self.size = size
         self._init_pygame(start, size)
         self.full = False
-        self.disabled = False
         self._sub_planes = [None] * 4
-
-    def set_full(self) -> None:
-        self.full = True
 
     def _add_point(self, point: int) -> Optional[List[int]]:
         if self.full:
@@ -104,15 +111,9 @@ class BasePlane(metaclass=PlaneFactory):
         return sub_chunks
 
     def _reset(self) -> None:
-        if self.disabled:
-            return
-        o = [id(i) for i in self._sub_planes if i]
         self._object_pool[self.__class__].add(self)
-        for i in self._sub_planes:
-            if isinstance(i, BasePlane):
-                i._reset()
         self._sub_planes.clear()
-        self.disabled = True
+    # endregion
 
     # region Abstract
     def add_sub_chunks(self, chunks) -> None:
