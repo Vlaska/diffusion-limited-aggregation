@@ -35,6 +35,6 @@ class IndivisiblePlane(BasePlane):
 
     def _reset(self) -> None:
         self._object_pool[self.__class__].add(self)
-        logger.debug(f"Added to pool: {self.__class__.__name__}, {id(self)}")
+        # logger.debug(f"Added to pool: {self.__class__.__name__}, {id(self)}")
         self._sub_planes = [None] * 4
         # print("Returned to pool")

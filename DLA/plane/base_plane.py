@@ -43,8 +43,14 @@ class PlaneFactory(type):
         if pool:
             # print("Got from pool")
             obj = pool.pop()
-            logger.debug(f"Removed from pool: {cls.__name__}, {id(obj)}")
-            obj._init(start, size)
+            while not (obj.disabled and pool):
+                if not pool:
+                    obj = super(PlaneFactory, cls).__call__(start=start, size=size)
+                    break
+                obj = pool.pop()
+            else:
+                obj._reinit(start, size)
+            # logger.debug(f"Removed from pool: {cls.__name__}, {id(obj)}")
         else:
             # print("New object")
             obj = super(PlaneFactory, cls).__call__(start=start, size=size)
@@ -62,6 +68,7 @@ class BasePlane(metaclass=PlaneFactory):
     def __init__(self, start: Vec2, size: float) -> None:
         self.start_pos = np.empty(2, dtype=np.double)
         self._init(start, size)
+        logger.debug(f"Init: {id(self)}")
 
     @property
     def size(self) -> float:
@@ -70,6 +77,10 @@ class BasePlane(metaclass=PlaneFactory):
     @size.setter
     def size(self, size: float) -> None:
         self._size = size
+
+    def _reinit(self, start, size):
+        logger.debug(f'Reinit: {id(self)}')
+        self._init(start, size)
 
     def _init(self, start: Vec2, size: float) -> None:
         self.start_pos[:] = start
@@ -108,10 +119,12 @@ class BasePlane(metaclass=PlaneFactory):
             return
         o = [id(i) for i in self._sub_planes if i]
         self._object_pool[self.__class__].add(self)
-        logger.debug(f"Added to pool: {self.__class__.__name__}, {id(self)}, children: {o}")
+        logger.debug(f'Reset: {id(self)}')
+        # logger.debug(f"Added to pool: {self.__class__.__name__}, {id(self)}, children: {o}")
         for i in self._sub_planes:
             if isinstance(i, BasePlane):
                 i._reset()
+        self._sub_planes.clear()
         self.disabled = True
         # print("Returned to pool")
 
@@ -119,7 +132,7 @@ class BasePlane(metaclass=PlaneFactory):
     def add_sub_chunks(self, chunks) -> None:
         pass
 
-    def are_full(self) -> bool:
+    def is_full(self) -> bool:
         pass
 
     def add_point(self, point: int) -> None:

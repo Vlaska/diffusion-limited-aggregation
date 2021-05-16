@@ -45,11 +45,12 @@ class Plane(BasePlane):
     def add_sub_chunks(self, chunks: Iterable[int]) -> None:
         for i in chunks:
             if not self._sub_planes[i]:
-                self._sub_planes[i] = self._new_plane_type(
+                t = self._new_plane_type(
                     one_subchunk_coords(self.start_pos, self.size, i),
                     self.size / 2
                 )
-        logger.debug(f"Added to: {id(self)}, child: {[id(i) for i in self._sub_planes if i]}")
+                self._sub_planes[i] = t
+        # logger.debug(f"Added to: {id(self)}, child: {[id(i) for i in self._sub_planes if i]}")
 
     def set_full(self) -> None:
         super().set_full()
@@ -58,7 +59,7 @@ class Plane(BasePlane):
                 i._reset()
 
     def add_point(self, point: int) -> None:
-        # print(f"{self.size=}")        
+        # print(f"{self.size=}")
         sub_planes = self._add_point(point)
         # print(f"{int(self.size)} {tuple(self.start_pos)}")
 
@@ -69,18 +70,18 @@ class Plane(BasePlane):
             for i in sub_planes:
                 cast(Plane, self._sub_planes[i]).add_point(point)
         except AttributeError:
-            logger.error(f"Crashed at: {id(self)}, children: {[id(i) for i in self._sub_planes if i]}")
+            # logger.error(f"Crashed at: {id(self)}, children: {[id(i) for i in self._sub_planes if i]}")
             raise
         # print(f"Return to {self.size=}")
 
-        if self.are_full():
+        if self.is_full():
             self.set_full()
 
     @staticmethod
     def _check_is_full(v: Optional[BasePlane]) -> bool:
-        return v and v.full  # type: ignore
+        return v and v.is_full()  # type: ignore
 
-    def are_full(self) -> bool:
+    def is_full(self) -> bool:
         return self.full or all(
             self._check_is_full(self._sub_planes[i]) for i in range(4)
         )
