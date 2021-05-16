@@ -4,8 +4,9 @@
 #cython: nonecheck=False
 
 import numpy as np
-cimport numpy as np
+
 cimport cython
+cimport numpy as np
 from cython.view cimport array as cvarray
 
 

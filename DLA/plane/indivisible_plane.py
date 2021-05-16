@@ -1,13 +1,13 @@
-from typing import List, Optional, Iterable
+from typing import Iterable, List, Optional
 
 from pygame import draw
 from pygame.surface import Surface
 
 from DLA import LIGHT_GRAY
-from DLA.plane import Plane
+from DLA.plane.base_plane import USE_PYGAME, BasePlane
 
 
-class IndivisiblePlane(Plane):
+class IndivisiblePlane(BasePlane):
     _sub_planes: List[Optional[bool]]  # type: ignore
 
     def add_sub_chunks(self, chunks: Iterable[int]) -> None:
@@ -15,9 +15,9 @@ class IndivisiblePlane(Plane):
             self._sub_planes[i] = True
 
     def add_point(self, point: int) -> None:
-        done, _ = self._add_point(point)
+        sub_planes = self._add_point(point)
 
-        if done:
+        if sub_planes is None:
             return
 
         if len(self) == 4:
@@ -25,8 +25,9 @@ class IndivisiblePlane(Plane):
 
         return
 
-    def _draw(self, surface: Surface) -> None:
-        draw.rect(surface, LIGHT_GRAY, self.rect, 1)
+    if USE_PYGAME:
+        def _draw(self, surface: Surface) -> None:
+            draw.rect(surface, LIGHT_GRAY, self.rect, 1)
 
     def are_full(self) -> bool:
         return self.full

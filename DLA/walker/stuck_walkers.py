@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Final, Iterator, Optional, Tuple
 
 import numpy as np
+
 from DLA import GREEN, RGB, Vec, config
 from DLA.utils import dot_self, squared_distance
 
@@ -10,7 +11,8 @@ from .config import RADIUS
 from .walker import Walker
 
 if TYPE_CHECKING:
-    from DLA.plane import Plane
+    from DLA.plane.base_plane import BasePlane
+
     from .walker_population import WalkerPopulation
 
 
@@ -24,14 +26,14 @@ RADIUS_CHECK: Final[float] = (max(0, config['radius_check']) + 1) * RADIUS
 
 class StuckWalkers(Walker):
     color: RGB = GREEN
-    _plane: Plane
+    _plane: BasePlane
     radius: float
 
     def __init__(
         self,
         walkers: WalkerPopulation,
         start_pos: Vec,
-        plane: Plane
+        plane: BasePlane
     ) -> None:
         super().__init__(walkers.size + 1)
         self.pos[0] = start_pos

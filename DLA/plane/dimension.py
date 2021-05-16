@@ -3,10 +3,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Dict, Final, OrderedDict
 
 import numpy as np
+
 from DLA import config
 from DLA.walker.stuck_walkers import WINDOW_SIZE
 
 if TYPE_CHECKING:
+    from DLA.plane.base_plane import BasePlane
+
     from .plane import Plane
 
 _KT = float
@@ -39,7 +42,7 @@ class Dimension(OrderedDict[_KT, _VT]):
     def count(self):
         self._count(self.plane)
 
-    def _count(self, plane: Plane):
+    def _count(self, plane: BasePlane):
 
         if plane.full:
             self._count_full(plane.size)

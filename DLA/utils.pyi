@@ -4,7 +4,6 @@ from typing import List, Tuple
 
 import numpy as np
 
-
 def squared_distance(v: np.ndarray) -> np.ndarray: ...
 
 

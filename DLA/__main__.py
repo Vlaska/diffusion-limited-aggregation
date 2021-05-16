@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from gc import collect
 import sys
+from gc import collect
 from typing import Final, NoReturn, Tuple
 
-from beautifultable import BeautifulTable
 import numpy as np
 import pygame
 import pygame.display as display
@@ -12,10 +11,10 @@ import pygame.event as events
 import pygame.key
 import pygame.surface as surface
 import pygame.time as time
+from beautifultable import BeautifulTable
 
 from DLA import BLACK, config, plane
 from DLA.plane.dimension import Dimension
-
 
 FPS: Final[int] = 60
 WINDOW_SIZE: Final[Tuple[int, int]] = (

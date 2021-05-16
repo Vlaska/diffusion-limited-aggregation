@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from typing import Iterator, cast, Tuple, Any
+from typing import Any, Iterator, Tuple, cast
 
 import numpy as np
 from numpy import NaN
-from pygame import surface as surface, draw as draw
+from pygame import draw as draw
+from pygame import surface as surface
 
-from DLA import WHITE, RGB, Vec
+from DLA import RGB, WHITE, Vec
+
 from .config import RADIUS
 
 

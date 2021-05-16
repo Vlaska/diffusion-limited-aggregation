@@ -3,9 +3,10 @@ from __future__ import annotations
 from typing import Final
 
 import numpy as np
+from numpy import NaN
+
 from DLA import Vec, config
 from DLA.utils import correct_circle_pos
-from numpy import NaN
 
 from .stuck_walkers import StuckWalkers
 from .utils import random_in_range
