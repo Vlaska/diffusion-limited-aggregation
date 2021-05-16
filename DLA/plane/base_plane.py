@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import Dict, TYPE_CHECKING, Final, Generator, List, Optional, Tuple, Type, TypeVar, cast
+from typing import Dict, Set, TYPE_CHECKING, Final, Generator, List, Optional, Tuple, Type, TypeVar, cast
 
 import numpy as np
+from loguru import logger
 
 from DLA import LIGHT_GRAY, Vec2, config
 from DLA.utils import circle_in_subchunks, is_in_circle
@@ -20,14 +21,16 @@ if USE_PYGAME or TYPE_CHECKING:
 
 K = TypeVar('K')
 V = TypeVar('V')
+logger.add('logs/reuse - {time}.log', format='{time} | {level} | {message}')
+logger.disable('DLA')
 
 
-class _ObjectPool(Dict[K, List[V]]):
-    def __getitem__(self, k: K) -> List[V]:
+class _ObjectPool(Dict[K, Set[V]]):
+    def __getitem__(self, k: K) -> Set[V]:
         try:
             return super().__getitem__(k)
         except KeyError:
-            t: List[V] = []
+            t: Set[V] = set()
             self[k] = t
             return t
 
@@ -40,10 +43,12 @@ class PlaneFactory(type):
         if pool:
             # print("Got from pool")
             obj = pool.pop()
+            logger.debug(f"Removed from pool: {cls.__name__}, {id(obj)}")
             obj._init(start, size)
         else:
             # print("New object")
             obj = super(PlaneFactory, cls).__call__(start=start, size=size)
+            # logger.debug(f"New object: {cls.__name__}, {id(obj)}")
 
         return obj
 
@@ -65,20 +70,6 @@ class BasePlane(metaclass=PlaneFactory):
     @size.setter
     def size(self, size: float) -> None:
         self._size = size
-
-    # def __new__(cls, start: Vec2, size: float) -> BasePlane:
-    #     pool = cls._object_pool[cls]
-    #     obj: BasePlane
-
-    #     if pool:
-    #         print("Got from pool")
-    #         obj = pool.pop()
-    #         obj._init(start, size)
-    #     else:
-    #         # print("New object")
-    #         obj = super().__new__(cls)
-
-    #     return obj
 
     def _init(self, start: Vec2, size: float) -> None:
         self.start_pos[:] = start
@@ -113,10 +104,14 @@ class BasePlane(metaclass=PlaneFactory):
         return sub_chunks
 
     def _reset(self) -> None:
+        if self.disabled:
+            return
+        o = [id(i) for i in self._sub_planes if i]
+        self._object_pool[self.__class__].add(self)
+        logger.debug(f"Added to pool: {self.__class__.__name__}, {id(self)}, children: {o}")
         for i in self._sub_planes:
-            if isinstance(i, BasePlane) and not i.disabled:
+            if isinstance(i, BasePlane):
                 i._reset()
-        self._object_pool[self.__class__].append(self)
         self.disabled = True
         # print("Returned to pool")
 

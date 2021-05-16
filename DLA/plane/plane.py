@@ -7,6 +7,7 @@ from DLA.plane.base_plane import BasePlane
 from DLA.plane.indivisible_plane import IndivisiblePlane
 from DLA.utils import one_subchunk_coords
 from DLA.walker import StuckWalkers, WalkerPopulation
+from loguru import logger
 
 WINDOW_WIDTH_AND_HEIGHT: Final[int] = config['window_size']
 MIN_BOX_SIZE: Final[float] = config['min_box_size']
@@ -48,6 +49,7 @@ class Plane(BasePlane):
                     one_subchunk_coords(self.start_pos, self.size, i),
                     self.size / 2
                 )
+        logger.debug(f"Added to: {id(self)}, child: {[id(i) for i in self._sub_planes if i]}")
 
     def set_full(self) -> None:
         super().set_full()
@@ -63,8 +65,12 @@ class Plane(BasePlane):
         if sub_planes is None or self.disabled:
             return
 
-        for i in sub_planes:
-            cast(Plane, self._sub_planes[i]).add_point(point)
+        try:
+            for i in sub_planes:
+                cast(Plane, self._sub_planes[i]).add_point(point)
+        except AttributeError:
+            logger.error(f"Crashed at: {id(self)}, children: {[id(i) for i in self._sub_planes if i]}")
+            raise
         # print(f"Return to {self.size=}")
 
         if self.are_full():

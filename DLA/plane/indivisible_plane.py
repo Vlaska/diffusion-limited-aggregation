@@ -2,6 +2,7 @@ from typing import Iterable, List, Optional
 
 from pygame import draw
 from pygame.surface import Surface
+from loguru import logger
 
 from DLA import LIGHT_GRAY
 from DLA.plane.base_plane import USE_PYGAME, BasePlane
@@ -33,6 +34,7 @@ class IndivisiblePlane(BasePlane):
         return self.full
 
     def _reset(self) -> None:
-        self._object_pool[self.__class__].append(self)
+        self._object_pool[self.__class__].add(self)
+        logger.debug(f"Added to pool: {self.__class__.__name__}, {id(self)}")
         self._sub_planes = [None] * 4
         # print("Returned to pool")
