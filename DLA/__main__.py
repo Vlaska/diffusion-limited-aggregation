@@ -62,7 +62,7 @@ def main() -> NoReturn:
     up_num = 0
 
     while True:
-        for i in range(50):
+        for i in range(300):
             clock.tick(FPS)
             display.set_caption(f"Diffusion Limited Aggregation - {up_num}")
             up_num += 1
