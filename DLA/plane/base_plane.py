@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Final, Generator, List, Optional, Tuple, cast
+from typing import Dict, TYPE_CHECKING, Final, Generator, List, Optional, Tuple, Type, TypeVar, cast
 
 import numpy as np
 
@@ -18,12 +18,69 @@ if USE_PYGAME or TYPE_CHECKING:
     from pygame.surface import Surface
 
 
-class BasePlane:
+K = TypeVar('K')
+V = TypeVar('V')
+
+
+class _ObjectPool(Dict[K, List[V]]):
+    def __getitem__(self, k: K) -> List[V]:
+        try:
+            return super().__getitem__(k)
+        except KeyError:
+            t: List[V] = []
+            self[k] = t
+            return t
+
+
+class PlaneFactory(type):
+    def __call__(cls, start: Vec2, size: float) -> BasePlane:  # type: ignore
+        pool = cls._object_pool[cls]  # type: ignore
+        obj: BasePlane
+
+        if pool:
+            print("Got from pool")
+            obj = pool.pop()
+            obj._init(start, size)
+        else:
+            # print("New object")
+            obj = super(PlaneFactory, cls).__call__(start=start, size=size)
+
+        return obj
+
+
+class BasePlane(metaclass=PlaneFactory):
     _stuck_points: StuckWalkers
     _walking_points: WalkerPopulation
+    _object_pool: _ObjectPool[Type[BasePlane], BasePlane] = _ObjectPool()
 
     def __init__(self, start: Vec2, size: float) -> None:
-        self.start_pos = np.array(start, dtype=np.double)
+        self.start_pos = np.empty(2, dtype=np.double)
+        self._init(start, size)
+
+    @property
+    def size(self) -> float:
+        return self._size
+
+    @size.setter
+    def size(self, size: float) -> None:
+        self._size = size
+
+    # def __new__(cls, start: Vec2, size: float) -> BasePlane:
+    #     pool = cls._object_pool[cls]
+    #     obj: BasePlane
+
+    #     if pool:
+    #         print("Got from pool")
+    #         obj = pool.pop()
+    #         obj._init(start, size)
+    #     else:
+    #         # print("New object")
+    #         obj = super().__new__(cls)
+
+    #     return obj
+
+    def _init(self, start: Vec2, size: float) -> None:
+        self.start_pos[:] = start
         self.size = size
         self._init_pygame(start, size)
         self._sub_planes: List[Optional[BasePlane]] = [None] * 4
@@ -31,7 +88,6 @@ class BasePlane:
 
     def set_full(self) -> None:
         self.full = True
-        del self._sub_planes
 
     def _add_point(self, point: int) -> Optional[List[int]]:
         if self.full:
@@ -54,6 +110,14 @@ class BasePlane:
 
         return sub_chunks
 
+    def _reset(self) -> None:
+        for i in self._sub_planes:
+            if isinstance(i, BasePlane):
+                i._reset()
+        self._object_pool[self.__class__].append(self)
+        print("Returned to pool")
+
+    # region Abstract
     def add_sub_chunks(self, chunks) -> None:
         pass
 
@@ -62,6 +126,7 @@ class BasePlane:
 
     def add_point(self, point: int) -> None:
         pass
+    # endregion
 
     # region Magic Methods
     def __bool__(self) -> bool:

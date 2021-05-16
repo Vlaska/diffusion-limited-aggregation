@@ -31,3 +31,7 @@ class IndivisiblePlane(BasePlane):
 
     def are_full(self) -> bool:
         return self.full
+
+    def _reset(self) -> None:
+        self._object_pool[self.__class__].append(self)
+        # print("Returned to pool")

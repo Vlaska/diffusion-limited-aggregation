@@ -27,10 +27,19 @@ class Plane(BasePlane):
     └───────┴───────┘
     """
 
-    _new_plane_type_: Type[BasePlane]
+    _new_plane_type: Type[BasePlane]
+    _size: float
 
     def update(self):
         self._walking_points.update(self._stuck_points)
+
+    @BasePlane.size.setter
+    def size(self, size: float) -> None:
+        self._size = size
+        self._new_plane_type = (
+                IndivisiblePlane
+                if self._size / 2 == SECOND_MIN_BOX_SIZE else Plane
+            )
 
     def add_sub_chunks(self, chunks: Iterable[int]) -> None:
         for i in chunks:
@@ -39,6 +48,12 @@ class Plane(BasePlane):
                     one_subchunk_coords(self.start_pos, self.size, i),
                     self.size / 2
                 )
+
+    def set_full(self) -> None:
+        super().set_full()
+        for i in self._sub_planes:
+            if i:
+                i._reset()
 
     def add_point(self, point: int) -> None:
         sub_planes = self._add_point(point)
@@ -61,16 +76,16 @@ class Plane(BasePlane):
             self._check_is_full(self._sub_planes[i]) for i in range(4)
         )
 
-    @property
-    def _new_plane_type(self) -> Type[BasePlane]:
-        try:
-            return self._new_plane_type_
-        except AttributeError:
-            self._new_plane_type_ = (
-                IndivisiblePlane
-                if self.size / 2 == SECOND_MIN_BOX_SIZE else Plane
-            )
-            return self._new_plane_type_
+    # @property
+    # def _new_plane_type(self) -> Type[BasePlane]:
+    #     try:
+    #         return self._new_plane_type_
+    #     except AttributeError:
+    #         self._new_plane_type_ = (
+    #             IndivisiblePlane
+    #             if self.size / 2 == SECOND_MIN_BOX_SIZE else Plane
+    #         )
+    #         return self._new_plane_type_
 
     @classmethod
     def new(cls) -> Plane:
