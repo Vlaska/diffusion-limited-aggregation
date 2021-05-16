@@ -34,4 +34,5 @@ class IndivisiblePlane(BasePlane):
 
     def _reset(self) -> None:
         self._object_pool[self.__class__].append(self)
+        self._sub_planes = [None] * 4
         # print("Returned to pool")

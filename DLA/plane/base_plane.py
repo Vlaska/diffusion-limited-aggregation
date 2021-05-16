@@ -38,7 +38,7 @@ class PlaneFactory(type):
         obj: BasePlane
 
         if pool:
-            print("Got from pool")
+            # print("Got from pool")
             obj = pool.pop()
             obj._init(start, size)
         else:
@@ -51,6 +51,7 @@ class PlaneFactory(type):
 class BasePlane(metaclass=PlaneFactory):
     _stuck_points: StuckWalkers
     _walking_points: WalkerPopulation
+    _sub_planes: List[Optional[BasePlane]]
     _object_pool: _ObjectPool[Type[BasePlane], BasePlane] = _ObjectPool()
 
     def __init__(self, start: Vec2, size: float) -> None:
@@ -83,8 +84,9 @@ class BasePlane(metaclass=PlaneFactory):
         self.start_pos[:] = start
         self.size = size
         self._init_pygame(start, size)
-        self._sub_planes: List[Optional[BasePlane]] = [None] * 4
         self.full = False
+        self.disabled = False
+        self._sub_planes = [None] * 4
 
     def set_full(self) -> None:
         self.full = True
@@ -112,10 +114,11 @@ class BasePlane(metaclass=PlaneFactory):
 
     def _reset(self) -> None:
         for i in self._sub_planes:
-            if isinstance(i, BasePlane):
+            if isinstance(i, BasePlane) and not i.disabled:
                 i._reset()
         self._object_pool[self.__class__].append(self)
-        print("Returned to pool")
+        self.disabled = True
+        # print("Returned to pool")
 
     # region Abstract
     def add_sub_chunks(self, chunks) -> None:

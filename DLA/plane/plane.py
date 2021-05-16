@@ -56,13 +56,16 @@ class Plane(BasePlane):
                 i._reset()
 
     def add_point(self, point: int) -> None:
+        # print(f"{self.size=}")        
         sub_planes = self._add_point(point)
+        # print(f"{int(self.size)} {tuple(self.start_pos)}")
 
-        if sub_planes is None:
+        if sub_planes is None or self.disabled:
             return
 
         for i in sub_planes:
             cast(Plane, self._sub_planes[i]).add_point(point)
+        # print(f"Return to {self.size=}")
 
         if self.are_full():
             self.set_full()
