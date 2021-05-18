@@ -18,23 +18,30 @@ RADIUS: Final[float] = config['particle_radius']
 BORDER_U_L: Final[float] = RADIUS
 BORDER_D_R: Final[float] = config['window_size'] - RADIUS
 REGENERATE_AFTER: Final[int] = config['regen_after_updates']
+ALPHA: Final[float] = config['step_strength']
+BETA: Final[float] = config['memory']
 
 
 class WalkerPopulation(Walker):
     def __init__(self, size: int) -> None:
         super().__init__(size)
-        self.pos[:, :] = random_in_range(0, WINDOW_SIZE, (size, 2))
+        self.pos[:, :] = random_in_range(BORDER_U_L, BORDER_D_R, (size, 2))
         self.last_step: np.ndarray
+        self.prev_pos = np.empty_like(self.pos)
         self.last_regen = 0
 
     def walk(self) -> None:
-        self.last_step = random_in_range(-5, 5, (self.size, 2))
+        # self.last_step = random_in_range(-5, 5, (self.size, 2))
+        # self.last_step = ALPHA * np.random.standard_normal((self.size, 2))
+        step = ALPHA * np.random.standard_normal((self.size, 2))
+        self.prev_pos[:] = self.pos
         np.clip(
-            self.pos + self.last_step,
+            BETA * self.pos + step,
             BORDER_U_L,
             BORDER_D_R,
             out=self.pos
         )
+        self.last_step = self.pos - self.prev_pos
 
     @staticmethod
     def pass_to_stuck(
@@ -77,7 +84,9 @@ class WalkerPopulation(Walker):
 
     def regenerate_population(self):
         if self.last_regen >= REGENERATE_AFTER:
-            self.pos = self.pos[~np.isnan(self.pos[:, 0])]
+            mask = ~np.isnan(self.pos[:, 0])
+            self.pos = self.pos[mask]
+            self.prev_pos = self.prev_pos[mask]
             self.last_regen = -1
             self.size = self.pos.shape[0]
         self.last_regen += 1

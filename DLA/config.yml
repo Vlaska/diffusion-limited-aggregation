@@ -24,3 +24,5 @@ radius_check: 2
 
 # remove NaN's from walking population after:
 regen_after_updates: 200
+step_strength: 20
+memory: 0.66666
