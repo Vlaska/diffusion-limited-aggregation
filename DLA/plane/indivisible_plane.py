@@ -1,10 +1,12 @@
-from typing import Iterable, List, Optional
+from typing import Iterable, List, Optional, TYPE_CHECKING
 
-from pygame import draw
-from pygame.surface import Surface
 
 from DLA import LIGHT_GRAY
 from DLA.plane.base_plane import USE_PYGAME, BasePlane
+
+if USE_PYGAME or TYPE_CHECKING:
+    from pygame import draw
+    from pygame.surface import Surface
 
 
 class IndivisiblePlane(BasePlane):
