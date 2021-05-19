@@ -1,14 +1,15 @@
 from __future__ import annotations
 
-import sys
 import signal
+import sys
 from gc import collect
-from typing import Final, NoReturn, TYPE_CHECKING, Tuple
+from typing import Dict, TYPE_CHECKING, Final, NoReturn, Tuple, Union
+
 from beautifultable import BeautifulTable
+import numpy as np
 
-from DLA import BLACK, config, plane
+from DLA import BLACK, config, plane, Vec
 from DLA.plane.dimension import Dimension
-
 
 # region Consts
 FPS: Final[int] = 60
@@ -28,6 +29,8 @@ if USE_PYGAME or TYPE_CHECKING:
     import pygame.time as time
 
 p = plane.Plane.new()
+random_generator_state = np.random.get_state()
+num_of_iterations = 0
 
 
 def print_dim():
@@ -41,6 +44,21 @@ def print_dim():
         tab.rows.append([f'1/{int(1 / k)}', dim[k], v])
 
     print(tab)
+
+
+def get_data() -> Dict[str, Union[Vec, float]]:
+    out = {
+        # 'starting_state': random_generator_state
+        'radius': config['particle_radius'],
+        'window_size': config['window_size'],
+        'num_of_particles': config['num_of_particles'],
+        'num_of_iterations': num_of_iterations,
+    }
+    out.update(p.get_data())
+    dim = Dimension(p)
+    dim.count()
+    out.update(dim.get_data())
+    return out
 
 
 def at_end(*_):
@@ -70,13 +88,15 @@ def render(surface_: surface.Surface) -> None:
 
 def main_pygame() -> NoReturn:
     surface_, clock = init_pygame()
-    up_num = 0
+    global num_of_iterations
 
     while True:
         for _ in range(100):
             clock.tick(FPS)
-            display.set_caption(f"Diffusion Limited Aggregation - {up_num}")
-            up_num += 1
+            num_of_iterations += 1
+            display.set_caption(
+                f"Diffusion Limited Aggregation - {num_of_iterations}"
+            )
             for event in events.get():
                 if event.type == pygame.QUIT:
                     at_end()
@@ -97,8 +117,11 @@ def main_pygame() -> NoReturn:
 
 
 def main_no_pygame() -> NoReturn:
+    global num_of_iterations
+
     while True:
         for _ in range(100):
+            num_of_iterations += 1
             p.update()
         collect()
 

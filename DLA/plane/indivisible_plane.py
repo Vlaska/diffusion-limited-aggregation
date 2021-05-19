@@ -1,5 +1,4 @@
-from typing import Iterable, List, Optional, TYPE_CHECKING
-
+from typing import TYPE_CHECKING, Iterable, List, Optional
 
 from DLA import LIGHT_GRAY
 from DLA.plane.base_plane import USE_PYGAME, BasePlane

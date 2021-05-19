@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from typing import Final, Iterable, Optional, Type, cast
+from typing import Dict, Final, Iterable, Optional, Type, Union, cast
 
-from DLA import config
-from DLA.plane.base_plane import BasePlane
+from DLA import Vec, config
+from DLA.plane.base_plane import RADIUS, BasePlane
 from DLA.plane.indivisible_plane import IndivisiblePlane
 from DLA.utils import one_subchunk_coords
 from DLA.walker import StuckWalkers, WalkerPopulation
@@ -88,6 +88,12 @@ class Plane(BasePlane):
         obj.add_point(0)
 
         return obj
+
+    def get_data(self) -> Dict[str, Vec]:
+        return {
+            'stuck_particles': self._stuck_points[:self._stuck_points.filled],
+            'free_particles': self._walking_points.pos,
+        }
 
     # region Magic Methods
     # endregion

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Final, Iterator, TYPE_CHECKING, Tuple, cast
+from typing import TYPE_CHECKING, Any, Final, Iterator, Tuple, cast
 
 import numpy as np
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Final, Generator, List, Optional, Tuple, cast
+from typing import (TYPE_CHECKING, Final, Generator, List, Optional, Tuple,
+                    Union, cast)
 
 import numpy as np
 
@@ -54,6 +55,7 @@ class BasePlane:
 
         return sub_chunks
 
+    # region Abstract Methods
     def add_sub_chunks(self, chunks) -> None:
         pass
 
@@ -62,6 +64,7 @@ class BasePlane:
 
     def add_point(self, point: int) -> None:
         pass
+    # endregion
 
     # region Magic Methods
     def __bool__(self) -> bool:
@@ -70,7 +73,9 @@ class BasePlane:
     def __len__(self) -> int:
         return 4 - self._sub_planes.count(None)
 
-    def __getitem__(self, idx: int) -> Optional[BasePlane]:
+    def __getitem__(
+        self, idx: Union[int, slice]
+    ) -> Union[Optional[BasePlane], List[Optional[BasePlane]]]:
         return self._sub_planes[idx]
 
     def __setitem__(self, idx: int, val: Optional[BasePlane]) -> None:

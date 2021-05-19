@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, Final, OrderedDict
+from typing import TYPE_CHECKING, Dict, Final, OrderedDict, Tuple
 
 import numpy as np
 
 from DLA import config
+from DLA.types import Vec
 from DLA.walker.stuck_walkers import WINDOW_SIZE
 
 if TYPE_CHECKING:
@@ -69,6 +70,13 @@ class Dimension(OrderedDict[_KT, _VT]):
                 out[k] = np.log(v) / np.log(1 / k)
 
         return out
+
+    def get_data(self) -> Dict[str, Vec]:
+        return {
+            'box_size': np.array(self.keys()),
+            'num_of_boxes': np.array(self.values()),
+            'dimension': np.array(self.dim().values()),
+        }
 
     def __getitem__(self, k: _KT) -> _VT:
         try:
