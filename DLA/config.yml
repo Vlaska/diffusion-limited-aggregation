@@ -17,7 +17,8 @@ min_box_size: 0.015625
 start_pos: !!python/tuple [256, 256]
 epsilon: !!python/float 1e-10
 push_out_tries: 10
-use_pygame: false
+use_pygame: true
+print_dimensions: false
 max_steps: 4000
 
 # multiple of 'particle_radius' which will be used while checking collision; min = 0

@@ -1,14 +1,17 @@
 from __future__ import annotations
 
+import pickle
 import signal
 import sys
+from datetime import datetime
 from gc import collect
-from typing import Dict, TYPE_CHECKING, Final, NoReturn, Tuple, Union
+from pathlib import Path
+from typing import TYPE_CHECKING, Dict, Final, NoReturn, Tuple, Union
 
-from beautifultable import BeautifulTable
 import numpy as np
+from beautifultable import BeautifulTable
 
-from DLA import BLACK, config, plane, Vec
+from DLA import BLACK, Vec, config, plane
 from DLA.plane.dimension import Dimension
 
 # region Consts
@@ -61,8 +64,18 @@ def get_data() -> Dict[str, Union[Vec, float]]:
     return out
 
 
+def save_data():
+    data = get_data()
+    raw_data = pickle.dumps(data)
+    filename = f'{datetime.now().strftime("%d.%m.%Y-%H.%M.%S.%f")}.pickle'
+    Path(filename).write_bytes(raw_data)
+    print(filename)
+
+
 def at_end(*_):
-    print_dim()
+    if config['print_dimensions']:
+        print_dim()
+    save_data()
     sys.exit(0)
 
 

@@ -73,9 +73,9 @@ class Dimension(OrderedDict[_KT, _VT]):
 
     def get_data(self) -> Dict[str, Vec]:
         return {
-            'box_size': np.array(self.keys()),
-            'num_of_boxes': np.array(self.values()),
-            'dimension': np.array(self.dim().values()),
+            'box_size': np.array(list(self.keys())),
+            'num_of_boxes': np.array(list(self.values())),
+            'dimension': np.array(list(self.dim().values())),
         }
 
     def __getitem__(self, k: _KT) -> _VT:
