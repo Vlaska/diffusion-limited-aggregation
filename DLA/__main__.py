@@ -55,6 +55,8 @@ def get_data() -> Dict[str, Union[Vec, float]]:
         'radius': config['particle_radius'],
         'window_size': config['window_size'],
         'num_of_particles': config['num_of_particles'],
+        'memory': config['memory'],
+        'step_strength': config['step_strength'],
         'num_of_iterations': num_of_iterations,
     }
     out.update(p.get_data())
