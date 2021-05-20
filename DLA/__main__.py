@@ -119,11 +119,12 @@ def main_pygame() -> NoReturn:
 def main_no_pygame() -> NoReturn:
     global num_of_iterations
 
-    while True:
+    for _ in range(config['max_steps'] // 100):
         for _ in range(100):
             num_of_iterations += 1
             p.update()
         collect()
+    at_end()
 
 
 def main() -> NoReturn:
