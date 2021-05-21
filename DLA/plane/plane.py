@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from typing import Dict, Final, Iterable, Optional, Type, Union, cast
+from typing import Dict, Final, Iterable, Optional, Type, cast
 
 from DLA import Vec, config
-from DLA.plane.base_plane import RADIUS, BasePlane
+from DLA.plane.base_plane import BasePlane
 from DLA.plane.indivisible_plane import IndivisiblePlane
 from DLA.utils import one_subchunk_coords
 from DLA.walker import StuckWalkers, WalkerPopulation

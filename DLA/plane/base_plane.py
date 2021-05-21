@@ -9,7 +9,6 @@ from DLA import LIGHT_GRAY, Vec2, config
 from DLA.utils import circle_in_subchunks, is_in_circle
 from DLA.walker import StuckWalkers, WalkerPopulation
 
-SECOND_MIN_BOX_SIZE: Final[float] = config['second_min_box_size']
 RADIUS: Final[float] = config['particle_radius']
 USE_PYGAME: Final[bool] = config['use_pygame']
 
