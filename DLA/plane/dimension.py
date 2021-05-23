@@ -1,22 +1,18 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, Final, OrderedDict, Tuple
+from typing import TYPE_CHECKING, Dict, OrderedDict
 
 import numpy as np
 
-from DLA import config
-from DLA.types import Vec
-from DLA.walker.stuck_walkers import WINDOW_SIZE
+from DLA import Vec
+from DLA.config import MIN_BOX_SIZE, SECOND_MIN_BOX_SIZE, WINDOW_SIZE
 
 if TYPE_CHECKING:
-    from DLA.plane.base_plane import BasePlane
-
+    from .base_plane import BasePlane
     from .plane import Plane
 
 _KT = float
 _VT = float
-MIN_BOX_SIZE: Final[float] = config['min_box_size']
-SECOND_MIN_BOX_SIZE: Final[float] = config['second_min_box_size']
 
 
 class Dimension(OrderedDict[_KT, _VT]):

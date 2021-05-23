@@ -1,14 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Final, Iterator, Tuple, cast
+from typing import TYPE_CHECKING, Any, Iterator, Tuple, cast
 
 import numpy as np
 
-from DLA import RGB, WHITE, Vec, config
-
-from .config import RADIUS
-
-USE_PYGAME: Final[bool] = config['use_pygame']
+from DLA import RGB, WHITE, Vec
+from DLA.config import RADIUS, USE_PYGAME
 
 if USE_PYGAME or TYPE_CHECKING:
     from pygame import draw as draw
@@ -39,7 +36,7 @@ class Walker:
 
     def __setitem__(self, i: Any, value: Any) -> None:
         self.pos[i] = value
-    #endregion
+    # endregion
 
     # region Pygame
     if USE_PYGAME:

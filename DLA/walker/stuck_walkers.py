@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING, Final, Iterator, Optional, Tuple
 
 import numpy as np
 
-from DLA import GREEN, RGB, Vec, config
+from DLA import GREEN, RGB, Vec, Vec2
+from DLA.config import EPSILON, RADIUS, RADIUS_CHECK, WINDOW_CENTER
 from DLA.utils import dot_self, squared_distance
 
-from .config import RADIUS
 from .walker import Walker
 
 if TYPE_CHECKING:
@@ -16,12 +16,7 @@ if TYPE_CHECKING:
     from .walker_population import WalkerPopulation
 
 
-WINDOW_SIZE: Final[float] = config['window_size']
-WINDOW_CENTER: Final[float] = WINDOW_SIZE // 2
 SQUARED_PARTICLE_DISTANCE: Final[float] = 4 * RADIUS * RADIUS
-EPSILON: Final[float] = config['epsilon']
-# + 1 to include radius of single particle
-RADIUS_CHECK: Final[float] = (max(0, config['radius_check']) + 1) * RADIUS
 
 
 class StuckWalkers(Walker):
@@ -32,7 +27,7 @@ class StuckWalkers(Walker):
     def __init__(
         self,
         walkers: WalkerPopulation,
-        start_pos: Vec,
+        start_pos: Vec2,
         plane: BasePlane
     ) -> None:
         super().__init__(walkers.size + 1)

@@ -1,16 +1,13 @@
 from __future__ import annotations
 
-from typing import (TYPE_CHECKING, Final, Generator, List, Optional, Tuple,
-                    Union, cast)
+from typing import TYPE_CHECKING, Generator, List, Optional, Tuple, Union, cast
 
 import numpy as np
 
-from DLA import LIGHT_GRAY, Vec2, config
+from DLA import LIGHT_GRAY, Vec2
+from DLA.config import RADIUS, USE_PYGAME
 from DLA.utils import circle_in_subchunks, is_in_circle
 from DLA.walker import StuckWalkers, WalkerPopulation
-
-RADIUS: Final[float] = config['particle_radius']
-USE_PYGAME: Final[bool] = config['use_pygame']
 
 if USE_PYGAME or TYPE_CHECKING:
     import pygame

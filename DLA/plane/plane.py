@@ -1,16 +1,14 @@
 from __future__ import annotations
 
-from typing import Dict, Final, Iterable, Optional, Type, cast
+from typing import Dict, Iterable, Optional, Type, cast
 
-from DLA import Vec, config
+from DLA import Vec
+from DLA.config import (NUM_OF_PARTICLES, SECOND_MIN_BOX_SIZE, STARTING_POS,
+                        WINDOW_SIZE)
 from DLA.plane.base_plane import BasePlane
 from DLA.plane.indivisible_plane import IndivisiblePlane
 from DLA.utils import one_subchunk_coords
 from DLA.walker import StuckWalkers, WalkerPopulation
-
-WINDOW_WIDTH_AND_HEIGHT: Final[int] = config['window_size']
-MIN_BOX_SIZE: Final[float] = config['min_box_size']
-SECOND_MIN_BOX_SIZE: Final[float] = config['second_min_box_size']
 
 
 class Plane(BasePlane):
@@ -74,13 +72,11 @@ class Plane(BasePlane):
 
     @classmethod
     def new(cls) -> Plane:
-        obj = cls((0, 0), WINDOW_WIDTH_AND_HEIGHT)
+        obj = cls((0, 0), WINDOW_SIZE)
 
-        BasePlane._walking_points = WalkerPopulation(
-            config['num_of_particles']
-        )
+        BasePlane._walking_points = WalkerPopulation(NUM_OF_PARTICLES)
         BasePlane._stuck_points = StuckWalkers(
-            cls._walking_points, config['start_pos'], obj
+            cls._walking_points, STARTING_POS, obj
         )
 
         # * Method called at initialization of simulation;
@@ -94,6 +90,3 @@ class Plane(BasePlane):
             'stuck_particles': self._stuck_points[:self._stuck_points.filled],
             'free_particles': self._walking_points.pos,
         }
-
-    # region Magic Methods
-    # endregion

@@ -1,7 +1,6 @@
 import numpy as np
-import pytest
 from pytest import MonkeyPatch
-from DLA import config
+from DLA import config_dict
 from DLA.plane.plane import Plane
 
 POINTS_TO_TEST = [
@@ -25,8 +24,8 @@ def test_add_point(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr(plane, 'WINDOW_WIDTH_AND_HEIGHT', 512)
     monkeypatch.setattr(plane, 'SECOND_MIN_BOX_SIZE', 32)
     monkeypatch.setattr(base_plane, 'RADIUS', 1)
-    monkeypatch.setitem(config, 'start_pos', (14, 16))
-    monkeypatch.setitem(config, 'num_of_particles', 0)
+    monkeypatch.setitem(config_dict, 'start_pos', (14, 16))
+    monkeypatch.setitem(config_dict, 'num_of_particles', 0)
     p = Plane.new()
     assert len(p) == 1  # type: ignore
     assert p[0]  # type: ignore

@@ -5,21 +5,17 @@ from typing import Final
 import numpy as np
 from numpy import NaN
 
-from DLA import Vec, config
+from DLA import Vec
+from DLA.config import (ALPHA, BETA, PUSH_OUT_TRIES, RADIUS, REGENERATE_AFTER,
+                        WINDOW_SIZE)
 from DLA.utils import correct_circle_pos
 
 from .stuck_walkers import StuckWalkers
 from .utils import random_in_range
 from .walker import Walker
 
-PUSH_OUT_TRIES: Final[int] = config['push_out_tries']
-WINDOW_SIZE: Final[float] = config['window_size']
-RADIUS: Final[float] = config['particle_radius']
 BORDER_U_L: Final[float] = RADIUS
-BORDER_D_R: Final[float] = config['window_size'] - RADIUS
-REGENERATE_AFTER: Final[int] = config['regen_after_updates']
-ALPHA: Final[float] = config['step_strength']
-BETA: Final[float] = config['memory']
+BORDER_D_R: Final[float] = WINDOW_SIZE - RADIUS
 
 
 class WalkerPopulation(Walker):

@@ -6,22 +6,16 @@ import sys
 from datetime import datetime
 from gc import collect
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, Final, NoReturn, Tuple, Union
+from typing import TYPE_CHECKING, Dict, NoReturn, Tuple, Union
 
 import numpy as np
 from beautifultable import BeautifulTable
 
-from DLA import BLACK, Vec, config, plane
+from DLA import BLACK, Vec, plane
+from DLA.config import (ALPHA, BETA, FPS, MAX_STEPS, NUM_OF_PARTICLES,
+                        PRINT_RESULTS, RADIUS, USE_PYGAME, WINDOW_SIZE,
+                        WINDOW_SIZE_FOR_RENDERING)
 from DLA.plane.dimension import Dimension
-
-# region Consts
-FPS: Final[int] = 60
-WINDOW_SIZE: Final[Tuple[int, int]] = (
-    config['window_size'], config['window_size']
-)
-MIN_BOX_SIZE: Final[float] = 64
-USE_PYGAME: Final[bool] = config['use_pygame']
-# endregion
 
 if USE_PYGAME or TYPE_CHECKING:
     import pygame
@@ -50,15 +44,16 @@ def print_dim():
 
 
 def get_data() -> Dict[str, Union[Vec, float]]:
-    out = {
+    out: Dict[str, Union[float, np.ndarray]] = {
         # 'starting_state': random_generator_state
-        'radius': config['particle_radius'],
-        'window_size': config['window_size'],
-        'num_of_particles': config['num_of_particles'],
-        'memory': config['memory'],
-        'step_strength': config['step_strength'],
+        'radius': RADIUS,
+        'window_size': WINDOW_SIZE,
+        'num_of_particles': NUM_OF_PARTICLES,
+        'memory': BETA,
+        'step_strength': ALPHA,
         'num_of_iterations': num_of_iterations,
     }
+
     out.update(p.get_data())
     dim = Dimension(p)
     dim.count()
@@ -75,7 +70,7 @@ def save_data():
 
 
 def at_end(*_):
-    if config['print_dimensions']:
+    if PRINT_RESULTS:
         print_dim()
     save_data()
     sys.exit(0)
@@ -90,7 +85,7 @@ def init_pygame() -> Tuple[surface.Surface, time.Clock]:
     clock = time.Clock()
 
     display.set_caption("Diffusion Limited Aggregation")
-    screen = display.set_mode(WINDOW_SIZE)
+    screen = display.set_mode(WINDOW_SIZE_FOR_RENDERING)
 
     display.flip()
 
@@ -134,7 +129,7 @@ def main_pygame() -> NoReturn:
 def main_no_pygame() -> NoReturn:
     global num_of_iterations
 
-    for _ in range(config['max_steps'] // 100):
+    for _ in range(MAX_STEPS // 100):
         for _ in range(100):
             num_of_iterations += 1
             p.update()
