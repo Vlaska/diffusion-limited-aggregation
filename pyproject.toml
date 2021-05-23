@@ -15,6 +15,7 @@ pygame = "^2.0.1"
 PyYAML = "^5.4.1"
 beautifultable = "^1.0.1"
 pandas = "^1.2.4"
+click = "^8.0.1"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.7.4"
