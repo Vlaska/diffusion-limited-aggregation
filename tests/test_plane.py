@@ -2,6 +2,7 @@ import numpy as np
 from pytest import MonkeyPatch
 from DLA import config_dict
 from DLA.plane.plane import Plane
+from DLA.plane import dimension
 
 POINTS_TO_TEST = [
     [(0, 0), (0, )],
@@ -40,3 +41,30 @@ def test_add_point(monkeypatch: MonkeyPatch) -> None:
     ) == 2
     assert p[0][0][0][0][0]  # type: ignore
     assert p[0][0][0][0][2]  # type: ignore
+
+
+def test_calc_dimension(monkeypatch: MonkeyPatch) -> None:
+    from DLA.plane import plane
+    from DLA.plane import base_plane
+    monkeypatch.setattr(plane, 'WINDOW_WIDTH_AND_HEIGHT', 128)
+    monkeypatch.setattr(plane, 'MIN_BOX_SIZE', 1/8)
+    monkeypatch.setattr(plane, 'SECOND_MIN_BOX_SIZE', 1/4)
+    monkeypatch.setattr(dimension, 'MIN_BOX_SIZE', 1/8)
+    monkeypatch.setattr(dimension, 'SECOND_MIN_BOX_SIZE', 1/4)
+    monkeypatch.setattr(base_plane, 'RADIUS', 2)
+    monkeypatch.setitem(config, 'num_of_particles', 5)
+    monkeypatch.setitem(config, 'start_pos', (64, 64))
+
+    p = plane.Plane.new()
+    stuck_points = p._stuck_points.pos
+    stuck_points[1:, :] = [
+        [10, 10],
+        [2, 0],
+        [3, 1],
+        [11, 12],
+        [10, 11]
+    ]
+    dimension.Dimension.init_lookup()
+    dim = dimension.Dimension(p)
+    dim.count()
+    assert dim[1/2] == 60

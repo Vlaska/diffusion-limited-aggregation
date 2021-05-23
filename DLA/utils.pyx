@@ -41,7 +41,7 @@ cdef bint circle_square_collision(double s_x, double s_y, double[::1] c_pos, dou
     dX = c_pos[0] - tX
     dY = c_pos[1] - tY
 
-    return (dX * dX) + (dY * dY) <= radius * radius
+    return (dX * dX) + (dY * dY) < radius * radius
 
 
 cdef _one_subchunk_coords(double x, double y, double size, int idx):
