@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from pkgutil import get_data
+import sys
 from typing import Optional
 
 import click
@@ -67,4 +69,11 @@ def client() -> None:
 
 
 if __name__ == '__main__':
+    # Supress pygame banner
+    sys.stdout = open(os.devnull, 'w')
+    try:
+        import pygame  # noqa
+    except ImportError:
+        pass
+    sys.stdout = sys.__stdout__
     cli()
