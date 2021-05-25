@@ -10,7 +10,12 @@ import yaml
 import DLA
 
 
-@click.command()
+@click.group()
+def cli() -> None:
+    pass
+
+
+@cli.command()
 @click.argument(
     'config',
     required=False,
@@ -23,6 +28,9 @@ import DLA
     )
 )
 def simulate(config: Optional[str]) -> None:
+    """Run Diffusion Limited Aggregations with provided configuration
+    """
+
     config_str: str
     if config is None:
         _config_data = get_data('DLA', 'config.yml')
@@ -42,5 +50,21 @@ def simulate(config: Optional[str]) -> None:
     main()
 
 
+@cli.command()
+def server() -> None:
+    """Run server to initialize simulations running on clients.
+    """
+
+    pass
+
+
+@cli.command()
+def client() -> None:
+    """Start symulation based on configuration from server and return results
+    to it.
+    """
+    pass
+
+
 if __name__ == '__main__':
-    simulate()
+    cli()
