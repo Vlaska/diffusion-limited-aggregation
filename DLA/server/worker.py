@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import asyncio
-import sys
+from pathlib import Path
 import pickle
+import sys
 
 
 class Worker:
@@ -10,11 +11,7 @@ class Worker:
         self.work_id = work_id
         self.config = config
 
-    async def send_to_worker(self, writer: asyncio.StreamWriter) -> None:
-        writer.write(pickle.dumps(self))
-        await writer.drain()
-
-    async def _run_work(self) -> str:
+    async def execute_work(self) -> str:
         proc = await asyncio.create_subprocess_exec(
             sys.executable, "-m", "DLA", "simulate", "-",
             stdin=asyncio.subprocess.PIPE,
@@ -22,10 +19,30 @@ class Worker:
         )
         return (
             await proc.communicate(self.config.encode('utf-8'))
-        )[0].decode('utf-8').strip()
+        )[0].decode('utf-8').strip()        
 
-    async def start_work(self) -> bool:
-        pass
+    async def return_results_to_server(
+        self,
+        writer: asyncio.StreamWriter,
+        data_path: str
+    ) -> None:
+        data = pickle.dumps((
+            self.work_id,
+            Path(data_path).read_bytes()
+        ))
+        writer.write(data)
+        await writer.drain()
 
-    async def return_results(self, writer: asyncio.StreamWriter) -> None:
-        pass
+    @staticmethod
+    async def send_config_to_client(
+        writer: asyncio.StreamWriter,
+        work_id: int, config: str
+    ) -> None:
+        data = pickle.dumps((work_id, config))
+        writer.write(data)
+        await writer.drain()
+
+    @staticmethod
+    async def load_workder_from_server(reader: asyncio.StreamReader) -> Worker:
+        d = pickle.loads(await reader.read(-1))
+        return Worker(*d)
