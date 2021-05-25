@@ -4,7 +4,7 @@ import asyncio
 import pickle
 
 
-class Manager:
+class Worker:
     def __init__(self, work_id: int, config: str) -> None:
         self.work_id = work_id
         self.config = config
