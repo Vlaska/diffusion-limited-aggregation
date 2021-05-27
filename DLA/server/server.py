@@ -24,21 +24,23 @@ memory_counter = {
 
 async def send_work_to_client(
     reader: asyncio.StreamReader,
-    writer: asyncio.StreamWriter
+    writer: asyncio.StreamWriter,
+    out_dir: Path
 ) -> None:
     print("Send")
 
 
 async def receive_data_from_client(
     reader: asyncio.StreamReader,
-    writer: asyncio.StreamWriter
+    writer: asyncio.StreamWriter,
+    out_dir: Path
 ) -> None:
     print("Receive")
 
 
 CONNECTION_TYPE: Dict[
     bytes, Callable[
-        [asyncio.StreamReader, asyncio.StreamWriter],
+        [asyncio.StreamReader, asyncio.StreamWriter, Path],
         Coroutine[Any, Any, None]
     ]
 ] = {
@@ -48,23 +50,29 @@ CONNECTION_TYPE: Dict[
 }
 
 
-async def handle_request(
-    reader: asyncio.StreamReader,
-    writer: asyncio.StreamWriter
-) -> None:
-    conn_type = await reader.read(1)
-    try:
-        await CONNECTION_TYPE[conn_type](reader, writer)
-    except KeyError:
-        pass
-    finally:
-        writer.close()
+def handle_request(out_dir: Path) -> Callable[
+    [asyncio.StreamReader, asyncio.StreamWriter],
+    Coroutine[Any, Any, None]
+]:
+    async def _handle_request(
+        reader: asyncio.StreamReader,
+        writer: asyncio.StreamWriter
+    ) -> None:
+        conn_type = await reader.read(1)
+        try:
+            await CONNECTION_TYPE[conn_type](reader, writer, out_dir)
+        except KeyError:
+            pass
+        finally:
+            writer.close()
+
+    return _handle_request
 
 
 # src: https://docs.python.org/3/library/asyncio-stream.html
-async def serve():
+async def serve(out_dir: Path):
     serv = await asyncio.start_server(
-        handle_request,
+        handle_request(out_dir),
         '0.0.0.0',
         os.environ.get('DLA_PORT', 1025)
     )
@@ -92,7 +100,7 @@ async def check_old_works():
 
 
 async def server(out_dir: Path) -> None:
-    t1 = asyncio.create_task(serve())
+    t1 = asyncio.create_task(serve(out_dir))
     t2 = asyncio.create_task(check_old_works())
     await t1
     await t2

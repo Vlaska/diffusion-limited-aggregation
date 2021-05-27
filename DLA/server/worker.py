@@ -19,7 +19,7 @@ class Worker:
         )
         return (
             await proc.communicate(self.config.encode('utf-8'))
-        )[0].decode('utf-8').strip()        
+        )[0].decode('utf-8').strip()
 
     async def return_results_to_server(
         self,
