@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 import asyncio
-from dataclasses import dataclass, field
 import os
-from pathlib import Path
+import pkgutil
 import time
-from typing import Any, Callable, Coroutine, Dict
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Callable, Coroutine, Dict, Optional, cast
+
+import numpy as np
+import yaml
 
 
 @dataclass
@@ -20,6 +24,48 @@ works: Dict[int, WorkData] = {}
 memory_counter = {
     -0.99 + (i * 0.01): 100 for i in range(199)
 }
+CONFIG_TEMPLATE: Dict[str, Any] = yaml.full_load(
+    cast(bytes, pkgutil.get_data('DLA.server', 'config_template.yml'))
+)
+
+
+class WorkGenerator:
+    lock = asyncio.Lock()
+
+    def __init__(self, start: float, end: float, step: float, num: int):
+        _points = end - start
+        points = int(_points)
+        while _points != points:
+            _points *= 10
+            points = int(_points)
+        self.to_distribute = {
+            -start + (i * step): num for i in range(points + 1)
+        }
+        self.waiting_for_results = {
+            -start + (i * step): 0 for i in range(points + 1)
+        }
+
+    async def get(self) -> Optional[float]:
+        async with self.lock:
+            t = (k for k, v in self.to_distribute.items() if v)
+            if not (t or any(self.waiting_for_results.values())):
+                return None
+            val = np.random.choice(t)
+            self.to_distribute[val] -= 1
+            self.waiting_for_results[val] += 1
+        return val
+
+    async def work_completed(self, val: float) -> None:
+        async with self.lock:
+            self.waiting_for_results[val] -= 1
+
+    async def work_timeouted(self, val: float) -> None:
+        async with self.lock:
+            self.to_distribute[val] += 1
+            self.waiting_for_results[val] -= 1
+
+
+work_gen = WorkGenerator(-0.99, 0.99, 0.1, 10)
 
 
 async def send_work_to_client(
@@ -46,7 +92,6 @@ CONNECTION_TYPE: Dict[
 ] = {
     b'\x00': send_work_to_client,
     b'\x01': receive_data_from_client,
-
 }
 
 
@@ -60,7 +105,8 @@ def handle_request(out_dir: Path) -> Callable[
     ) -> None:
         conn_type = await reader.read(1)
         try:
-            await CONNECTION_TYPE[conn_type](reader, writer, out_dir)
+            async with check_old_works_lock:
+                await CONNECTION_TYPE[conn_type](reader, writer, out_dir)
         except KeyError:
             pass
         finally:
@@ -94,7 +140,7 @@ async def check_old_works():
             for k, v in works.copy().items():
                 if t - v.start_time > limit:
                     works.pop(k)
-                    memory_counter[v.beta] += 1
+                    work_gen.work_timeouted(k)
 
         await asyncio.sleep(60 * 2)  # check every 2 minutes
 

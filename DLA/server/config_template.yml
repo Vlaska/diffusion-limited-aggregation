@@ -1,19 +1,11 @@
 # window_size: 1024
 window_size: 512
 particle_radius: 3.0
-# num_of_particles: 2000
 num_of_particles: 1000
+
 fps: 120
 min_box_size: 0.015625
 
-# 1/2 = 0.5
-# 1/4 = 0.25
-# 1/8 = 0.125
-# 1/16 = 0.0625
-# 1/32 = 0.03125
-# 1/64 = 0.015625
-
-# start_pos: !!python/tuple [512, 512]
 start_pos: !!python/tuple [256, 256]
 epsilon: !!python/float 1e-10
 push_out_tries: 10
@@ -27,6 +19,4 @@ radius_check: 2
 # remove NaN's from walking population after:
 regen_after_updates: 200
 step_strength: 2
-# memory: 0.9999999999
-# memory: -0.9999999999
 memory: 0
