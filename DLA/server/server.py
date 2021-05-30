@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 import os
-import pickle
 import pkgutil
 import time
 from dataclasses import dataclass, field
@@ -72,44 +71,6 @@ class WorkGenerator:
 work_gen: WorkGenerator
 
 
-async def send_work_to_client(
-    reader: asyncio.StreamReader,
-    writer: asyncio.StreamWriter,
-    out_dir: Path
-) -> None:
-    beta = await work_gen.get()
-
-    if beta is None:
-        writer.close()
-        return
-
-    work_id = uuid4().int
-    config = CONFIG_TEMPLATE.copy()
-    config['memory'] = beta
-    writer.write(pickle.dumps((work_id, yaml.dump(config))))
-    await writer.drain()
-    writer.close()
-
-
-async def receive_data_from_client(
-    reader: asyncio.StreamReader,
-    writer: asyncio.StreamWriter,
-    out_dir: Path
-) -> None:
-    print("Receive")
-
-
-CONNECTION_TYPE: Dict[
-    bytes, Callable[
-        [asyncio.StreamReader, asyncio.StreamWriter, Path],
-        Coroutine[Any, Any, None]
-    ]
-] = {
-    b'\x00': send_work_to_client,
-    b'\x01': receive_data_from_client,
-}
-
-
 def handle_request(out_dir: Path) -> Callable[
     [asyncio.StreamReader, asyncio.StreamWriter],
     Coroutine[Any, Any, None]
@@ -118,14 +79,37 @@ def handle_request(out_dir: Path) -> Callable[
         reader: asyncio.StreamReader,
         writer: asyncio.StreamWriter
     ) -> None:
-        conn_type = await reader.read(1)
-        try:
-            async with check_old_works_lock:
-                await CONNECTION_TYPE[conn_type](reader, writer, out_dir)
-        except KeyError:
-            pass
-        finally:
+        beta = await work_gen.get()
+
+        if beta is None:
             writer.close()
+            return
+
+        work_uuid = uuid4()
+        work_id_int = work_uuid.int
+        work_id_bytes = work_uuid.bytes
+
+        config = CONFIG_TEMPLATE.copy()
+        config['memory'] = beta
+
+        writer.write(work_id_bytes)
+
+        writer.write(cast(str, yaml.dump(config)).encode('utf-8'))
+        await writer.drain()
+
+        try:
+            await asyncio.wait_for(reader.read(1), 60 * 10)
+        except asyncio.TimeoutError:
+            await work_gen.work_timeouted(beta)
+        else:
+            await work_gen.work_completed(beta)
+            name_len = int(await reader.read(1))
+            file_name = (await reader.read(name_len)).decode('utf-8')
+            data = await reader.read(-1)
+
+            (out_dir / str(beta) / file_name).write_bytes(data)
+
+        writer.close()
 
     return _handle_request
 
