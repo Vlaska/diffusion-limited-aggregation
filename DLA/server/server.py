@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import asyncio
 import os
+import pickle
 import pkgutil
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Coroutine, Dict, Optional, cast
+from uuid import uuid4
 
 import numpy as np
 import yaml
@@ -19,7 +21,7 @@ class WorkData:
 
 
 is_done = False
-check_old_works_lock = asyncio.Lock()
+check_old_works_lock: asyncio.Lock
 works: Dict[int, WorkData] = {}
 memory_counter = {
     -0.99 + (i * 0.01): 100 for i in range(199)
@@ -30,30 +32,32 @@ CONFIG_TEMPLATE: Dict[str, Any] = yaml.full_load(
 
 
 class WorkGenerator:
-    lock = asyncio.Lock()
+    lock: asyncio.Lock
 
     def __init__(self, start: float, end: float, step: float, num: int):
+        self.__class__.lock = asyncio.Lock()
         _points = end - start
         points = int(_points)
         while _points != points:
             _points *= 10
             points = int(_points)
+        tmp = np.arange(start, end, step)
         self.to_distribute = {
-            -start + (i * step): num for i in range(points + 1)
+            i: num for i in tmp
         }
         self.waiting_for_results = {
-            -start + (i * step): 0 for i in range(points + 1)
+            i: 0 for i in tmp
         }
 
     async def get(self) -> Optional[float]:
         async with self.lock:
-            t = (k for k, v in self.to_distribute.items() if v)
+            t = tuple(k for k, v in self.to_distribute.items() if v)
             if not (t or any(self.waiting_for_results.values())):
                 return None
             val = np.random.choice(t)
             self.to_distribute[val] -= 1
             self.waiting_for_results[val] += 1
-        return val
+        return float(val)
 
     async def work_completed(self, val: float) -> None:
         async with self.lock:
@@ -65,7 +69,7 @@ class WorkGenerator:
             self.waiting_for_results[val] -= 1
 
 
-work_gen = WorkGenerator(-0.99, 0.99, 0.1, 10)
+work_gen: WorkGenerator
 
 
 async def send_work_to_client(
@@ -73,7 +77,18 @@ async def send_work_to_client(
     writer: asyncio.StreamWriter,
     out_dir: Path
 ) -> None:
-    print("Send")
+    beta = await work_gen.get()
+
+    if beta is None:
+        writer.close()
+        return
+
+    work_id = uuid4().int
+    config = CONFIG_TEMPLATE.copy()
+    config['memory'] = beta
+    writer.write(pickle.dumps((work_id, yaml.dump(config))))
+    await writer.drain()
+    writer.close()
 
 
 async def receive_data_from_client(
@@ -146,6 +161,10 @@ async def check_old_works():
 
 
 async def server(out_dir: Path) -> None:
+    global check_old_works_lock
+    global work_gen
+    check_old_works_lock = asyncio.Lock()
+    work_gen = WorkGenerator(-0.99, 0.99, 0.1, 10)
     t1 = asyncio.create_task(serve(out_dir))
     t2 = asyncio.create_task(check_old_works())
     await t1
