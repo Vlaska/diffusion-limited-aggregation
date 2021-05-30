@@ -6,7 +6,7 @@ import pkgutil
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Coroutine, Dict, Optional, cast
+from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, cast
 from uuid import uuid4
 
 from loguru import logger
@@ -16,6 +16,7 @@ import yaml
 
 logger.add('server_{time}.log', format='{time} | {level} | {message}')
 
+
 @dataclass
 class WorkData:
     beta: float
@@ -23,11 +24,6 @@ class WorkData:
 
 
 is_done = False
-check_old_works_lock: asyncio.Lock
-works: Dict[int, WorkData] = {}
-memory_counter = {
-    -0.99 + (i * 0.01): 100 for i in range(199)
-}
 CONFIG_TEMPLATE: Dict[str, Any] = yaml.full_load(
     cast(bytes, pkgutil.get_data('DLA.server', 'config_template.yml'))
 )
@@ -51,14 +47,53 @@ class WorkGenerator:
             i: 0 for i in tmp
         }
 
+    def _gather_beta_values(self) -> Tuple[float, ...]:
+        return tuple(k for k, v in self.to_distribute.items() if v)
+
+    async def are_values_left(self, is_locked: bool = True) -> bool:
+        if not is_locked:
+            await self.lock.acquire()
+
+        val = bool(
+            self._gather_beta_values() or
+            tuple(
+                k
+                for k, v in self.waiting_for_results.items()
+                if v
+            ))
+
+        if not is_locked:
+            self.lock.release()
+
+        return val
+
+    async def _is_done(self) -> bool:
+        await self.lock.acquire()
+        if self._gather_beta_values():
+            return False
+
+        if any(self.waiting_for_results.values()):
+            while await self.are_values_left(True):
+                self.lock.release()
+                await asyncio.sleep(30)
+                await self.lock.acquire()
+            return False
+
+        self.lock.release()
+        return True
+
     async def get(self) -> Optional[float]:
-        async with self.lock:
-            t = tuple(k for k, v in self.to_distribute.items() if v)
-            if not (t or any(self.waiting_for_results.values())):
-                return None
-            val = np.random.choice(t)
-            self.to_distribute[val] -= 1
-            self.waiting_for_results[val] += 1
+        if await self._is_done():
+            return None
+
+        t = self._gather_beta_values()
+
+        val = np.random.choice(t)
+        self.to_distribute[val] -= 1
+        self.waiting_for_results[val] += 1
+
+        self.lock.release()
+
         return float(val)
 
     async def work_completed(self, val: float) -> None:
@@ -132,7 +167,10 @@ def handle_request(out_dir: Path) -> Callable[
 
 
 # src: https://docs.python.org/3/library/asyncio-stream.html
-async def serve(out_dir: Path):
+async def server(out_dir: Path) -> None:
+    global work_gen
+    work_gen = WorkGenerator(-0.99, 0.99, 0.1, 10)
+
     serv = await asyncio.start_server(
         handle_request(out_dir),
         '0.0.0.0',
@@ -144,32 +182,6 @@ async def serve(out_dir: Path):
 
     async with serv:
         await serv.serve_forever()
-
-
-async def check_old_works():
-    # wait first 10 minutes, to let first works run
-    limit = 60 * 10
-    await asyncio.sleep(limit)
-    while not is_done:
-        async with check_old_works_lock:
-            t = time.time()
-            for k, v in works.copy().items():
-                if t - v.start_time > limit:
-                    works.pop(k)
-                    work_gen.work_timeouted(k)
-
-        await asyncio.sleep(60 * 2)  # check every 2 minutes
-
-
-async def server(out_dir: Path) -> None:
-    global check_old_works_lock
-    global work_gen
-    check_old_works_lock = asyncio.Lock()
-    work_gen = WorkGenerator(-0.99, 0.99, 0.1, 10)
-    t1 = asyncio.create_task(serve(out_dir))
-    t2 = asyncio.create_task(check_old_works())
-    await t1
-    await t2
 
 
 asyncio.run(server(Path('.')))

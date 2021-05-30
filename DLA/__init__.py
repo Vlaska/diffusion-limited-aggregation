@@ -4,7 +4,7 @@ from typing import Any, Dict, Final
 
 from DLA.types import RGB, RGBA, Vec, Vec2
 
-confg_dict: Dict[str, Any]
+config_dict: Dict[str, Any]
 
 BLACK: Final[RGB] = (0, 0, 0)
 WHITE: Final[RGB] = (255, 255, 255)
