@@ -9,9 +9,12 @@ from pathlib import Path
 from typing import Any, Callable, Coroutine, Dict, Optional, cast
 from uuid import uuid4
 
+from loguru import logger
 import numpy as np
 import yaml
 
+
+logger.add('server_{time}.log', format='{time} | {level} | {message}')
 
 @dataclass
 class WorkData:
@@ -79,15 +82,20 @@ def handle_request(out_dir: Path) -> Callable[
         reader: asyncio.StreamReader,
         writer: asyncio.StreamWriter
     ) -> None:
+        work_uuid = uuid4()
+        work_id_int = work_uuid.int
+        work_id_bytes = work_uuid.bytes
+
+        logger.info(f'{work_id_int} - Client connected')
+
+        logger.bind(work_id=work_id_int)
+
         beta = await work_gen.get()
 
         if beta is None:
             writer.close()
+            logger.info(f'{work_id_int} - No work to assign.')
             return
-
-        work_uuid = uuid4()
-        work_id_int = work_uuid.int
-        work_id_bytes = work_uuid.bytes
 
         config = CONFIG_TEMPLATE.copy()
         config['memory'] = beta
@@ -97,9 +105,12 @@ def handle_request(out_dir: Path) -> Callable[
         writer.write(cast(str, yaml.dump(config)).encode('utf-8'))
         await writer.drain()
 
+        logger.info(f'{work_id_int} - Assigned work, {beta=}')
+
         try:
             await asyncio.wait_for(reader.read(1), 60 * 10)
         except asyncio.TimeoutError:
+            logger.warning(f'{work_id_int} - Work timed out.')
             await work_gen.work_timeouted(beta)
         else:
             await work_gen.work_completed(beta)
@@ -107,7 +118,13 @@ def handle_request(out_dir: Path) -> Callable[
             file_name = (await reader.read(name_len)).decode('utf-8')
             data = await reader.read(-1)
 
-            (out_dir / str(beta) / file_name).write_bytes(data)
+            out_file = out_dir / str(beta) / file_name
+
+            out_file.write_bytes(data)
+
+            logger.info(
+                f'{work_id_int} - Work completed, saved to file {out_file}'
+            )
 
         writer.close()
 
@@ -123,7 +140,7 @@ async def serve(out_dir: Path):
     )
 
     addr = serv.sockets[0].getsockname()  # type: ignore
-    print(f"Serving at: {addr}")
+    logger.info(f"Serving at: {addr}")
 
     async with serv:
         await serv.serve_forever()
