@@ -55,10 +55,12 @@ async def run_work() -> bool:
         logger.info(f'{work_id} - Send results.')
     except ConnectionError as e:
         logger.warning(f'{work_id} - {e}')
-
-    writer.close()
-    await writer.wait_closed()
-    logger.info(f'{work_id} - Closed connection.')
+        writer.close()
+        return True
+    else:
+        writer.close()
+        await writer.wait_closed()
+        logger.info(f'{work_id} - Closed connection.')
 
     return False
 

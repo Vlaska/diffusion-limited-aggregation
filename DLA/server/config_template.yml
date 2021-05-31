@@ -11,7 +11,7 @@ epsilon: !!python/float 1e-10
 push_out_tries: 10
 use_pygame: false
 print_results: false
-max_steps: 1000
+max_steps: 200
 
 # multiple of 'particle_radius' which will be used while checking collision; min = 0
 radius_check: 2

@@ -20,6 +20,9 @@ CONFIG_TEMPLATE: Dict[str, Any] = yaml.full_load(
     cast(bytes, pkgutil.get_data('DLA.server', 'config_template.yml'))
 )
 
+lock_connection_counter: asyncio.Lock
+connections = 0
+
 
 class WorkGenerator:
     lock: asyncio.Lock
@@ -112,6 +115,13 @@ def handle_request(out_dir: Path) -> Callable[
         reader: asyncio.StreamReader,
         writer: asyncio.StreamWriter
     ) -> None:
+        if close_server.is_set():
+            writer.write(b'\01')
+            return
+
+        global connections
+        async with lock_connection_counter:
+            connections += 1
         work_uuid = uuid4()
         work_id_int = work_uuid.int
         work_id_bytes = work_uuid.bytes
@@ -131,6 +141,8 @@ def handle_request(out_dir: Path) -> Callable[
             await writer.drain()
             writer.close()
             logger.info(f'{work_id_int} - No work to assign.')
+            async with lock_connection_counter:
+                connections -= 1
             return
 
         writer.write(b'\00')
@@ -150,7 +162,7 @@ def handle_request(out_dir: Path) -> Callable[
 
         try:
             logger.info(f'{work_id_int} - Waiting for work to complete.')
-            await asyncio.wait_for(reader.read(1), 10)
+            await asyncio.wait_for(reader.read(1), 60 * 10)
         except asyncio.TimeoutError:
             writer.write(b'\01')
             logger.warning(f'{work_id_int} - Work timed out.')
@@ -174,6 +186,12 @@ def handle_request(out_dir: Path) -> Callable[
         writer.close()
         await writer.wait_closed()
 
+        async with lock_connection_counter:
+            connections -= 1
+        
+        if not (close_server.is_set() or await work_gen.are_values_left()):
+            close_server.set()
+
     return _handle_request
 
 
@@ -181,7 +199,11 @@ def handle_request(out_dir: Path) -> Callable[
 @logger.catch
 async def server(out_dir: Path) -> None:
     global work_gen
-    work_gen = WorkGenerator(-0.99, 0.99, 0.99, 1)
+    global close_server
+    global lock_connection_counter
+    work_gen = WorkGenerator(-0.99, 0.99, 0.99, 5)
+    close_server = asyncio.Event()
+    lock_connection_counter = asyncio.Lock()
 
     serv = await asyncio.start_server(
         handle_request(out_dir),
@@ -192,8 +214,21 @@ async def server(out_dir: Path) -> None:
     addr = serv.sockets[0].getsockname()  # type: ignore
     logger.info(f"Serving at: {addr}")
 
-    async with serv:
-        await serv.serve_forever()
+    # async with serv:
+    #     await serv.serve_forever()
+    # await close_server.wait()
+
+    await close_server.wait()
+
+    while True:
+        async with lock_connection_counter:
+            if not connections:
+                break
+        await asyncio.sleep(10)
+
+    serv.close()
+    await serv.wait_closed()
+    logger.info('Server closed.')
 
 
 asyncio.run(server(Path('./out')), debug=True)
