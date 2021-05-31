@@ -5,6 +5,8 @@ from pathlib import Path
 import pickle
 import sys
 
+from loguru import logger
+
 
 class Worker:
     def __init__(self, work_id: int, config: str) -> None:
