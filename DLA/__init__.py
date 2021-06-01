@@ -1,8 +1,13 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Final
+from typing import Any, Dict, Final, Tuple, Union
 
-from DLA.types import RGB, RGBA, Vec, Vec2
+import numpy as np
+
+Vec = np.ndarray
+Vec2 = Union[Tuple[float, float], np.ndarray]
+RGB = Tuple[int, int, int]
+RGBA = Tuple[int, int, int, int]
 
 config_dict: Dict[str, Any]
 
