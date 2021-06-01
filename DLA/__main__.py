@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import os
+import sys
 from pathlib import Path
 from pkgutil import get_data
-import sys
 from typing import Optional
 
 import click
