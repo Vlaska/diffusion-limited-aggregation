@@ -8,17 +8,12 @@ authors = ["Kamil Gierada <vlaska8888@gmail.com>"]
 python = ">=3.8,<3.10"
 numpy = "^1.20.2"
 Cython = "^0.29.22"
-Pillow = "^8.2.0"
-matplotlib = "^3.4.1"
-imageio = "^2.9.0"
 pygame = "^2.0.1"
 PyYAML = "^5.4.1"
 beautifultable = "^1.0.1"
-pandas = "^1.2.4"
 click = "^8.0.1"
 
 [tool.poetry.dev-dependencies]
-pylint = "^2.7.4"
 mypy = "^0.812"
 autopep8 = "^1.5.6"
 ipython = "^7.22.0"
