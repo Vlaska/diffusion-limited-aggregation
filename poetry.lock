@@ -160,7 +160,7 @@ testing = ["Django (<3.1)", "colorama", "docopt", "pytest (>=3.9.0,<5.0.0)"]
 name = "loguru"
 version = "0.5.3"
 description = "Python logging made (stupidly) simple"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.5"
 
@@ -464,7 +464,7 @@ python-versions = "*"
 name = "win32-setctime"
 version = "1.0.3"
 description = "A small Python utility to set file creation time on Windows"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.5"
 
@@ -474,7 +474,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.10"
-content-hash = "dceafa6b7ffa6324746c3cbde6e9047a8f2985f89dee4418d94881c14063cb06"
+content-hash = "eb2b5ddcaf84b14df9a1f845078133b6bbe4653288b9e756936c3cfef72b4763"
 
 [metadata.files]
 appnope = [
