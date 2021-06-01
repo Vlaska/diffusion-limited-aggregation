@@ -321,7 +321,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 name = "pygame"
 version = "2.0.1"
 description = "Python Game Development"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 
@@ -474,7 +474,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.10"
-content-hash = "5288e62613d6c47e7bb2470569b96139ed8e558aec9d42c5b009186bde1e736e"
+content-hash = "dceafa6b7ffa6324746c3cbde6e9047a8f2985f89dee4418d94881c14063cb06"
 
 [metadata.files]
 appnope = [
