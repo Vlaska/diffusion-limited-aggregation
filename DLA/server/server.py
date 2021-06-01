@@ -203,7 +203,7 @@ async def server(out_dir: Path) -> None:
     global work_gen
     global close_server
     global lock_connection_counter
-    work_gen = WorkGenerator(-0.99, 0.99, 1, 2)
+    work_gen = WorkGenerator(-0.99, 0.11, 1, 20)
     close_server = asyncio.Event()
     lock_connection_counter = asyncio.Lock()
 
@@ -230,4 +230,5 @@ async def server(out_dir: Path) -> None:
     logger.info('Server closed.')
 
 
-asyncio.run(server(Path('./out')), debug=True)
+if __name__ == '__main__':
+    asyncio.run(server(Path('./out')), debug=True)

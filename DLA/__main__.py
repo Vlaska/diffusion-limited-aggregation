@@ -1,4 +1,5 @@
 from __future__ import annotations
+import asyncio
 
 import os
 import sys
@@ -53,19 +54,28 @@ def simulate(config: Optional[str]) -> None:
 
 
 @cli.command()
-def server() -> None:
+@click.option(
+    '-o', '--out',
+    nargs=1, default=Path('.'), type=Path, show_default=True
+)
+def server(out: Path) -> None:
     """Run server to initialize simulations running on clients.
     """
-
-    pass
+    from DLA.server import server
+    asyncio.run(server(out))
 
 
 @cli.command()
-def client() -> None:
+@click.option(
+    '-c', '--clients',
+    nargs=1, default=1, type=int, show_default=True
+)
+def client(clients) -> None:
     """Start symulation based on configuration from server and return results
     to it.
     """
-    pass
+    from DLA.server import run_clients
+    asyncio.run(run_clients(clients))
 
 
 if __name__ == '__main__':

@@ -87,5 +87,13 @@ async def run_work() -> bool:
 
     return False
 
+
+async def run_clients(num_of_clients: int) -> None:
+    while not any(
+        await asyncio.gather(*[run_work() for _ in range(num_of_clients)])
+    ):
+        pass
+
+
 if __name__ == '__main__':
     asyncio.run(run_work())
