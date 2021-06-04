@@ -22,7 +22,7 @@ logger.add('server_{time}.log', format='{time} | {level} | {message}')
 
 
 @dataclass
-class WorkData:
+class ConnData:
     reader: asyncio.StreamReader
     writer: asyncio.StreamWriter
     work_id: str = field(default_factory=lambda: uuid4().hex, init=False)
@@ -72,36 +72,36 @@ class Handler:
         self.work_gen = work_gen
         self.out_dir.mkdir(parents=True, exist_ok=True)
 
-    async def gen_beta(self, work_data: WorkData):
+    async def gen_beta(self, conn_data: ConnData):
         beta = await self.work_gen.get()
-        work_data.beta = beta
+        conn_data.beta = beta
 
-    async def send_config(self, work_data: WorkData) -> None:
+    async def send_config(self, conn_data: ConnData) -> None:
         config = CONFIG_TEMPLATE.copy()
-        config['beta'] = work_data.beta
+        config['beta'] = conn_data.beta
 
         config_dump = cast(str, yaml.dump(config)).encode('utf-8')
-        await work_data.write(
+        await conn_data.write(
             len(config_dump).to_bytes(4, 'big') + config_dump
         )
 
-    async def save_results(self, work_data: WorkData) -> bool:
+    async def save_results(self, conn_data: ConnData) -> bool:
         try:
-            name_len = int.from_bytes(await work_data.read(1), 'big')
-            filename = (await work_data.read(name_len)).decode('utf-8')
-            data = await work_data.read(-1)
+            name_len = int.from_bytes(await conn_data.read(1), 'big')
+            filename = (await conn_data.read(name_len)).decode('utf-8')
+            data = await conn_data.read(-1)
 
             out_file = self.out_dir / filename
             out_file.write_bytes(data)
-            work_data.info(f'Work completed, saved to "{out_file}"')
+            conn_data.info(f'Work completed, saved to "{out_file}"')
 
-            await self.work_gen.work_completed(cast(float, work_data.beta))
+            await self.work_gen.work_completed(cast(float, conn_data.beta))
 
             return True
         except PermissionError:
-            work_data.warning('Disconnected.')
+            conn_data.warning('Disconnected.')
         except Exception as e:
-            work_data.error(f'Exception: {e}')
+            conn_data.error(f'Exception: {e}')
 
         try:
             if out_file.exists():
@@ -111,59 +111,59 @@ class Handler:
 
         return False
 
-    async def _handle_request(self, work_data: WorkData) -> None:
-        sock: socket = work_data.writer.transport._sock  # type: ignore
+    async def _handle_request(self, conn_data: ConnData) -> None:
+        sock: socket = conn_data.writer.transport._sock  # type: ignore
         client_ip = sock.getpeername()[0]
 
-        work_data.info(
+        conn_data.info(
             f'Client connected, connection from {client_ip}'
         )
 
         if self.conn.is_closed():
-            await work_data.failed()
-            work_data.info(
+            await conn_data.failed()
+            conn_data.info(
                 f'Server is closing, reject connection from: {client_ip}'
             )
-            await work_data.close()
+            await conn_data.close()
             return
 
         await self.conn.connect()
-        await self.gen_beta(work_data)
+        await self.gen_beta(conn_data)
 
-        if work_data.beta is None:
-            await work_data.failed()
-            work_data.info(f'No work to assign.')
+        if conn_data.beta is None:
+            await conn_data.failed()
+            conn_data.info(f'No work to assign.')
 
-            await work_data.close()
+            await conn_data.close()
             await self.conn.disconnect()
             return
 
-        await work_data.success()
-        await work_data.send_id_to_client()
-        await self.send_config(work_data)
+        await conn_data.success()
+        await conn_data.send_id_to_client()
+        await self.send_config(conn_data)
 
-        work_data.info(
-            f'Assigned work, beta = {work_data.beta}. '
+        conn_data.info(
+            f'Assigned work, beta = {conn_data.beta}. '
             'Waiting for work to finnish.'
         )
 
         try:
-            result = await asyncio.wait_for(work_data.read(1), TIMEOUT)
+            result = await asyncio.wait_for(conn_data.read(1), TIMEOUT)
             if result == b'':
                 raise Disconnected()
         except asyncio.TimeoutError:
-            await work_data.failed()
-            work_data.warning('Work timed out.')
-            await self.work_gen.work_timeouted(work_data.beta)
+            await conn_data.failed()
+            conn_data.warning('Work timed out.')
+            await self.work_gen.work_timeouted(conn_data.beta)
         except Disconnected:
-            work_data.warning('Client got disconnected.')
-            await self.work_gen.work_timeouted(work_data.beta)
+            conn_data.warning('Client got disconnected.')
+            await self.work_gen.work_timeouted(conn_data.beta)
         else:
-            await work_data.success()
-            if not await self.save_results(work_data):
-                await self.work_gen.work_timeouted(work_data.beta)
+            await conn_data.success()
+            if not await self.save_results(conn_data):
+                await self.work_gen.work_timeouted(conn_data.beta)
 
-        await work_data.close()
+        await conn_data.close()
         await self.conn.disconnect()
 
     async def handle_request(
@@ -171,12 +171,12 @@ class Handler:
         reader: asyncio.StreamReader,
         writer: asyncio.StreamWriter,
     ) -> None:
-        work_data = WorkData(reader, writer)
-        await self._handle_request(work_data)
+        conn_data = ConnData(reader, writer)
+        await self._handle_request(conn_data)
         if not (
             self.conn.is_closed() or await self.work_gen.are_values_left(False)
         ):
-            work_data.info(
+            conn_data.info(
                 'There are no more work to assign. '
                 'Starting to close the server'
             )
