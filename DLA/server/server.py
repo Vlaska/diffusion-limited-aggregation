@@ -2,22 +2,19 @@ from __future__ import annotations
 
 import asyncio
 import os
-import pkgutil
 from pathlib import Path
 from socket import socket
-from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, cast
+from typing import Any, Callable, Coroutine, Optional, Tuple, cast
 from uuid import uuid4
 
 import numpy as np
 import yaml
 from loguru import logger
 
+from .config import CONFIG_TEMPLATE, START, END, STEP, NUM_OF_SAMPLES
+
 logger.add('server_{time}.log', format='{time} | {level} | {message}')
 
-
-CONFIG_TEMPLATE: Dict[str, Any] = yaml.full_load(
-    cast(bytes, pkgutil.get_data('DLA.server', 'config_template.yml'))
-)
 
 lock_connection_counter: asyncio.Lock
 connections = 0
@@ -203,7 +200,7 @@ async def server(out_dir: Path) -> None:
     global work_gen
     global close_server
     global lock_connection_counter
-    work_gen = WorkGenerator(-0.99, 0.11, 1, 20)
+    work_gen = WorkGenerator(START, END, STEP, NUM_OF_SAMPLES)
     close_server = asyncio.Event()
     lock_connection_counter = asyncio.Lock()
 

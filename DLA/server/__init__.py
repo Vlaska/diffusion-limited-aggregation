@@ -1,5 +1,3 @@
-from .client import run_clients
-from .server import server
+from typing import Any, Dict, List
 
-
-__all__ = ['run_clients', 'server']
+config_dict: List[Dict[str, Any]]
