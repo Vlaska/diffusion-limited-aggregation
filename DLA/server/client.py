@@ -11,6 +11,8 @@ from typing import Final
 
 from loguru import logger
 
+from DLA.server import FAIL, SUCCESS
+
 logger.add('client_{time}.log', format='{time} | {level} | {message}')
 
 
@@ -35,11 +37,19 @@ async def run_work() -> bool:
     tmp_work_id = uuid.uuid4().hex
     logger.info(f'Temporary work_id = {tmp_work_id}')
 
-    reader, writer = await asyncio.open_connection(SERVER_ADDR, SERVER_PORT)
+    try:
+        reader, writer = await asyncio.open_connection(
+            SERVER_ADDR, SERVER_PORT
+        )
+    except ConnectionRefusedError:
+        logger.warning(
+            f'{tmp_work_id} - Connection to server refused. Closing clients.'
+        )
+        return True
 
     logger.info(f'{tmp_work_id} - Connected to server.')
 
-    if await reader.read(1) == b'\01':
+    if await reader.read(1) == FAIL:
         logger.warning(f'{tmp_work_id} - No work to do.')
         writer.close()
         await writer.wait_closed()
@@ -60,10 +70,10 @@ async def run_work() -> bool:
     delta_time = time.time() - start_time
 
     try:
-        writer.write(b'\01')
+        writer.write(SUCCESS)
         await writer.drain()
 
-        if await asyncio.wait_for(reader.read(1), 3 * 60) == b'\01':
+        if await asyncio.wait_for(reader.read(1), 3 * 60) == FAIL:
             logger.warning(f'{work_id} - Timeout.')
             writer.close()
             return False
