@@ -90,7 +90,7 @@ def simulate(config: Optional[str]) -> None:
 def server(out: str, config: Optional[str]) -> None:
     """Run server to initialize simulations running on clients.
     """
-    config_dict = load_config(config, 'DLA.server', 'server_config.yml', True)
+    config_dict = load_config(config, 'DLA.server', 'server_config.yml')
     import DLA.server as s
     setattr(s, 'config_dict', config_dict)
     from DLA.server.server import server as serv

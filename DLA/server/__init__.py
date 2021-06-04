@@ -1,3 +1,3 @@
-from typing import Any, Dict, List
+from typing import Any, Dict
 
-config_dict: List[Dict[str, Any]]
+config_dict: Dict[str, Any]
