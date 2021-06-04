@@ -11,13 +11,34 @@ import numpy as np
 import yaml
 from loguru import logger
 
-from .config import CONFIG_TEMPLATE, START, END, STEP, NUM_OF_SAMPLES
+from .config import CONFIG_TEMPLATE, END, NUM_OF_SAMPLES, START, STEP
 
 logger.add('server_{time}.log', format='{time} | {level} | {message}')
 
 
-lock_connection_counter: asyncio.Lock
-connections = 0
+class Connections:
+    def __init__(self, event: asyncio.Event) -> None:
+        self.lock = asyncio.Lock()
+        self.connections = 0
+        self.end_event = event
+
+    async def connect(self) -> None:
+        with self.lock:
+            self.connections += 1
+
+    async def disconnect(self) -> None:
+        with self.lock:
+            self.connections -= 1
+
+    async def are_connections_left(self) -> bool:
+        with self.lock:
+            return bool(self.connections)
+
+    def close(self) -> None:
+        self.end_event.set()
+
+    def is_closed(self) -> bool:
+        return self.end_event.is_set()
 
 
 class WorkGenerator:
@@ -99,11 +120,11 @@ class WorkGenerator:
             self.waiting_for_results[val] -= 1
 
 
-work_gen: WorkGenerator
-close_server: asyncio.Event
-
-
-def handle_request(out_dir: Path) -> Callable[
+def handle_request(
+    out_dir: Path,
+    conn: Connections,
+    work_gen: WorkGenerator
+) -> Callable[
     [asyncio.StreamReader, asyncio.StreamWriter],
     Coroutine[Any, Any, None]
 ]:
@@ -113,16 +134,14 @@ def handle_request(out_dir: Path) -> Callable[
     ) -> None:
         sock: socket = writer.transport._sock  # type: ignore
         client_ip = sock.getpeername()[0]
-        if close_server.is_set():
+        if conn.is_closed():
             writer.write(b'\01')
             logger.info(
                 f'Server is closing, reject connection from: {client_ip}'
             )
             return
 
-        global connections
-        async with lock_connection_counter:
-            connections += 1
+        await conn.connect()
 
         work_id = uuid4().hex
 
@@ -136,8 +155,7 @@ def handle_request(out_dir: Path) -> Callable[
             await writer.drain()
             writer.close()
             logger.info(f'{work_id} - No work to assign.')
-            async with lock_connection_counter:
-                connections -= 1
+            await conn.disconnect()
             return
 
         writer.write(b'\00')
@@ -187,19 +205,19 @@ def handle_request(out_dir: Path) -> Callable[
                     pass
                 finally:
                     await work_gen.work_timeouted(beta)
+                    await conn.disconnect()
 
         writer.close()
         await writer.wait_closed()
 
-        async with lock_connection_counter:
-            connections -= 1
+        await conn.disconnect()
 
-        if not (close_server.is_set() or await work_gen.are_values_left()):
+        if not (conn.is_closed() or await work_gen.are_values_left()):
             logger.info(
                 f'{work_id} - There are no more values to assign. '
                 'Starting to close the server.'
             )
-            close_server.set()
+            conn.close()
 
     return _handle_request
 
@@ -207,15 +225,13 @@ def handle_request(out_dir: Path) -> Callable[
 # src: https://docs.python.org/3/library/asyncio-stream.html
 @logger.catch
 async def server(out_dir: Path) -> None:
-    global work_gen
-    global close_server
-    global lock_connection_counter
     work_gen = WorkGenerator(START, END, STEP, NUM_OF_SAMPLES)
     close_server = asyncio.Event()
-    lock_connection_counter = asyncio.Lock()
+
+    conn = Connections(close_server)
 
     serv = await asyncio.start_server(
-        handle_request(out_dir),
+        handle_request(out_dir, conn, work_gen),
         '0.0.0.0',
         os.environ.get('DLA_PORT', 1025)
     )
@@ -226,9 +242,8 @@ async def server(out_dir: Path) -> None:
     await close_server.wait()
 
     while True:
-        async with lock_connection_counter:
-            if not connections:
-                break
+        if not await conn.are_connections_left():
+            break
         logger.info('Waiting for all connections to end.')
         await asyncio.sleep(10)
 
