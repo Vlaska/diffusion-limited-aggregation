@@ -163,20 +163,30 @@ def handle_request(out_dir: Path) -> Callable[
             logger.warning(f'{work_id} - Work timed out.')
             await work_gen.work_timeouted(beta)
         else:
-            writer.write(b'\00')
-            await work_gen.work_completed(beta)
-            name_len = int.from_bytes(await reader.read(1), 'big')
-            file_name = (await reader.read(name_len)).decode('utf-8')
-            data = await reader.read(-1)
+            try:
+                writer.write(b'\00')
+                name_len = int.from_bytes(await reader.read(1), 'big')
+                file_name = (await reader.read(name_len)).decode('utf-8')
+                data = await reader.read(-1)
 
-            out_file = out_dir / file_name
-            out_file.parent.mkdir(exist_ok=True, parents=True)
+                out_file = out_dir / file_name
+                out_file.parent.mkdir(exist_ok=True, parents=True)
 
-            out_file.write_bytes(data)
+                out_file.write_bytes(data)
 
-            logger.info(
-                f'{work_id} - Work completed, saved to file {out_file}'
-            )
+                logger.info(
+                    f'{work_id} - Work completed, saved to file {out_file}'
+                )
+                await work_gen.work_completed(beta)
+            except Exception as e:
+                logger.error(f'{work_id} - Exception: {e}')
+                try:
+                    if out_file.exists():
+                        out_file.unlink()
+                except Exception:
+                    pass
+                finally:
+                    await work_gen.work_timeouted(beta)
 
         writer.close()
         await writer.wait_closed()
