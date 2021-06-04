@@ -4,120 +4,18 @@ import asyncio
 import os
 from pathlib import Path
 from socket import socket
-from typing import Any, Callable, Coroutine, Optional, Tuple, cast
+from typing import Any, Callable, Coroutine, cast
 from uuid import uuid4
 
-import numpy as np
 import yaml
 from loguru import logger
+
+from DLA.server.connections import Connections
+from DLA.server.work_generator import WorkGenerator
 
 from .config import CONFIG_TEMPLATE, END, NUM_OF_SAMPLES, START, STEP
 
 logger.add('server_{time}.log', format='{time} | {level} | {message}')
-
-
-class Connections:
-    def __init__(self, event: asyncio.Event) -> None:
-        self.lock = asyncio.Lock()
-        self.connections = 0
-        self.end_event = event
-
-    async def connect(self) -> None:
-        with self.lock:
-            self.connections += 1
-
-    async def disconnect(self) -> None:
-        with self.lock:
-            self.connections -= 1
-
-    async def are_connections_left(self) -> bool:
-        with self.lock:
-            return bool(self.connections)
-
-    def close(self) -> None:
-        self.end_event.set()
-
-    def is_closed(self) -> bool:
-        return self.end_event.is_set()
-
-
-class WorkGenerator:
-    lock: asyncio.Lock
-
-    def __init__(self, start: float, end: float, step: float, num: int):
-        self.__class__.lock = asyncio.Lock()
-        _points = end - start
-        points = int(_points)
-        while _points != points:
-            _points *= 10
-            points = int(_points)
-        tmp = np.arange(start, end, step)
-        self.to_distribute = {
-            i: num for i in tmp
-        }
-        self.waiting_for_results = {
-            i: 0 for i in tmp
-        }
-
-    def _gather_beta_values(self) -> Tuple[float, ...]:
-        return tuple(k for k, v in self.to_distribute.items() if v)
-
-    async def are_values_left(self, is_locked: bool = True) -> bool:
-        if not is_locked:
-            await self.lock.acquire()
-
-        val = bool(
-            self._gather_beta_values() or
-            tuple(
-                k
-                for k, v in self.waiting_for_results.items()
-                if v
-            ))
-
-        if not is_locked:
-            self.lock.release()
-
-        return val
-
-    async def _is_done(self) -> bool:
-        await self.lock.acquire()
-        if self._gather_beta_values():
-            return False
-
-        if bool(self.waiting_for_results.values()):
-            while await self.are_values_left(True):
-                if bool(self._gather_beta_values()):
-                    return False
-
-                self.lock.release()
-                await asyncio.sleep(5)
-                await self.lock.acquire()
-
-        self.lock.release()
-        return True
-
-    async def get(self) -> Optional[float]:
-        if await self._is_done():
-            return None
-
-        t = self._gather_beta_values()
-
-        val = np.random.choice(t)
-        self.to_distribute[val] -= 1
-        self.waiting_for_results[val] += 1
-
-        self.lock.release()
-
-        return float(val)
-
-    async def work_completed(self, val: float) -> None:
-        async with self.lock:
-            self.waiting_for_results[val] -= 1
-
-    async def work_timeouted(self, val: float) -> None:
-        async with self.lock:
-            self.to_distribute[val] += 1
-            self.waiting_for_results[val] -= 1
 
 
 def handle_request(
