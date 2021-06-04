@@ -5,6 +5,7 @@ import os
 import sys
 import time
 import uuid
+from datetime import timedelta
 from pathlib import Path
 from typing import Final
 
@@ -56,13 +57,13 @@ async def run_work() -> bool:
 
     out_file = await execute_work(config)
 
-    delta_time = (time.time() - start_time) / 60
+    delta_time = time.time() - start_time
 
     try:
         writer.write(b'\01')
         await writer.drain()
 
-        if await reader.read(1) == b'\01':
+        if await asyncio.wait_for(reader.read(1), 3 * 60) == b'\01':
             logger.warning(f'{work_id} - Timeout.')
             writer.close()
             return False
@@ -74,9 +75,10 @@ async def run_work() -> bool:
         await writer.drain()
 
         logger.info(
-            f'{work_id} - Work finished, took {delta_time}s, results send.'
+            f'{work_id} - Work finished, took {timedelta(seconds=delta_time)},'
+            ' results send.'
         )
-    except ConnectionError as e:
+    except (ConnectionError, asyncio.TimeoutError) as e:
         logger.warning(f'{work_id} - {e}')
         writer.close()
         return True
