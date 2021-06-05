@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Dict, Iterable, Optional, Type, cast
 
+import numpy as np
+
 from DLA import Vec
 from DLA.config import (NUM_OF_PARTICLES, SECOND_MIN_BOX_SIZE, STARTING_POS,
                         WINDOW_SIZE)
@@ -89,7 +91,8 @@ class Plane(BasePlane):
         return obj
 
     def get_data(self) -> Dict[str, Vec]:
+        nan_mask = np.isnan(self._walking_points.pos)[:, 0]
         return {
             'stuck_particles': self._stuck_points[:self._stuck_points.filled],
-            'free_particles': self._walking_points.pos,
+            'free_particles': self._walking_points.pos[~nan_mask],
         }
