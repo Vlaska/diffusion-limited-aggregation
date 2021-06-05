@@ -4,7 +4,27 @@ from typing import Final, Tuple
 
 import numpy as np
 
-from . import config_dict
+try:
+    from . import config_dict
+except ImportError:
+    # Used during testing
+    config_dict = {
+        'window_size': 512,
+        'particle_radius': 3.0,
+        'num_of_particles': 1000,
+        'fps': 120,
+        'min_box_size': 0.5,
+        'start_pos': (256, 256),
+        'epsilon': 1e-10,
+        'push_out_tries': 10,
+        'use_pygame': False,
+        'print_results': False,
+        'max_steps': 4000,
+        'radius_check': 2,
+        'regen_after_updates': 200,
+        'step_strength': 2,
+        'memory': 0
+    }
 
 FPS: Final[int] = config_dict['fps']
 WINDOW_SIZE_FOR_RENDERING: Final[Tuple[int, int]] = (
