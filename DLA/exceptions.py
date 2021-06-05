@@ -1,0 +1,2 @@
+class StopSimulation(Exception):
+    pass

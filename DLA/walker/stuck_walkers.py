@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Final, Iterator, Optional, Tuple
 
 import numpy as np
-
 from DLA import GREEN, RGB, Vec, Vec2
-from DLA.config import EPSILON, RADIUS, RADIUS_CHECK, WINDOW_CENTER
+from DLA.config import (EPSILON, NUM_OF_PARTICLES, RADIUS, RADIUS_CHECK,
+                        WINDOW_CENTER)
 from DLA.utils import dot_self, squared_distance
 
 from .walker import Walker
@@ -76,3 +76,6 @@ class StuckWalkers(Walker):
 
         if (dist := dot_self(new_point - WINDOW_CENTER)) > self.raw_radius:
             self.raw_radius = dist
+
+    def is_complete(self) -> bool:
+        return self.filled > NUM_OF_PARTICLES

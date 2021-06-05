@@ -15,6 +15,7 @@ from DLA import BLACK, Vec, plane
 from DLA.config import (ALPHA, BETA, FPS, MAX_STEPS, NUM_OF_PARTICLES,
                         PRINT_RESULTS, RADIUS, USE_PYGAME, WINDOW_SIZE,
                         WINDOW_SIZE_FOR_RENDERING)
+from DLA.exceptions import StopSimulation
 from DLA.plane.dimension import Dimension
 
 if USE_PYGAME or TYPE_CHECKING:
@@ -128,13 +129,16 @@ def main_pygame() -> NoReturn:
 
 def main_no_pygame() -> NoReturn:
     global num_of_iterations
-
-    for _ in range(MAX_STEPS // 100):
-        for _ in range(100):
-            num_of_iterations += 1
-            p.update()
-        collect()
-    at_end()
+    try:
+        for _ in range(MAX_STEPS // 100):
+            for _ in range(100):
+                num_of_iterations += 1
+                p.update()
+            collect()
+    except StopSimulation:
+        pass
+    finally:
+        at_end()
 
 
 def main() -> NoReturn:

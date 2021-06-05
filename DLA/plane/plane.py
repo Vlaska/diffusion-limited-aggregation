@@ -5,6 +5,7 @@ from typing import Dict, Iterable, Optional, Type, cast
 from DLA import Vec
 from DLA.config import (NUM_OF_PARTICLES, SECOND_MIN_BOX_SIZE, STARTING_POS,
                         WINDOW_SIZE)
+from DLA.exceptions import StopSimulation
 from DLA.plane.base_plane import BasePlane
 from DLA.plane.indivisible_plane import IndivisiblePlane
 from DLA.utils import one_subchunk_coords
@@ -29,6 +30,8 @@ class Plane(BasePlane):
 
     def update(self):
         self._walking_points.update(self._stuck_points)
+        if self._stuck_points.is_complete():
+            raise StopSimulation
 
     def add_sub_chunks(self, chunks: Iterable[int]) -> None:
         for i in chunks:
