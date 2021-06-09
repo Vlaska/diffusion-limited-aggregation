@@ -101,29 +101,47 @@ def main_pygame() -> NoReturn:
     surface_, clock = init_pygame()
     global num_of_iterations
 
-    while True:
-        for _ in range(100):
-            clock.tick(FPS)
-            num_of_iterations += 1
-            display.set_caption(
-                f"Diffusion Limited Aggregation - {num_of_iterations}"
-            )
-            for event in events.get():
-                if event.type == pygame.QUIT:
+    for _ in range(MAX_STEPS // 100):
+        try:
+            for _ in range(100):
+                clock.tick(FPS)
+                num_of_iterations += 1
+                display.set_caption(
+                    f"Diffusion Limited Aggregation - {num_of_iterations}"
+                )
+                for event in events.get():
+                    if event.type == pygame.QUIT:
+                        at_end()
+
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_ESCAPE]:
                     at_end()
 
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_ESCAPE]:
-                at_end()
+                p.update()
 
-            p.update()
+                surface_.fill((0, 0, 0, 60))
 
-            surface_.fill(BLACK)
+                render(surface_)
 
-            render(surface_)
+                display.flip()
+            collect()
+        except StopSimulation:
+            while True:
+                clock.tick(FPS)
 
-            display.flip()
-        collect()
+                for event in events.get():
+                    if event.type == pygame.QUIT:
+                        at_end()
+
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_ESCAPE]:
+                    at_end()
+
+                surface_.fill(BLACK)
+
+                render(surface_)
+
+                display.flip()
 # endregion
 
 

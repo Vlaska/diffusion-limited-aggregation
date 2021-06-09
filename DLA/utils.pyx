@@ -165,3 +165,39 @@ cpdef bint is_in_circle(double[::1] pos, double[::1] c_pos, double size, double 
         if _dot_self(tmp) > r_sqruared:
             return False
     return True
+
+cdef double _get_collision_time(double[::1] static_part, double[::1] moving_part, double[::1] move_vec, double radius):
+    cdef double a = _dot_self(move_vec)
+    cdef double tmp_1 = moving_part[0] - static_part[0]
+    cdef double tmp_2 = moving_part[1] - static_part[1]
+    cdef double b = move_vec[0] * tmp_1 + move_vec[1] * tmp_2
+    # cdef double c = _dot_self(static_part) + _dot_self(moving_part) - 4 * radius * radius
+    cdef double c = tmp_1 * tmp_1 + tmp_2 * tmp_2 - 4 * radius * radius
+
+    cdef double delta = b * b - c * a
+    # print(a, b, c, delta)
+    if delta < 0:
+        return -1
+
+    cdef double sqrt_delta = np.sqrt(delta)
+    cdef double one_over_a = 1 / a
+
+    cdef double o1 = (-b + sqrt_delta) * one_over_a
+    cdef double o2 = (-b - sqrt_delta) * one_over_a
+
+    return min(o1, o2)
+
+
+cpdef double get_collision_time(double[:, ::1] static_parts, double[::1] moving_part, double[::1] move_vec, double radius):
+    cdef double out_time = 2
+    cdef Py_ssize_t i
+    cdef Py_ssize_t size = static_parts.shape[0]
+    cdef double tmp
+
+    for i in range(size):
+        tmp = _get_collision_time(static_parts[i], moving_part, move_vec, radius)
+        # print(tmp)
+        if 0 <= tmp <= 1:
+            out_time = min(tmp, out_time)
+    
+    return out_time

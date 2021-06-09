@@ -33,6 +33,7 @@ class WalkerPopulation(Walker):
             ALPHA * np.random.standard_normal((self.size, 2))
         )
 
+    def finish_walk(self) -> None:
         np.clip(
             self.pos + self.last_step,
             BORDER_U_L,
@@ -43,30 +44,20 @@ class WalkerPopulation(Walker):
     @staticmethod
     def pass_to_stuck(
         point: Vec,
-        colliding: Vec,
-        eq_dist: bool,
         step: Vec,
+        time: float,
         other: StuckWalkers
     ) -> None:
-        tries = PUSH_OUT_TRIES
-        while not (eq_dist or point is None) and tries:
-            point = correct_circle_pos(
-                point,
-                step,
-                colliding,
-                RADIUS
-            )
-            colliding, eq_dist = other.does_collide(point)  # type: ignore
-            tries -= 1
-        other.add_stuck(point)
+        other.add_stuck(point + step * time)
 
     def _is_stuck(self, other: StuckWalkers) -> bool:
         for i, v in enumerate(self.pos):
             if not np.isnan(v[0]):
-                colliding, eq_dist = other.does_collide(v)
-                if colliding is not None:
+                t = other.does_collide(v, self.last_step[i])
+
+                if 0 <= t <= 1:
                     self.pass_to_stuck(
-                        v, colliding, eq_dist, self.last_step[i], other
+                        v, self.last_step[i], t, other
                     )
                     self[i] = NaN
                     return True
@@ -91,3 +82,4 @@ class WalkerPopulation(Walker):
     def update(self, other: StuckWalkers) -> None:
         self.walk()
         self.is_stuck(other)
+        self.finish_walk()

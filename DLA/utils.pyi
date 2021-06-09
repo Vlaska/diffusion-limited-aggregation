@@ -44,3 +44,11 @@ def is_in_circle(
     size: float,
     radius: float
 ) -> bool: ...
+
+
+def get_collision_time(
+    static_parts: np.ndarray,
+    moving_part: np.ndarray,
+    move_vec: np.ndarray,
+    radius: float
+) -> float: ...
