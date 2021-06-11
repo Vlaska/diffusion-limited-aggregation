@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Final, Iterator, Optional, Tuple
+from typing import TYPE_CHECKING, Final, Iterator
 
 import numpy as np
+
 from DLA import GREEN, RGB, Vec, Vec2
-from DLA.config import (EPSILON, NUM_OF_PARTICLES, RADIUS, RADIUS_CHECK,
-                        WINDOW_CENTER)
+from DLA.config import NUM_OF_PARTICLES, RADIUS, RADIUS_CHECK, WINDOW_CENTER
 from DLA.utils import dot_self, get_collision_time
 
 from .walker import Walker
@@ -53,25 +53,9 @@ class StuckWalkers(Walker):
         self.radius = (value + RADIUS_CHECK) ** 2
 
     def does_collide(self, point: Vec, move_vec: Vec) -> float:
-        # if dot_self(point - WINDOW_CENTER) > self.radius:
-        #     return -1
-
         return get_collision_time(
             self.view, point, move_vec, RADIUS
         )
-
-        # diffs: np.ndarray = np.abs(self.view - point)
-        # dist: np.ndarray = squared_distance(diffs)
-
-        # t = np.argmin(dist)
-        # stuck_pos = self.pos[t]
-
-        # is_equal = -EPSILON <= dist[t] - SQUARED_PARTICLE_DISTANCE <= EPSILON
-
-        # return (
-        #     None if dist[t] > SQUARED_PARTICLE_DISTANCE else stuck_pos,
-        #     is_equal
-        # )
 
     def add_stuck(self, new_point: Vec) -> None:
         self.pos[self.filled] = new_point
