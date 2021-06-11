@@ -10,6 +10,10 @@ cimport numpy as np
 from cython.view cimport array as cvarray
 
 
+cdef extern from "math.h":
+    double sqrt(double m)
+
+
 cdef double[::1] _squared_distance(double[:, ::1] v):
     cdef Py_ssize_t i, size = v.shape[0]
     cdef double[::1] out = cvarray(shape=(size, ), itemsize=sizeof(double), format="d")
@@ -124,7 +128,7 @@ cdef double[::1] _correct_circle_pos(double[::1] new_pos, double[::1] step, doub
     psi = _dot_self(B) - 4 * radius * radius
     chi = _dot_self(A)
 
-    sqrt_delta = np.sqrt(theta * theta - 4 * psi * chi)
+    sqrt_delta = sqrt(theta * theta - 4 * psi * chi)
 
     # Chi cannot be == 0, because that would mean, that new_pos didn't change
     # therefore would not collide with stuck_point
@@ -166,6 +170,7 @@ cpdef bint is_in_circle(double[::1] pos, double[::1] c_pos, double size, double 
             return False
     return True
 
+@cython.cdivision(True)
 cdef double _get_collision_time(double[::1] static_part, double[::1] moving_part, double[::1] move_vec, double radius):
     cdef double a = _dot_self(move_vec)
     cdef double tmp_1 = moving_part[0] - static_part[0]
@@ -177,9 +182,9 @@ cdef double _get_collision_time(double[::1] static_part, double[::1] moving_part
     cdef double delta = b * b - c * a
     # print(a, b, c, delta)
     if delta < 0:
-        return -1
+        return 2
 
-    cdef double sqrt_delta = np.sqrt(delta)
+    cdef double sqrt_delta = sqrt(delta)
     cdef double one_over_a = 1 / a
 
     cdef double o1 = (-b + sqrt_delta) * one_over_a
@@ -192,12 +197,18 @@ cpdef double get_collision_time(double[:, ::1] static_parts, double[::1] moving_
     cdef double out_time = 2
     cdef Py_ssize_t i
     cdef Py_ssize_t size = static_parts.shape[0]
-    cdef double tmp
+    cdef double tmp_1, tmp_2
+    
+    cdef double move_range = 2 * radius + _dot_self(move_vec)
+    cdef double r2 = 4 * radius * radius
+    move_range *= move_range
 
     for i in range(size):
-        tmp = _get_collision_time(static_parts[i], moving_part, move_vec, radius)
-        # print(tmp)
-        if 0 <= tmp <= 1:
-            out_time = min(tmp, out_time)
+        tmp_1 = ((moving_part[0] - static_parts[i][0]) ** 2 + (moving_part[1] - static_parts[i][1]) ** 2)
+        if tmp_1 <= move_range:
+            tmp_2 = _get_collision_time(static_parts[i], moving_part, move_vec, radius)
+            if tmp_2 < 0 and tmp_1 >= r2:
+                continue
+            out_time = min(tmp_2, out_time)
     
     return out_time

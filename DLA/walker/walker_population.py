@@ -8,7 +8,6 @@ from numpy import NaN
 from DLA import Vec
 from DLA.config import (ALPHA, BETA, PUSH_OUT_TRIES, RADIUS, REGENERATE_AFTER,
                         WINDOW_SIZE)
-from DLA.utils import correct_circle_pos
 
 from .stuck_walkers import StuckWalkers
 from .utils import random_in_range
@@ -26,8 +25,6 @@ class WalkerPopulation(Walker):
         self.last_regen = 0
 
     def walk(self) -> None:
-        # self.last_step = random_in_range(-5, 5, (self.size, 2))
-        # self.last_step = ALPHA * np.random.standard_normal((self.size, 2))
         self.last_step = (
             BETA * self.last_step +
             ALPHA * np.random.standard_normal((self.size, 2))
@@ -40,6 +37,21 @@ class WalkerPopulation(Walker):
             BORDER_D_R,
             out=self.pos
         )
+
+    def try_to_push_out(
+        self,
+        free_part: Vec,
+        last_step: Vec,
+        time: float,
+        other: StuckWalkers
+    ) -> None:
+        for _ in range(PUSH_OUT_TRIES):
+            free_part = free_part + last_step * time
+            time = other.does_collide(free_part, last_step)
+            if time >= 0:
+                break
+
+        self.pass_to_stuck(free_part, last_step, 0, other)
 
     @staticmethod
     def pass_to_stuck(
@@ -54,8 +66,11 @@ class WalkerPopulation(Walker):
         for i, v in enumerate(self.pos):
             if not np.isnan(v[0]):
                 t = other.does_collide(v, self.last_step[i])
-
-                if 0 <= t <= 1:
+                if t < 0:
+                    self.try_to_push_out(v, self.last_step[i], t, other)
+                    self[i] = NaN
+                    return True
+                elif t <= 1:
                     self.pass_to_stuck(
                         v, self.last_step[i], t, other
                     )
