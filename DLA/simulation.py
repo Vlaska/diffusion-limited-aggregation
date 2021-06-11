@@ -97,51 +97,51 @@ def render(surface_: surface.Surface) -> None:
     p.draw(surface_)
 
 
+def pygame_loop(
+    surface_: surface.Surface, clock: time.Clock, update: bool = True
+) -> None:
+    global num_of_iterations
+
+    clock.tick(FPS)
+    num_of_iterations += 1
+    display.set_caption(
+        f"Diffusion Limited Aggregation - {num_of_iterations}"
+    )
+    for event in events.get():
+        if event.type == pygame.QUIT:
+            at_end()
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_ESCAPE]:
+        at_end()
+
+    if update:
+        p.update()
+
+    surface_.fill(BLACK)
+
+    render(surface_)
+
+    display.flip()
+
+
 def main_pygame() -> NoReturn:
     surface_, clock = init_pygame()
-    global num_of_iterations
+
+    surface_.fill(BLACK)
+
+    render(surface_)
+
+    display.flip()
 
     for _ in range(MAX_STEPS // 100):
         try:
             for _ in range(100):
-                clock.tick(FPS)
-                num_of_iterations += 1
-                display.set_caption(
-                    f"Diffusion Limited Aggregation - {num_of_iterations}"
-                )
-                for event in events.get():
-                    if event.type == pygame.QUIT:
-                        at_end()
-
-                keys = pygame.key.get_pressed()
-                if keys[pygame.K_ESCAPE]:
-                    at_end()
-
-                p.update()
-
-                surface_.fill((0, 0, 0, 60))
-
-                render(surface_)
-
-                display.flip()
+                pygame_loop(surface_, clock)
             collect()
         except StopSimulation:
             while True:
-                clock.tick(FPS)
-
-                for event in events.get():
-                    if event.type == pygame.QUIT:
-                        at_end()
-
-                keys = pygame.key.get_pressed()
-                if keys[pygame.K_ESCAPE]:
-                    at_end()
-
-                surface_.fill(BLACK)
-
-                render(surface_)
-
-                display.flip()
+                pygame_loop(surface_, clock, False)
 # endregion
 
 
