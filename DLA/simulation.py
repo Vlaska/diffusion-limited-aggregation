@@ -103,10 +103,11 @@ def pygame_loop(
     global num_of_iterations
 
     clock.tick(FPS)
-    num_of_iterations += 1
-    display.set_caption(
-        f"Diffusion Limited Aggregation - {num_of_iterations}"
-    )
+    if update:
+        num_of_iterations += 1
+        display.set_caption(
+            f"Diffusion Limited Aggregation - {num_of_iterations}"
+        )
     for event in events.get():
         if event.type == pygame.QUIT:
             at_end()
@@ -134,14 +135,15 @@ def main_pygame() -> NoReturn:
 
     display.flip()
 
-    for _ in range(MAX_STEPS // 100):
-        try:
+    try:
+        for _ in range(MAX_STEPS // 100):
             for _ in range(100):
                 pygame_loop(surface_, clock)
             collect()
-        except StopSimulation:
-            while True:
-                pygame_loop(surface_, clock, False)
+        raise StopSimulation
+    except StopSimulation:
+        while True:
+            pygame_loop(surface_, clock, False)
 # endregion
 
 
