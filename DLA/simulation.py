@@ -36,10 +36,10 @@ def print_dim():
     dim.count()
 
     tab = BeautifulTable(precision=6)
-    tab.columns.header = ['Box size', 'Num of squares', 'Dimension']
+    tab.columns.header = ['Box size', 'Num of squares']
 
-    for k, v in dim.dim().items():
-        tab.rows.append([f'1/{int(1 / k)}', dim[k], v])
+    for k, v in dim.items():
+        tab.rows.append([k, v])
 
     print(tab)
 

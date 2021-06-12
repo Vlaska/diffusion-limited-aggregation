@@ -58,20 +58,10 @@ class Dimension(OrderedDict[_KT, _VT]):
         for k, v in self.lookup_tab[size].items():
             self[k] += v
 
-    def dim(self) -> OrderedDict[_KT, _VT]:
-        out = OrderedDict()
-
-        for k, v in self.items():
-            if k < 1:
-                out[k] = np.log(v) / np.log(1 / k)
-
-        return out
-
     def get_data(self) -> Dict[str, Vec]:
         return {
             'box_size': np.array(list(self.keys())),
             'num_of_boxes': np.array(list(self.values())),
-            'dimension': np.array(list(self.dim().values())),
         }
 
     def __getitem__(self, k: _KT) -> _VT:
