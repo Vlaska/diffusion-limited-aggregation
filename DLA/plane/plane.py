@@ -16,7 +16,7 @@ from DLA.plane.sub_planes import SubPlane
 from DLA.plane.particle_plane import ParticlePlane
 
 
-class SubPlanePlaneAndParticles(SubPlane, NotFullablePlane):
+class SubPlanePlaneAndParticles(NotFullablePlane, SubPlane):
     _alt_plane_type = ParticlePlane
     _size_for_alt_plane_type = PARTICLE_PLANE_SIZE
 
@@ -35,20 +35,12 @@ class Plane(NotFullablePlane):
     └───────┴───────┘
     """
 
-    _new_plane_type_: Type[BasePlane]
+    _new_plane_type: Type[BasePlane] = SubPlanePlaneAndParticles
 
     def update(self):
         self._walking_points.update(self._stuck_points)
         if self._stuck_points.is_complete():
             raise StopSimulation
-
-    def add_sub_chunks(self, chunks: Iterable[int]) -> None:
-        for i in chunks:
-            if not self._sub_planes[i]:
-                self._sub_planes[i] = SubPlanePlaneAndParticles(
-                    one_subchunk_coords(self.start_pos, self.size, i),
-                    self.size / 2
-                )
 
     def add_point(self, point: int) -> None:
         sub_planes = self._add_point(point)

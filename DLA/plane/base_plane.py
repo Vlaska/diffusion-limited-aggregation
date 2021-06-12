@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Generator, List, Optional, Tuple, Union, cast
+from typing import TYPE_CHECKING, Generator, List, Optional, Tuple, Union, cast, Type, Iterable
 
 import numpy as np
 
 from DLA import LIGHT_GRAY, Vec2
 from DLA.config import RADIUS, USE_PYGAME
-from DLA.utils import circle_in_subchunks, is_in_circle
+from DLA.utils import circle_in_subchunks, is_in_circle, one_subchunk_coords
 from DLA.walker import StuckWalkers, WalkerPopulation
 
 if USE_PYGAME or TYPE_CHECKING:
@@ -18,6 +18,8 @@ if USE_PYGAME or TYPE_CHECKING:
 class BasePlane:
     _stuck_points: StuckWalkers
     _walking_points: WalkerPopulation
+    _new_plane_type: Type[BasePlane]
+
     can_be_full: bool = True
 
     def __init__(self, start: Vec2, size: float) -> None:
@@ -52,10 +54,15 @@ class BasePlane:
 
         return sub_chunks
 
-    # region Abstract Methods
-    def add_sub_chunks(self, chunks) -> None:
-        pass
+    def add_sub_chunks(self, chunks: Iterable[int]) -> None:
+        for i in chunks:
+            if not self._sub_planes[i]:
+                self._sub_planes[i] = self._new_plane_type(
+                    one_subchunk_coords(self.start_pos, self.size, i),
+                    self.size / 2
+                )
 
+    # region Abstract Methods
     def are_full(self) -> bool:
         pass
 
