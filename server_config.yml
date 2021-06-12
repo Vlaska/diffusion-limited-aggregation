@@ -27,3 +27,4 @@ simulation:
   regen_after_updates: 200
   step_strength: 2
   memory: 0
+  particle_plane_size: 32

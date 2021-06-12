@@ -30,3 +30,4 @@ step_strength: 2
 # memory: 0.9999999999
 # memory: -0.9999999999
 memory: 0
+particle_plane_size: 32
