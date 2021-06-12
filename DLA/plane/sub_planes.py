@@ -7,7 +7,7 @@ from DLA.plane.base_plane import BasePlane
 from DLA.utils import one_subchunk_coords
 
 
-class SubPlane:
+class SubPlane(BasePlane):
     _new_plane_type_: Type[BasePlane]
     _alt_plane_type: Type[BasePlane]
 

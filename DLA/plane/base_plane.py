@@ -30,8 +30,7 @@ class BasePlane:
         self.full = False
 
     def set_full(self) -> None:
-        self.full = True
-        del self._sub_planes
+        pass
 
     def _add_point(self, point: int) -> Optional[List[int]]:
         if self.full:
@@ -62,11 +61,17 @@ class BasePlane:
                     self.size / 2
                 )
 
+    def add_point(self, point: int) -> None:
+        sub_planes = self._add_point(point)
+
+        if sub_planes is None:
+            return
+
+        for i in sub_planes:
+            cast(BasePlane, self._sub_planes[i]).add_point(point)
+
     # region Abstract Methods
     def are_full(self) -> bool:
-        pass
-
-    def add_point(self, point: int) -> None:
         pass
     # endregion
 

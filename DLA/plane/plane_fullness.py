@@ -9,8 +9,9 @@ class FullablePlane(BasePlane):
     can_be_full: bool = True
 
     def set_full(self) -> None:
-        self.full = True
-        del self._sub_planes
+        if not self.full:
+            self.full = True
+            del self._sub_planes
 
     @staticmethod
     def _check_is_full(v: Optional[BasePlane]) -> bool:
@@ -21,6 +22,11 @@ class FullablePlane(BasePlane):
             self._check_is_full(self._sub_planes[i]) for i in range(4)
         )
 
+    def add_point(self, point: int) -> None:
+        super().add_point(point)
+
+        if self.are_full():
+            self.set_full()
 
 class NotFullablePlane(BasePlane):
     can_be_full: bool = False

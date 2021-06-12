@@ -25,8 +25,6 @@ class IndivisiblePlane(FullablePlane):
         if len(self) == 4:
             self.set_full()
 
-        return
-
     if USE_PYGAME:
         def _draw(self, surface: Surface) -> None:
             draw.rect(surface, LIGHT_GRAY, self.rect, 1)
