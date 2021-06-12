@@ -1,14 +1,15 @@
 from typing import TYPE_CHECKING, Iterable, List, Optional
 
 from DLA import LIGHT_GRAY
-from DLA.plane.base_plane import USE_PYGAME, BasePlane
+from DLA.config import USE_PYGAME
+from DLA.plane.plane_fullness import FullablePlane
 
 if USE_PYGAME or TYPE_CHECKING:
     from pygame import draw
     from pygame.surface import Surface
 
 
-class IndivisiblePlane(BasePlane):
+class IndivisiblePlane(FullablePlane):
     _sub_planes: List[Optional[bool]]  # type: ignore
 
     def add_sub_chunks(self, chunks: Iterable[int]) -> None:
