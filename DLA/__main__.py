@@ -87,7 +87,7 @@ def simulate(config: Optional[str]) -> None:
         allow_dash=True
     )
 )
-def server(out: str, config: Optional[str]) -> None:
+def server(out: Path, config: Optional[str]) -> None:
     """Run server to initialize simulations running on clients.
     """
     config_dict = load_config(config, 'DLA.server', 'server_config.yml')
