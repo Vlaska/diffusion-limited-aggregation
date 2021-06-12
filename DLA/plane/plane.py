@@ -1,19 +1,18 @@
 from __future__ import annotations
 
-from typing import Dict, Iterable, Type, cast
+from typing import Dict, Type
 
 import numpy as np
 
 from DLA import Vec
-from DLA.config import (NUM_OF_PARTICLES, STARTING_POS,
-                        WINDOW_SIZE, PARTICLE_PLANE_SIZE)
+from DLA.config import (NUM_OF_PARTICLES, PARTICLE_PLANE_SIZE, STARTING_POS,
+                        WINDOW_SIZE)
 from DLA.exceptions import StopSimulation
 from DLA.plane.base_plane import BasePlane
-from DLA.utils import one_subchunk_coords
-from DLA.walker import StuckWalkers, WalkerPopulation
+from DLA.plane.particle_plane import ParticlePlane
 from DLA.plane.plane_fullness import NotFullablePlane
 from DLA.plane.sub_planes import SubPlane
-from DLA.plane.particle_plane import ParticlePlane
+from DLA.walker import StuckWalkers, WalkerPopulation
 
 
 class SubPlanePlaneAndParticles(NotFullablePlane, SubPlane):

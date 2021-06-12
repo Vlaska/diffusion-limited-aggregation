@@ -28,6 +28,7 @@ class FullablePlane(BasePlane):
         if self.are_full():
             self.set_full()
 
+
 class NotFullablePlane(BasePlane):
     can_be_full: bool = False
 

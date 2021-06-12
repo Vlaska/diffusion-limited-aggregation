@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from typing import List, Iterable
+from typing import List
 
 from DLA import Vec2
 from DLA.config import SECOND_MIN_BOX_SIZE
-from DLA.plane.base_plane import BasePlane
-from DLA.plane.sub_planes import SubPlane
 from DLA.plane.indivisible_plane import IndivisiblePlane
 from DLA.plane.plane_fullness import FullablePlane
+from DLA.plane.sub_planes import SubPlane
 
 
 class SubPlaneParticlesAndIndivisible(FullablePlane, SubPlane):

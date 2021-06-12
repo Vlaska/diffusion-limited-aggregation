@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from typing import Type, Iterable, Optional, List, cast
+from typing import List, Optional, Type, cast
 
 from DLA import Vec
 from DLA.plane.base_plane import BasePlane
-from DLA.utils import one_subchunk_coords
 
 
 class SubPlane(BasePlane):
