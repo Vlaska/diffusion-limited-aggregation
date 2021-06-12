@@ -1,20 +1,27 @@
 from __future__ import annotations
 
-from typing import Dict, Iterable, Optional, Type, cast
+from typing import Dict, Iterable, Type, cast
 
 import numpy as np
 
 from DLA import Vec
-from DLA.config import (NUM_OF_PARTICLES, SECOND_MIN_BOX_SIZE, STARTING_POS,
-                        WINDOW_SIZE)
+from DLA.config import (NUM_OF_PARTICLES, STARTING_POS,
+                        WINDOW_SIZE, PARTICLE_PLANE_SIZE)
 from DLA.exceptions import StopSimulation
 from DLA.plane.base_plane import BasePlane
-from DLA.plane.indivisible_plane import IndivisiblePlane
 from DLA.utils import one_subchunk_coords
 from DLA.walker import StuckWalkers, WalkerPopulation
+from DLA.plane.plane_fullness import NotFullablePlane
+from DLA.plane.sub_planes import SubPlane
+from DLA.plane.particle_plane import ParticlePlane
 
 
-class Plane(BasePlane):
+class SubPlanePlaneAndParticles(SubPlane, NotFullablePlane):
+    _alt_plane_type = ParticlePlane
+    _size_for_alt_plane_type = PARTICLE_PLANE_SIZE
+
+
+class Plane(NotFullablePlane):
     """
     Sub planes assignment
     ┌───────┬───────┐
@@ -29,7 +36,6 @@ class Plane(BasePlane):
     """
 
     _new_plane_type_: Type[BasePlane]
-    can_be_full: bool = False
 
     def update(self):
         self._walking_points.update(self._stuck_points)
@@ -39,7 +45,7 @@ class Plane(BasePlane):
     def add_sub_chunks(self, chunks: Iterable[int]) -> None:
         for i in chunks:
             if not self._sub_planes[i]:
-                self._sub_planes[i] = self._new_plane_type(
+                self._sub_planes[i] = SubPlanePlaneAndParticles(
                     one_subchunk_coords(self.start_pos, self.size, i),
                     self.size / 2
                 )
@@ -55,26 +61,6 @@ class Plane(BasePlane):
 
         if self.are_full():
             self.set_full()
-
-    @staticmethod
-    def _check_is_full(v: Optional[BasePlane]) -> bool:
-        return v and v.full  # type: ignore
-
-    def are_full(self) -> bool:
-        return self.full or all(
-            self._check_is_full(self._sub_planes[i]) for i in range(4)
-        )
-
-    @property
-    def _new_plane_type(self) -> Type[BasePlane]:
-        try:
-            return self._new_plane_type_
-        except AttributeError:
-            self._new_plane_type_ = (
-                IndivisiblePlane
-                if self.size / 2 == SECOND_MIN_BOX_SIZE else Plane
-            )
-            return self._new_plane_type_
 
     @classmethod
     def new(cls) -> Plane:
