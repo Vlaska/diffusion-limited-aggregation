@@ -23,7 +23,8 @@ except ImportError:
         'radius_check': 2,
         'regen_after_updates': 200,
         'step_strength': 2,
-        'memory': 0
+        'memory': 0,
+        'particle_plane_size': 32
     }
 
 FPS: Final[int] = config_dict['fps']
