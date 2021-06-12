@@ -29,6 +29,7 @@ class Plane(BasePlane):
     """
 
     _new_plane_type_: Type[BasePlane]
+    can_be_full: bool = False
 
     def update(self):
         self._walking_points.update(self._stuck_points)

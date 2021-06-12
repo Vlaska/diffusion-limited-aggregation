@@ -18,6 +18,7 @@ if USE_PYGAME or TYPE_CHECKING:
 class BasePlane:
     _stuck_points: StuckWalkers
     _walking_points: WalkerPopulation
+    can_be_full: bool = True
 
     def __init__(self, start: Vec2, size: float) -> None:
         self.start_pos = np.array(start, dtype=np.double)
@@ -34,7 +35,7 @@ class BasePlane:
         if self.full:
             return None
 
-        if is_in_circle(
+        if self.can_be_full and is_in_circle(
                 self.start_pos,
                 self._stuck_points[point],
                 self.size,
