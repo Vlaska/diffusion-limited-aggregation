@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List
+from array import array
 
 from DLA import Vec2
 from DLA.config import SECOND_MIN_BOX_SIZE
@@ -19,7 +19,7 @@ class ParticlePlane(FullablePlane):
 
     def __init__(self, start: Vec2, size: float) -> None:
         super().__init__(start, size)
-        self.parts: List[int] = []
+        self.parts: array[int] = array('I')
 
     def add_point(self, point: int) -> None:
         super().add_point(point)
