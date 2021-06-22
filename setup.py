@@ -12,7 +12,7 @@ ext = '.pyx' if USE_CYTHON else '.c'
 
 extensions = [
     Extension(
-        'utils',
+        'DLA.utils',
         [f'DLA/utils{ext}'],
         extra_compile_args=[]
     )
