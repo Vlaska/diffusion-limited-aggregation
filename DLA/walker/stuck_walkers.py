@@ -5,8 +5,9 @@ from typing import TYPE_CHECKING, Final, Iterator
 import numpy as np
 
 from DLA import GREEN, RGB, Vec, Vec2
-from DLA.config import NUM_OF_PARTICLES, RADIUS, RADIUS_CHECK, WINDOW_CENTER
-from DLA.utils import dot_self, get_collision_time
+from DLA.config import (NUM_OF_PARTICLES, PARTICLE_PLANE_SIZE, RADIUS,
+                        RADIUS_CHECK, WINDOW_CENTER)
+from DLA.utils import dot_self, new_get_collision_time
 
 from .walker import Walker
 
@@ -53,8 +54,8 @@ class StuckWalkers(Walker):
         self.radius = (value + RADIUS_CHECK) ** 2
 
     def does_collide(self, point: Vec, move_vec: Vec) -> float:
-        return get_collision_time(
-            self.view, point, move_vec, RADIUS
+        return new_get_collision_time(
+            self._plane, PARTICLE_PLANE_SIZE, point, move_vec, RADIUS
         )
 
     def add_stuck(self, new_point: Vec) -> None:
