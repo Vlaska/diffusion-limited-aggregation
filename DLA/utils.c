@@ -4,12 +4,12 @@
 {
     "distutils": {
         "depends": [],
-        "name": "DLA.utils",
+        "name": "utils",
         "sources": [
             "DLA/utils.pyx"
         ]
     },
-    "module_name": "DLA.utils"
+    "module_name": "utils"
 }
 END: Cython Metadata */
 
@@ -617,8 +617,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__DLA__utils
-#define __PYX_HAVE_API__DLA__utils
+#define __PYX_HAVE__utils
+#define __PYX_HAVE_API__utils
 /* Early includes */
 #include <string.h>
 #include <stdio.h>
@@ -1242,7 +1242,7 @@ typedef npy_cdouble __pyx_t_5numpy_complex_t;
 struct __pyx_ctuple_double__and_double;
 typedef struct __pyx_ctuple_double__and_double __pyx_ctuple_double__and_double;
 
-/* "DLA/utils.pyx":48
+/* "utils.pyx":48
  * 
  * 
  * cpdef (double, double) one_subchunk_coords(double[::1] coords, double size, int idx):             # <<<<<<<<<<<<<<
@@ -2364,7 +2364,7 @@ static PyTypeObject *__pyx_ptype_5numpy_ufunc = 0;
 static PyTypeObject *__pyx_ptype_7cpython_5array_array = 0;
 static CYTHON_INLINE int __pyx_f_7cpython_5array_extend_buffer(arrayobject *, char *, Py_ssize_t); /*proto*/
 
-/* Module declarations from 'DLA.utils' */
+/* Module declarations from 'utils' */
 static PyTypeObject *__pyx_array_type = 0;
 static PyTypeObject *__pyx_MemviewEnum_type = 0;
 static PyTypeObject *__pyx_memoryview_type = 0;
@@ -2376,18 +2376,18 @@ static PyObject *contiguous = 0;
 static PyObject *indirect_contiguous = 0;
 static int __pyx_memoryview_thread_locks_used;
 static PyThread_type_lock __pyx_memoryview_thread_locks[8];
-static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice, __Pyx_memviewslice, double, double); /*proto*/
-static __Pyx_memviewslice __pyx_f_3DLA_5utils__one_subchunk_coords(__Pyx_memviewslice, double, int); /*proto*/
-static __pyx_ctuple_double__and_double __pyx_f_3DLA_5utils_one_subchunk_coords(__Pyx_memviewslice, double, int, int __pyx_skip_dispatch); /*proto*/
-static __Pyx_memviewslice __pyx_f_3DLA_5utils__subchunk_coords(__Pyx_memviewslice, double); /*proto*/
-static PyObject *__pyx_f_3DLA_5utils_circle_in_subchunks(__Pyx_memviewslice, __Pyx_memviewslice, double, double, int __pyx_skip_dispatch); /*proto*/
-static double __pyx_f_3DLA_5utils__dot_self(__Pyx_memviewslice); /*proto*/
-static double __pyx_f_3DLA_5utils_dot_self(__Pyx_memviewslice, int __pyx_skip_dispatch); /*proto*/
-static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice, __Pyx_memviewslice, double, double, int __pyx_skip_dispatch); /*proto*/
-static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, double); /*proto*/
-static double __pyx_f_3DLA_5utils_get_collision_time(__Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, double, int __pyx_skip_dispatch); /*proto*/
-static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *, double, __Pyx_memviewslice, double, __Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, double, __Pyx_memviewslice, double); /*proto*/
-static double __pyx_f_3DLA_5utils_new_get_collision_time(PyObject *, double, __Pyx_memviewslice, __Pyx_memviewslice, double, int __pyx_skip_dispatch); /*proto*/
+static int __pyx_f_5utils_circle_square_collision(__Pyx_memviewslice, __Pyx_memviewslice, double, double); /*proto*/
+static __Pyx_memviewslice __pyx_f_5utils__one_subchunk_coords(__Pyx_memviewslice, double, int); /*proto*/
+static __pyx_ctuple_double__and_double __pyx_f_5utils_one_subchunk_coords(__Pyx_memviewslice, double, int, int __pyx_skip_dispatch); /*proto*/
+static __Pyx_memviewslice __pyx_f_5utils__subchunk_coords(__Pyx_memviewslice, double); /*proto*/
+static PyObject *__pyx_f_5utils_circle_in_subchunks(__Pyx_memviewslice, __Pyx_memviewslice, double, double, int __pyx_skip_dispatch); /*proto*/
+static double __pyx_f_5utils__dot_self(__Pyx_memviewslice); /*proto*/
+static double __pyx_f_5utils_dot_self(__Pyx_memviewslice, int __pyx_skip_dispatch); /*proto*/
+static int __pyx_f_5utils_is_in_circle(__Pyx_memviewslice, __Pyx_memviewslice, double, double, int __pyx_skip_dispatch); /*proto*/
+static double __pyx_f_5utils__get_collision_time(__Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, double); /*proto*/
+static double __pyx_f_5utils_get_collision_time(__Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, double, int __pyx_skip_dispatch); /*proto*/
+static double __pyx_f_5utils__new_get_collision_time(PyObject *, double, __Pyx_memviewslice, double, __Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, double, __Pyx_memviewslice, double); /*proto*/
+static double __pyx_f_5utils_new_get_collision_time(PyObject *, double, __Pyx_memviewslice, __Pyx_memviewslice, double, int __pyx_skip_dispatch); /*proto*/
 static struct __pyx_array_obj *__pyx_array_new(PyObject *, Py_ssize_t, char *, char *, char *); /*proto*/
 static void *__pyx_align_pointer(void *, size_t); /*proto*/
 static PyObject *__pyx_memoryview_new(PyObject *, int, int, __Pyx_TypeInfo *); /*proto*/
@@ -2423,11 +2423,11 @@ static void __pyx_memoryview__slice_assign_scalar(char *, Py_ssize_t *, Py_ssize
 static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *, PyObject *); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_double = { "double", NULL, sizeof(double), { 0 }, 0, 'R', 0, 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_unsigned_int = { "unsigned int", NULL, sizeof(unsigned int), { 0 }, 0, IS_UNSIGNED(unsigned int) ? 'U' : 'I', IS_UNSIGNED(unsigned int), 0 };
-#define __Pyx_MODULE_NAME "DLA.utils"
-extern int __pyx_module_is_main_DLA__utils;
-int __pyx_module_is_main_DLA__utils = 0;
+#define __Pyx_MODULE_NAME "utils"
+extern int __pyx_module_is_main_utils;
+int __pyx_module_is_main_utils = 0;
 
-/* Implementation of 'DLA.utils' */
+/* Implementation of 'utils' */
 static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_ImportError;
 static PyObject *__pyx_builtin_MemoryError;
@@ -2654,12 +2654,12 @@ static PyObject *__pyx_kp_s_unable_to_allocate_shape_and_str;
 static PyObject *__pyx_n_s_unpack;
 static PyObject *__pyx_n_s_update;
 static PyObject *__pyx_n_u_view;
-static PyObject *__pyx_pf_3DLA_5utils_one_subchunk_coords(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_coords, double __pyx_v_size, int __pyx_v_idx); /* proto */
-static PyObject *__pyx_pf_3DLA_5utils_2circle_in_subchunks(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_start, __Pyx_memviewslice __pyx_v_circle_pos, double __pyx_v_size, double __pyx_v_radius); /* proto */
-static PyObject *__pyx_pf_3DLA_5utils_4dot_self(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_a); /* proto */
-static PyObject *__pyx_pf_3DLA_5utils_6is_in_circle(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_pos, __Pyx_memviewslice __pyx_v_c_pos, double __pyx_v_size, double __pyx_v_radius); /* proto */
-static PyObject *__pyx_pf_3DLA_5utils_8get_collision_time(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_static_parts, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius); /* proto */
-static PyObject *__pyx_pf_3DLA_5utils_10new_get_collision_time(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_plane, double __pyx_v_particle_plane_size, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius); /* proto */
+static PyObject *__pyx_pf_5utils_one_subchunk_coords(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_coords, double __pyx_v_size, int __pyx_v_idx); /* proto */
+static PyObject *__pyx_pf_5utils_2circle_in_subchunks(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_start, __Pyx_memviewslice __pyx_v_circle_pos, double __pyx_v_size, double __pyx_v_radius); /* proto */
+static PyObject *__pyx_pf_5utils_4dot_self(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_a); /* proto */
+static PyObject *__pyx_pf_5utils_6is_in_circle(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_pos, __Pyx_memviewslice __pyx_v_c_pos, double __pyx_v_size, double __pyx_v_radius); /* proto */
+static PyObject *__pyx_pf_5utils_8get_collision_time(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_static_parts, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius); /* proto */
+static PyObject *__pyx_pf_5utils_10new_get_collision_time(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_plane, double __pyx_v_particle_plane_size, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius); /* proto */
 static int __pyx_pf_7cpython_5array_5array___getbuffer__(arrayobject *__pyx_v_self, Py_buffer *__pyx_v_info, CYTHON_UNUSED int __pyx_v_flags); /* proto */
 static void __pyx_pf_7cpython_5array_5array_2__releasebuffer__(CYTHON_UNUSED arrayobject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
@@ -2744,7 +2744,7 @@ static PyObject *__pyx_tuple__27;
 static PyObject *__pyx_codeobj__28;
 /* Late includes */
 
-/* "DLA/utils.pyx":21
+/* "utils.pyx":21
  * 
  * 
  * cdef bint circle_square_collision(double[::1] s_pos, double[::1] c_pos, double s_size, double radius):             # <<<<<<<<<<<<<<
@@ -2752,7 +2752,7 @@ static PyObject *__pyx_codeobj__28;
  *     cdef double dX, dY
  */
 
-static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_v_s_pos, __Pyx_memviewslice __pyx_v_c_pos, double __pyx_v_s_size, double __pyx_v_radius) {
+static int __pyx_f_5utils_circle_square_collision(__Pyx_memviewslice __pyx_v_s_pos, __Pyx_memviewslice __pyx_v_c_pos, double __pyx_v_s_size, double __pyx_v_radius) {
   double __pyx_v_tX;
   double __pyx_v_tY;
   double __pyx_v_dX;
@@ -2764,7 +2764,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
   int __pyx_t_3;
   __Pyx_RefNannySetupContext("circle_square_collision", 0);
 
-  /* "DLA/utils.pyx":22
+  /* "utils.pyx":22
  * 
  * cdef bint circle_square_collision(double[::1] s_pos, double[::1] c_pos, double s_size, double radius):
  *     cdef double tX = c_pos[0], tY = c_pos[1]             # <<<<<<<<<<<<<<
@@ -2776,7 +2776,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
   __pyx_t_1 = 1;
   __pyx_v_tY = (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_c_pos.data) + __pyx_t_1)) )));
 
-  /* "DLA/utils.pyx":25
+  /* "utils.pyx":25
  *     cdef double dX, dY
  * 
  *     if c_pos[0] < s_pos[0]:             # <<<<<<<<<<<<<<
@@ -2788,7 +2788,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
   __pyx_t_3 = (((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_c_pos.data) + __pyx_t_1)) ))) < (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_s_pos.data) + __pyx_t_2)) )))) != 0);
   if (__pyx_t_3) {
 
-    /* "DLA/utils.pyx":26
+    /* "utils.pyx":26
  * 
  *     if c_pos[0] < s_pos[0]:
  *         tX = s_pos[0]             # <<<<<<<<<<<<<<
@@ -2798,7 +2798,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
     __pyx_t_2 = 0;
     __pyx_v_tX = (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_s_pos.data) + __pyx_t_2)) )));
 
-    /* "DLA/utils.pyx":25
+    /* "utils.pyx":25
  *     cdef double dX, dY
  * 
  *     if c_pos[0] < s_pos[0]:             # <<<<<<<<<<<<<<
@@ -2808,7 +2808,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
     goto __pyx_L3;
   }
 
-  /* "DLA/utils.pyx":27
+  /* "utils.pyx":27
  *     if c_pos[0] < s_pos[0]:
  *         tX = s_pos[0]
  *     elif c_pos[0] > s_pos[0] + s_size:             # <<<<<<<<<<<<<<
@@ -2820,7 +2820,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
   __pyx_t_3 = (((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_c_pos.data) + __pyx_t_2)) ))) > ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_s_pos.data) + __pyx_t_1)) ))) + __pyx_v_s_size)) != 0);
   if (__pyx_t_3) {
 
-    /* "DLA/utils.pyx":28
+    /* "utils.pyx":28
  *         tX = s_pos[0]
  *     elif c_pos[0] > s_pos[0] + s_size:
  *         tX = s_pos[0] + s_size             # <<<<<<<<<<<<<<
@@ -2830,7 +2830,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
     __pyx_t_1 = 0;
     __pyx_v_tX = ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_s_pos.data) + __pyx_t_1)) ))) + __pyx_v_s_size);
 
-    /* "DLA/utils.pyx":27
+    /* "utils.pyx":27
  *     if c_pos[0] < s_pos[0]:
  *         tX = s_pos[0]
  *     elif c_pos[0] > s_pos[0] + s_size:             # <<<<<<<<<<<<<<
@@ -2840,7 +2840,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
   }
   __pyx_L3:;
 
-  /* "DLA/utils.pyx":30
+  /* "utils.pyx":30
  *         tX = s_pos[0] + s_size
  * 
  *     if c_pos[1] < s_pos[1]:             # <<<<<<<<<<<<<<
@@ -2852,7 +2852,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
   __pyx_t_3 = (((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_c_pos.data) + __pyx_t_1)) ))) < (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_s_pos.data) + __pyx_t_2)) )))) != 0);
   if (__pyx_t_3) {
 
-    /* "DLA/utils.pyx":31
+    /* "utils.pyx":31
  * 
  *     if c_pos[1] < s_pos[1]:
  *         tY = s_pos[1]             # <<<<<<<<<<<<<<
@@ -2862,7 +2862,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
     __pyx_t_2 = 1;
     __pyx_v_tY = (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_s_pos.data) + __pyx_t_2)) )));
 
-    /* "DLA/utils.pyx":30
+    /* "utils.pyx":30
  *         tX = s_pos[0] + s_size
  * 
  *     if c_pos[1] < s_pos[1]:             # <<<<<<<<<<<<<<
@@ -2872,7 +2872,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
     goto __pyx_L4;
   }
 
-  /* "DLA/utils.pyx":32
+  /* "utils.pyx":32
  *     if c_pos[1] < s_pos[1]:
  *         tY = s_pos[1]
  *     elif c_pos[1] > s_pos[1] + s_size:             # <<<<<<<<<<<<<<
@@ -2884,7 +2884,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
   __pyx_t_3 = (((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_c_pos.data) + __pyx_t_2)) ))) > ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_s_pos.data) + __pyx_t_1)) ))) + __pyx_v_s_size)) != 0);
   if (__pyx_t_3) {
 
-    /* "DLA/utils.pyx":33
+    /* "utils.pyx":33
  *         tY = s_pos[1]
  *     elif c_pos[1] > s_pos[1] + s_size:
  *         tY = s_pos[1] + s_size             # <<<<<<<<<<<<<<
@@ -2894,7 +2894,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
     __pyx_t_1 = 1;
     __pyx_v_tY = ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_s_pos.data) + __pyx_t_1)) ))) + __pyx_v_s_size);
 
-    /* "DLA/utils.pyx":32
+    /* "utils.pyx":32
  *     if c_pos[1] < s_pos[1]:
  *         tY = s_pos[1]
  *     elif c_pos[1] > s_pos[1] + s_size:             # <<<<<<<<<<<<<<
@@ -2904,7 +2904,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
   }
   __pyx_L4:;
 
-  /* "DLA/utils.pyx":35
+  /* "utils.pyx":35
  *         tY = s_pos[1] + s_size
  * 
  *     dX = c_pos[0] - tX             # <<<<<<<<<<<<<<
@@ -2914,7 +2914,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
   __pyx_t_1 = 0;
   __pyx_v_dX = ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_c_pos.data) + __pyx_t_1)) ))) - __pyx_v_tX);
 
-  /* "DLA/utils.pyx":36
+  /* "utils.pyx":36
  * 
  *     dX = c_pos[0] - tX
  *     dY = c_pos[1] - tY             # <<<<<<<<<<<<<<
@@ -2924,7 +2924,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
   __pyx_t_1 = 1;
   __pyx_v_dY = ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_c_pos.data) + __pyx_t_1)) ))) - __pyx_v_tY);
 
-  /* "DLA/utils.pyx":38
+  /* "utils.pyx":38
  *     dY = c_pos[1] - tY
  * 
  *     return (dX * dX) + (dY * dY) < radius * radius             # <<<<<<<<<<<<<<
@@ -2934,7 +2934,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
   __pyx_r = (((__pyx_v_dX * __pyx_v_dX) + (__pyx_v_dY * __pyx_v_dY)) < (__pyx_v_radius * __pyx_v_radius));
   goto __pyx_L0;
 
-  /* "DLA/utils.pyx":21
+  /* "utils.pyx":21
  * 
  * 
  * cdef bint circle_square_collision(double[::1] s_pos, double[::1] c_pos, double s_size, double radius):             # <<<<<<<<<<<<<<
@@ -2948,7 +2948,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
   return __pyx_r;
 }
 
-/* "DLA/utils.pyx":41
+/* "utils.pyx":41
  * 
  * 
  * cdef double[::1] _one_subchunk_coords(double[::1] coords, double size, int idx):             # <<<<<<<<<<<<<<
@@ -2956,7 +2956,7 @@ static int __pyx_f_3DLA_5utils_circle_square_collision(__Pyx_memviewslice __pyx_
  *     out[0] += size * (idx & 0b1)
  */
 
-static __Pyx_memviewslice __pyx_f_3DLA_5utils__one_subchunk_coords(__Pyx_memviewslice __pyx_v_coords, double __pyx_v_size, int __pyx_v_idx) {
+static __Pyx_memviewslice __pyx_f_5utils__one_subchunk_coords(__Pyx_memviewslice __pyx_v_coords, double __pyx_v_size, int __pyx_v_idx) {
   __Pyx_memviewslice __pyx_v_out = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_r = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_RefNannyDeclarations
@@ -2967,7 +2967,7 @@ static __Pyx_memviewslice __pyx_f_3DLA_5utils__one_subchunk_coords(__Pyx_memview
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_one_subchunk_coords", 0);
 
-  /* "DLA/utils.pyx":42
+  /* "utils.pyx":42
  * 
  * cdef double[::1] _one_subchunk_coords(double[::1] coords, double size, int idx):
  *     cdef double[::1] out = coords.copy()             # <<<<<<<<<<<<<<
@@ -2979,7 +2979,7 @@ static __Pyx_memviewslice __pyx_f_3DLA_5utils__one_subchunk_coords(__Pyx_memview
   __pyx_t_1.memview = NULL;
   __pyx_t_1.data = NULL;
 
-  /* "DLA/utils.pyx":43
+  /* "utils.pyx":43
  * cdef double[::1] _one_subchunk_coords(double[::1] coords, double size, int idx):
  *     cdef double[::1] out = coords.copy()
  *     out[0] += size * (idx & 0b1)             # <<<<<<<<<<<<<<
@@ -2989,7 +2989,7 @@ static __Pyx_memviewslice __pyx_f_3DLA_5utils__one_subchunk_coords(__Pyx_memview
   __pyx_t_2 = 0;
   *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_out.data) + __pyx_t_2)) )) += (__pyx_v_size * (__pyx_v_idx & 1));
 
-  /* "DLA/utils.pyx":44
+  /* "utils.pyx":44
  *     cdef double[::1] out = coords.copy()
  *     out[0] += size * (idx & 0b1)
  *     out[1] += size * ((idx & 0b10) >> 1)             # <<<<<<<<<<<<<<
@@ -2999,7 +2999,7 @@ static __Pyx_memviewslice __pyx_f_3DLA_5utils__one_subchunk_coords(__Pyx_memview
   __pyx_t_2 = 1;
   *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_out.data) + __pyx_t_2)) )) += (__pyx_v_size * ((__pyx_v_idx & 2) >> 1));
 
-  /* "DLA/utils.pyx":45
+  /* "utils.pyx":45
  *     out[0] += size * (idx & 0b1)
  *     out[1] += size * ((idx & 0b10) >> 1)
  *     return out             # <<<<<<<<<<<<<<
@@ -3010,7 +3010,7 @@ static __Pyx_memviewslice __pyx_f_3DLA_5utils__one_subchunk_coords(__Pyx_memview
   __pyx_r = __pyx_v_out;
   goto __pyx_L0;
 
-  /* "DLA/utils.pyx":41
+  /* "utils.pyx":41
  * 
  * 
  * cdef double[::1] _one_subchunk_coords(double[::1] coords, double size, int idx):             # <<<<<<<<<<<<<<
@@ -3023,7 +3023,7 @@ static __Pyx_memviewslice __pyx_f_3DLA_5utils__one_subchunk_coords(__Pyx_memview
   __PYX_XDEC_MEMVIEW(&__pyx_t_1, 1);
   __pyx_r.data = NULL;
   __pyx_r.memview = NULL;
-  __Pyx_AddTraceback("DLA.utils._one_subchunk_coords", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils._one_subchunk_coords", __pyx_clineno, __pyx_lineno, __pyx_filename);
   goto __pyx_L2;
   __pyx_L0:;
   if (unlikely(!__pyx_r.memview)) {
@@ -3035,7 +3035,7 @@ static __Pyx_memviewslice __pyx_f_3DLA_5utils__one_subchunk_coords(__Pyx_memview
   return __pyx_r;
 }
 
-/* "DLA/utils.pyx":48
+/* "utils.pyx":48
  * 
  * 
  * cpdef (double, double) one_subchunk_coords(double[::1] coords, double size, int idx):             # <<<<<<<<<<<<<<
@@ -3043,8 +3043,8 @@ static __Pyx_memviewslice __pyx_f_3DLA_5utils__one_subchunk_coords(__Pyx_memview
  *     return tuple(tmp)
  */
 
-static PyObject *__pyx_pw_3DLA_5utils_1one_subchunk_coords(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static __pyx_ctuple_double__and_double __pyx_f_3DLA_5utils_one_subchunk_coords(__Pyx_memviewslice __pyx_v_coords, double __pyx_v_size, int __pyx_v_idx, CYTHON_UNUSED int __pyx_skip_dispatch) {
+static PyObject *__pyx_pw_5utils_1one_subchunk_coords(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static __pyx_ctuple_double__and_double __pyx_f_5utils_one_subchunk_coords(__Pyx_memviewslice __pyx_v_coords, double __pyx_v_size, int __pyx_v_idx, CYTHON_UNUSED int __pyx_skip_dispatch) {
   __Pyx_memviewslice __pyx_v_tmp = { 0, 0, { 0 }, { 0 }, { 0 } };
   __pyx_ctuple_double__and_double __pyx_r;
   __Pyx_RefNannyDeclarations
@@ -3057,19 +3057,19 @@ static __pyx_ctuple_double__and_double __pyx_f_3DLA_5utils_one_subchunk_coords(_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("one_subchunk_coords", 0);
 
-  /* "DLA/utils.pyx":49
+  /* "utils.pyx":49
  * 
  * cpdef (double, double) one_subchunk_coords(double[::1] coords, double size, int idx):
  *     cdef double[::1] tmp = _one_subchunk_coords(coords, size / 2, idx)             # <<<<<<<<<<<<<<
  *     return tuple(tmp)
  * 
  */
-  __pyx_t_1 = __pyx_f_3DLA_5utils__one_subchunk_coords(__pyx_v_coords, (__pyx_v_size / 2.0), __pyx_v_idx); if (unlikely(!__pyx_t_1.memview)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5utils__one_subchunk_coords(__pyx_v_coords, (__pyx_v_size / 2.0), __pyx_v_idx); if (unlikely(!__pyx_t_1.memview)) __PYX_ERR(0, 49, __pyx_L1_error)
   __pyx_v_tmp = __pyx_t_1;
   __pyx_t_1.memview = NULL;
   __pyx_t_1.data = NULL;
 
-  /* "DLA/utils.pyx":50
+  /* "utils.pyx":50
  * cpdef (double, double) one_subchunk_coords(double[::1] coords, double size, int idx):
  *     cdef double[::1] tmp = _one_subchunk_coords(coords, size / 2, idx)
  *     return tuple(tmp)             # <<<<<<<<<<<<<<
@@ -3086,7 +3086,7 @@ static __pyx_ctuple_double__and_double __pyx_f_3DLA_5utils_one_subchunk_coords(_
   __pyx_r = __pyx_t_4;
   goto __pyx_L0;
 
-  /* "DLA/utils.pyx":48
+  /* "utils.pyx":48
  * 
  * 
  * cpdef (double, double) one_subchunk_coords(double[::1] coords, double size, int idx):             # <<<<<<<<<<<<<<
@@ -3099,7 +3099,7 @@ static __pyx_ctuple_double__and_double __pyx_f_3DLA_5utils_one_subchunk_coords(_
   __PYX_XDEC_MEMVIEW(&__pyx_t_1, 1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_WriteUnraisable("DLA.utils.one_subchunk_coords", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __Pyx_WriteUnraisable("utils.one_subchunk_coords", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __Pyx_pretend_to_initialize(&__pyx_r);
   __pyx_L0:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_tmp, 1);
@@ -3108,8 +3108,8 @@ static __pyx_ctuple_double__and_double __pyx_f_3DLA_5utils_one_subchunk_coords(_
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3DLA_5utils_1one_subchunk_coords(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_3DLA_5utils_1one_subchunk_coords(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_5utils_1one_subchunk_coords(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_5utils_1one_subchunk_coords(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __Pyx_memviewslice __pyx_v_coords = { 0, 0, { 0 }, { 0 }, { 0 } };
   double __pyx_v_size;
   int __pyx_v_idx;
@@ -3171,18 +3171,18 @@ static PyObject *__pyx_pw_3DLA_5utils_1one_subchunk_coords(PyObject *__pyx_self,
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("one_subchunk_coords", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 48, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("DLA.utils.one_subchunk_coords", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils.one_subchunk_coords", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3DLA_5utils_one_subchunk_coords(__pyx_self, __pyx_v_coords, __pyx_v_size, __pyx_v_idx);
+  __pyx_r = __pyx_pf_5utils_one_subchunk_coords(__pyx_self, __pyx_v_coords, __pyx_v_size, __pyx_v_idx);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3DLA_5utils_one_subchunk_coords(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_coords, double __pyx_v_size, int __pyx_v_idx) {
+static PyObject *__pyx_pf_5utils_one_subchunk_coords(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_coords, double __pyx_v_size, int __pyx_v_idx) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -3192,7 +3192,7 @@ static PyObject *__pyx_pf_3DLA_5utils_one_subchunk_coords(CYTHON_UNUSED PyObject
   __Pyx_RefNannySetupContext("one_subchunk_coords", 0);
   __Pyx_XDECREF(__pyx_r);
   if (unlikely(!__pyx_v_coords.memview)) { __Pyx_RaiseUnboundLocalError("coords"); __PYX_ERR(0, 48, __pyx_L1_error) }
-  __pyx_t_1 = __pyx_convert__to_py___pyx_ctuple_double__and_double(__pyx_f_3DLA_5utils_one_subchunk_coords(__pyx_v_coords, __pyx_v_size, __pyx_v_idx, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 48, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert__to_py___pyx_ctuple_double__and_double(__pyx_f_5utils_one_subchunk_coords(__pyx_v_coords, __pyx_v_size, __pyx_v_idx, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 48, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -3201,7 +3201,7 @@ static PyObject *__pyx_pf_3DLA_5utils_one_subchunk_coords(CYTHON_UNUSED PyObject
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("DLA.utils.one_subchunk_coords", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils.one_subchunk_coords", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_coords, 1);
@@ -3210,7 +3210,7 @@ static PyObject *__pyx_pf_3DLA_5utils_one_subchunk_coords(CYTHON_UNUSED PyObject
   return __pyx_r;
 }
 
-/* "DLA/utils.pyx":53
+/* "utils.pyx":53
  * 
  * 
  * cdef double[:, ::1] _subchunk_coords(double[::1] coords, double size):             # <<<<<<<<<<<<<<
@@ -3218,7 +3218,7 @@ static PyObject *__pyx_pf_3DLA_5utils_one_subchunk_coords(CYTHON_UNUSED PyObject
  *     cdef int i
  */
 
-static __Pyx_memviewslice __pyx_f_3DLA_5utils__subchunk_coords(__Pyx_memviewslice __pyx_v_coords, double __pyx_v_size) {
+static __Pyx_memviewslice __pyx_f_5utils__subchunk_coords(__Pyx_memviewslice __pyx_v_coords, double __pyx_v_size) {
   __Pyx_memviewslice __pyx_v_out = { 0, 0, { 0 }, { 0 }, { 0 } };
   int __pyx_v_i;
   __Pyx_memviewslice __pyx_r = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -3234,7 +3234,7 @@ static __Pyx_memviewslice __pyx_f_3DLA_5utils__subchunk_coords(__Pyx_memviewslic
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_subchunk_coords", 0);
 
-  /* "DLA/utils.pyx":54
+  /* "utils.pyx":54
  * 
  * cdef double[:, ::1] _subchunk_coords(double[::1] coords, double size):
  *     cdef double[:, ::1] out = cvarray(shape=(4, 2), itemsize=sizeof(double), format='d')             # <<<<<<<<<<<<<<
@@ -3258,7 +3258,7 @@ static __Pyx_memviewslice __pyx_f_3DLA_5utils__subchunk_coords(__Pyx_memviewslic
   __pyx_t_3.memview = NULL;
   __pyx_t_3.data = NULL;
 
-  /* "DLA/utils.pyx":56
+  /* "utils.pyx":56
  *     cdef double[:, ::1] out = cvarray(shape=(4, 2), itemsize=sizeof(double), format='d')
  *     cdef int i
  *     for i in range(4):             # <<<<<<<<<<<<<<
@@ -3268,14 +3268,14 @@ static __Pyx_memviewslice __pyx_f_3DLA_5utils__subchunk_coords(__Pyx_memviewslic
   for (__pyx_t_4 = 0; __pyx_t_4 < 4; __pyx_t_4+=1) {
     __pyx_v_i = __pyx_t_4;
 
-    /* "DLA/utils.pyx":57
+    /* "utils.pyx":57
  *     cdef int i
  *     for i in range(4):
  *         out[i] = _one_subchunk_coords(coords, size, i)             # <<<<<<<<<<<<<<
  *     return out
  * 
  */
-    __pyx_t_5 = __pyx_f_3DLA_5utils__one_subchunk_coords(__pyx_v_coords, __pyx_v_size, __pyx_v_i); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 57, __pyx_L1_error)
+    __pyx_t_5 = __pyx_f_5utils__one_subchunk_coords(__pyx_v_coords, __pyx_v_size, __pyx_v_i); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 57, __pyx_L1_error)
     __pyx_t_6.data = __pyx_v_out.data;
     __pyx_t_6.memview = __pyx_v_out.memview;
     __PYX_INC_MEMVIEW(&__pyx_t_6, 0);
@@ -3298,7 +3298,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_6, 1, 1, 0) < 0))
     __pyx_t_5.data = NULL;
   }
 
-  /* "DLA/utils.pyx":58
+  /* "utils.pyx":58
  *     for i in range(4):
  *         out[i] = _one_subchunk_coords(coords, size, i)
  *     return out             # <<<<<<<<<<<<<<
@@ -3309,7 +3309,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_6, 1, 1, 0) < 0))
   __pyx_r = __pyx_v_out;
   goto __pyx_L0;
 
-  /* "DLA/utils.pyx":53
+  /* "utils.pyx":53
  * 
  * 
  * cdef double[:, ::1] _subchunk_coords(double[::1] coords, double size):             # <<<<<<<<<<<<<<
@@ -3326,7 +3326,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_6, 1, 1, 0) < 0))
   __PYX_XDEC_MEMVIEW(&__pyx_t_6, 1);
   __pyx_r.data = NULL;
   __pyx_r.memview = NULL;
-  __Pyx_AddTraceback("DLA.utils._subchunk_coords", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils._subchunk_coords", __pyx_clineno, __pyx_lineno, __pyx_filename);
   goto __pyx_L2;
   __pyx_L0:;
   if (unlikely(!__pyx_r.memview)) {
@@ -3338,7 +3338,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_6, 1, 1, 0) < 0))
   return __pyx_r;
 }
 
-/* "DLA/utils.pyx":61
+/* "utils.pyx":61
  * 
  * 
  * cpdef list circle_in_subchunks(double[::1] start, double[::1] circle_pos, double size, double radius):             # <<<<<<<<<<<<<<
@@ -3346,8 +3346,8 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_6, 1, 1, 0) < 0))
  *     cdef int idx = 0
  */
 
-static PyObject *__pyx_pw_3DLA_5utils_3circle_in_subchunks(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_f_3DLA_5utils_circle_in_subchunks(__Pyx_memviewslice __pyx_v_start, __Pyx_memviewslice __pyx_v_circle_pos, double __pyx_v_size, double __pyx_v_radius, CYTHON_UNUSED int __pyx_skip_dispatch) {
+static PyObject *__pyx_pw_5utils_3circle_in_subchunks(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_f_5utils_circle_in_subchunks(__Pyx_memviewslice __pyx_v_start, __Pyx_memviewslice __pyx_v_circle_pos, double __pyx_v_size, double __pyx_v_radius, CYTHON_UNUSED int __pyx_skip_dispatch) {
   PyObject *__pyx_v_out = 0;
   int __pyx_v_idx;
   __Pyx_memviewslice __pyx_v_subchunks = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -3365,7 +3365,7 @@ static PyObject *__pyx_f_3DLA_5utils_circle_in_subchunks(__Pyx_memviewslice __py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("circle_in_subchunks", 0);
 
-  /* "DLA/utils.pyx":62
+  /* "utils.pyx":62
  * 
  * cpdef list circle_in_subchunks(double[::1] start, double[::1] circle_pos, double size, double radius):
  *     cdef list out = []             # <<<<<<<<<<<<<<
@@ -3377,7 +3377,7 @@ static PyObject *__pyx_f_3DLA_5utils_circle_in_subchunks(__Pyx_memviewslice __py
   __pyx_v_out = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "DLA/utils.pyx":63
+  /* "utils.pyx":63
  * cpdef list circle_in_subchunks(double[::1] start, double[::1] circle_pos, double size, double radius):
  *     cdef list out = []
  *     cdef int idx = 0             # <<<<<<<<<<<<<<
@@ -3386,7 +3386,7 @@ static PyObject *__pyx_f_3DLA_5utils_circle_in_subchunks(__Pyx_memviewslice __py
  */
   __pyx_v_idx = 0;
 
-  /* "DLA/utils.pyx":64
+  /* "utils.pyx":64
  *     cdef list out = []
  *     cdef int idx = 0
  *     size /= 2             # <<<<<<<<<<<<<<
@@ -3395,19 +3395,19 @@ static PyObject *__pyx_f_3DLA_5utils_circle_in_subchunks(__Pyx_memviewslice __py
  */
   __pyx_v_size = (__pyx_v_size / 2.0);
 
-  /* "DLA/utils.pyx":65
+  /* "utils.pyx":65
  *     cdef int idx = 0
  *     size /= 2
  *     cdef double[:, ::1] subchunks = _subchunk_coords(start, size)             # <<<<<<<<<<<<<<
  * 
  *     for i in range(4):
  */
-  __pyx_t_2 = __pyx_f_3DLA_5utils__subchunk_coords(__pyx_v_start, __pyx_v_size); if (unlikely(!__pyx_t_2.memview)) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_5utils__subchunk_coords(__pyx_v_start, __pyx_v_size); if (unlikely(!__pyx_t_2.memview)) __PYX_ERR(0, 65, __pyx_L1_error)
   __pyx_v_subchunks = __pyx_t_2;
   __pyx_t_2.memview = NULL;
   __pyx_t_2.data = NULL;
 
-  /* "DLA/utils.pyx":67
+  /* "utils.pyx":67
  *     cdef double[:, ::1] subchunks = _subchunk_coords(start, size)
  * 
  *     for i in range(4):             # <<<<<<<<<<<<<<
@@ -3417,7 +3417,7 @@ static PyObject *__pyx_f_3DLA_5utils_circle_in_subchunks(__Pyx_memviewslice __py
   for (__pyx_t_3 = 0; __pyx_t_3 < 4; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "DLA/utils.pyx":68
+    /* "utils.pyx":68
  * 
  *     for i in range(4):
  *         if circle_square_collision(subchunks[i], circle_pos, size, radius):             # <<<<<<<<<<<<<<
@@ -3437,13 +3437,13 @@ __pyx_t_4.shape[0] = __pyx_v_subchunks.shape[1];
 __pyx_t_4.strides[0] = __pyx_v_subchunks.strides[1];
     __pyx_t_4.suboffsets[0] = -1;
 
-__pyx_t_5 = (__pyx_f_3DLA_5utils_circle_square_collision(__pyx_t_4, __pyx_v_circle_pos, __pyx_v_size, __pyx_v_radius) != 0);
+__pyx_t_5 = (__pyx_f_5utils_circle_square_collision(__pyx_t_4, __pyx_v_circle_pos, __pyx_v_size, __pyx_v_radius) != 0);
     __PYX_XDEC_MEMVIEW(&__pyx_t_4, 1);
     __pyx_t_4.memview = NULL;
     __pyx_t_4.data = NULL;
     if (__pyx_t_5) {
 
-      /* "DLA/utils.pyx":69
+      /* "utils.pyx":69
  *     for i in range(4):
  *         if circle_square_collision(subchunks[i], circle_pos, size, radius):
  *             out.append(idx)             # <<<<<<<<<<<<<<
@@ -3455,7 +3455,7 @@ __pyx_t_5 = (__pyx_f_3DLA_5utils_circle_square_collision(__pyx_t_4, __pyx_v_circ
       __pyx_t_6 = __Pyx_PyList_Append(__pyx_v_out, __pyx_t_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 69, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "DLA/utils.pyx":68
+      /* "utils.pyx":68
  * 
  *     for i in range(4):
  *         if circle_square_collision(subchunks[i], circle_pos, size, radius):             # <<<<<<<<<<<<<<
@@ -3464,7 +3464,7 @@ __pyx_t_5 = (__pyx_f_3DLA_5utils_circle_square_collision(__pyx_t_4, __pyx_v_circ
  */
     }
 
-    /* "DLA/utils.pyx":70
+    /* "utils.pyx":70
  *         if circle_square_collision(subchunks[i], circle_pos, size, radius):
  *             out.append(idx)
  *         idx += 1             # <<<<<<<<<<<<<<
@@ -3474,7 +3474,7 @@ __pyx_t_5 = (__pyx_f_3DLA_5utils_circle_square_collision(__pyx_t_4, __pyx_v_circ
     __pyx_v_idx = (__pyx_v_idx + 1);
   }
 
-  /* "DLA/utils.pyx":72
+  /* "utils.pyx":72
  *         idx += 1
  * 
  *     return out             # <<<<<<<<<<<<<<
@@ -3486,7 +3486,7 @@ __pyx_t_5 = (__pyx_f_3DLA_5utils_circle_square_collision(__pyx_t_4, __pyx_v_circ
   __pyx_r = __pyx_v_out;
   goto __pyx_L0;
 
-  /* "DLA/utils.pyx":61
+  /* "utils.pyx":61
  * 
  * 
  * cpdef list circle_in_subchunks(double[::1] start, double[::1] circle_pos, double size, double radius):             # <<<<<<<<<<<<<<
@@ -3499,7 +3499,7 @@ __pyx_t_5 = (__pyx_f_3DLA_5utils_circle_square_collision(__pyx_t_4, __pyx_v_circ
   __Pyx_XDECREF(__pyx_t_1);
   __PYX_XDEC_MEMVIEW(&__pyx_t_2, 1);
   __PYX_XDEC_MEMVIEW(&__pyx_t_4, 1);
-  __Pyx_AddTraceback("DLA.utils.circle_in_subchunks", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils.circle_in_subchunks", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_out);
@@ -3510,8 +3510,8 @@ __pyx_t_5 = (__pyx_f_3DLA_5utils_circle_square_collision(__pyx_t_4, __pyx_v_circ
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3DLA_5utils_3circle_in_subchunks(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_3DLA_5utils_3circle_in_subchunks(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_5utils_3circle_in_subchunks(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_5utils_3circle_in_subchunks(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __Pyx_memviewslice __pyx_v_start = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_circle_pos = { 0, 0, { 0 }, { 0 }, { 0 } };
   double __pyx_v_size;
@@ -3584,18 +3584,18 @@ static PyObject *__pyx_pw_3DLA_5utils_3circle_in_subchunks(PyObject *__pyx_self,
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("circle_in_subchunks", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 61, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("DLA.utils.circle_in_subchunks", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils.circle_in_subchunks", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3DLA_5utils_2circle_in_subchunks(__pyx_self, __pyx_v_start, __pyx_v_circle_pos, __pyx_v_size, __pyx_v_radius);
+  __pyx_r = __pyx_pf_5utils_2circle_in_subchunks(__pyx_self, __pyx_v_start, __pyx_v_circle_pos, __pyx_v_size, __pyx_v_radius);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3DLA_5utils_2circle_in_subchunks(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_start, __Pyx_memviewslice __pyx_v_circle_pos, double __pyx_v_size, double __pyx_v_radius) {
+static PyObject *__pyx_pf_5utils_2circle_in_subchunks(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_start, __Pyx_memviewslice __pyx_v_circle_pos, double __pyx_v_size, double __pyx_v_radius) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -3606,7 +3606,7 @@ static PyObject *__pyx_pf_3DLA_5utils_2circle_in_subchunks(CYTHON_UNUSED PyObjec
   __Pyx_XDECREF(__pyx_r);
   if (unlikely(!__pyx_v_start.memview)) { __Pyx_RaiseUnboundLocalError("start"); __PYX_ERR(0, 61, __pyx_L1_error) }
   if (unlikely(!__pyx_v_circle_pos.memview)) { __Pyx_RaiseUnboundLocalError("circle_pos"); __PYX_ERR(0, 61, __pyx_L1_error) }
-  __pyx_t_1 = __pyx_f_3DLA_5utils_circle_in_subchunks(__pyx_v_start, __pyx_v_circle_pos, __pyx_v_size, __pyx_v_radius, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 61, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5utils_circle_in_subchunks(__pyx_v_start, __pyx_v_circle_pos, __pyx_v_size, __pyx_v_radius, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 61, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -3615,7 +3615,7 @@ static PyObject *__pyx_pf_3DLA_5utils_2circle_in_subchunks(CYTHON_UNUSED PyObjec
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("DLA.utils.circle_in_subchunks", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils.circle_in_subchunks", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_start, 1);
@@ -3625,7 +3625,7 @@ static PyObject *__pyx_pf_3DLA_5utils_2circle_in_subchunks(CYTHON_UNUSED PyObjec
   return __pyx_r;
 }
 
-/* "DLA/utils.pyx":75
+/* "utils.pyx":75
  * 
  * 
  * cdef inline double dot(double[::1] a, double[::1] b):             # <<<<<<<<<<<<<<
@@ -3633,7 +3633,7 @@ static PyObject *__pyx_pf_3DLA_5utils_2circle_in_subchunks(CYTHON_UNUSED PyObjec
  * 
  */
 
-static CYTHON_INLINE double __pyx_f_3DLA_5utils_dot(__Pyx_memviewslice __pyx_v_a, __Pyx_memviewslice __pyx_v_b) {
+static CYTHON_INLINE double __pyx_f_5utils_dot(__Pyx_memviewslice __pyx_v_a, __Pyx_memviewslice __pyx_v_b) {
   double __pyx_r;
   __Pyx_RefNannyDeclarations
   Py_ssize_t __pyx_t_1;
@@ -3642,7 +3642,7 @@ static CYTHON_INLINE double __pyx_f_3DLA_5utils_dot(__Pyx_memviewslice __pyx_v_a
   Py_ssize_t __pyx_t_4;
   __Pyx_RefNannySetupContext("dot", 0);
 
-  /* "DLA/utils.pyx":76
+  /* "utils.pyx":76
  * 
  * cdef inline double dot(double[::1] a, double[::1] b):
  *     return a[0] * b[0] + a[1] * b[1]             # <<<<<<<<<<<<<<
@@ -3656,7 +3656,7 @@ static CYTHON_INLINE double __pyx_f_3DLA_5utils_dot(__Pyx_memviewslice __pyx_v_a
   __pyx_r = (((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_a.data) + __pyx_t_1)) ))) * (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_b.data) + __pyx_t_2)) )))) + ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_a.data) + __pyx_t_3)) ))) * (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_b.data) + __pyx_t_4)) )))));
   goto __pyx_L0;
 
-  /* "DLA/utils.pyx":75
+  /* "utils.pyx":75
  * 
  * 
  * cdef inline double dot(double[::1] a, double[::1] b):             # <<<<<<<<<<<<<<
@@ -3670,7 +3670,7 @@ static CYTHON_INLINE double __pyx_f_3DLA_5utils_dot(__Pyx_memviewslice __pyx_v_a
   return __pyx_r;
 }
 
-/* "DLA/utils.pyx":79
+/* "utils.pyx":79
  * 
  * 
  * cdef double _dot_self(double[::1] a):             # <<<<<<<<<<<<<<
@@ -3678,7 +3678,7 @@ static CYTHON_INLINE double __pyx_f_3DLA_5utils_dot(__Pyx_memviewslice __pyx_v_a
  * 
  */
 
-static double __pyx_f_3DLA_5utils__dot_self(__Pyx_memviewslice __pyx_v_a) {
+static double __pyx_f_5utils__dot_self(__Pyx_memviewslice __pyx_v_a) {
   double __pyx_r;
   __Pyx_RefNannyDeclarations
   Py_ssize_t __pyx_t_1;
@@ -3687,7 +3687,7 @@ static double __pyx_f_3DLA_5utils__dot_self(__Pyx_memviewslice __pyx_v_a) {
   Py_ssize_t __pyx_t_4;
   __Pyx_RefNannySetupContext("_dot_self", 0);
 
-  /* "DLA/utils.pyx":80
+  /* "utils.pyx":80
  * 
  * cdef double _dot_self(double[::1] a):
  *     return a[0] * a[0] + a[1] * a[1]             # <<<<<<<<<<<<<<
@@ -3701,7 +3701,7 @@ static double __pyx_f_3DLA_5utils__dot_self(__Pyx_memviewslice __pyx_v_a) {
   __pyx_r = (((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_a.data) + __pyx_t_1)) ))) * (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_a.data) + __pyx_t_2)) )))) + ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_a.data) + __pyx_t_3)) ))) * (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_a.data) + __pyx_t_4)) )))));
   goto __pyx_L0;
 
-  /* "DLA/utils.pyx":79
+  /* "utils.pyx":79
  * 
  * 
  * cdef double _dot_self(double[::1] a):             # <<<<<<<<<<<<<<
@@ -3715,7 +3715,7 @@ static double __pyx_f_3DLA_5utils__dot_self(__Pyx_memviewslice __pyx_v_a) {
   return __pyx_r;
 }
 
-/* "DLA/utils.pyx":83
+/* "utils.pyx":83
  * 
  * 
  * cpdef double dot_self(double[::1] a):             # <<<<<<<<<<<<<<
@@ -3723,23 +3723,23 @@ static double __pyx_f_3DLA_5utils__dot_self(__Pyx_memviewslice __pyx_v_a) {
  * 
  */
 
-static PyObject *__pyx_pw_3DLA_5utils_5dot_self(PyObject *__pyx_self, PyObject *__pyx_arg_a); /*proto*/
-static double __pyx_f_3DLA_5utils_dot_self(__Pyx_memviewslice __pyx_v_a, CYTHON_UNUSED int __pyx_skip_dispatch) {
+static PyObject *__pyx_pw_5utils_5dot_self(PyObject *__pyx_self, PyObject *__pyx_arg_a); /*proto*/
+static double __pyx_f_5utils_dot_self(__Pyx_memviewslice __pyx_v_a, CYTHON_UNUSED int __pyx_skip_dispatch) {
   double __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("dot_self", 0);
 
-  /* "DLA/utils.pyx":84
+  /* "utils.pyx":84
  * 
  * cpdef double dot_self(double[::1] a):
  *     return _dot_self(a)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_r = __pyx_f_3DLA_5utils__dot_self(__pyx_v_a);
+  __pyx_r = __pyx_f_5utils__dot_self(__pyx_v_a);
   goto __pyx_L0;
 
-  /* "DLA/utils.pyx":83
+  /* "utils.pyx":83
  * 
  * 
  * cpdef double dot_self(double[::1] a):             # <<<<<<<<<<<<<<
@@ -3754,8 +3754,8 @@ static double __pyx_f_3DLA_5utils_dot_self(__Pyx_memviewslice __pyx_v_a, CYTHON_
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3DLA_5utils_5dot_self(PyObject *__pyx_self, PyObject *__pyx_arg_a); /*proto*/
-static PyObject *__pyx_pw_3DLA_5utils_5dot_self(PyObject *__pyx_self, PyObject *__pyx_arg_a) {
+static PyObject *__pyx_pw_5utils_5dot_self(PyObject *__pyx_self, PyObject *__pyx_arg_a); /*proto*/
+static PyObject *__pyx_pw_5utils_5dot_self(PyObject *__pyx_self, PyObject *__pyx_arg_a) {
   __Pyx_memviewslice __pyx_v_a = { 0, 0, { 0 }, { 0 }, { 0 } };
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -3768,18 +3768,18 @@ static PyObject *__pyx_pw_3DLA_5utils_5dot_self(PyObject *__pyx_self, PyObject *
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
-  __Pyx_AddTraceback("DLA.utils.dot_self", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils.dot_self", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3DLA_5utils_4dot_self(__pyx_self, __pyx_v_a);
+  __pyx_r = __pyx_pf_5utils_4dot_self(__pyx_self, __pyx_v_a);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3DLA_5utils_4dot_self(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_a) {
+static PyObject *__pyx_pf_5utils_4dot_self(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_a) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -3789,7 +3789,7 @@ static PyObject *__pyx_pf_3DLA_5utils_4dot_self(CYTHON_UNUSED PyObject *__pyx_se
   __Pyx_RefNannySetupContext("dot_self", 0);
   __Pyx_XDECREF(__pyx_r);
   if (unlikely(!__pyx_v_a.memview)) { __Pyx_RaiseUnboundLocalError("a"); __PYX_ERR(0, 83, __pyx_L1_error) }
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_3DLA_5utils_dot_self(__pyx_v_a, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_5utils_dot_self(__pyx_v_a, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 83, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -3798,7 +3798,7 @@ static PyObject *__pyx_pf_3DLA_5utils_4dot_self(CYTHON_UNUSED PyObject *__pyx_se
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("DLA.utils.dot_self", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils.dot_self", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_a, 1);
@@ -3807,7 +3807,7 @@ static PyObject *__pyx_pf_3DLA_5utils_4dot_self(CYTHON_UNUSED PyObject *__pyx_se
   return __pyx_r;
 }
 
-/* "DLA/utils.pyx":87
+/* "utils.pyx":87
  * 
  * 
  * cpdef bint is_in_circle(double[::1] pos, double[::1] c_pos, double size, double radius):             # <<<<<<<<<<<<<<
@@ -3815,8 +3815,8 @@ static PyObject *__pyx_pf_3DLA_5utils_4dot_self(CYTHON_UNUSED PyObject *__pyx_se
  *     cdef double r_sqruared = radius * radius
  */
 
-static PyObject *__pyx_pw_3DLA_5utils_7is_in_circle(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Pyx_memviewslice __pyx_v_c_pos, double __pyx_v_size, double __pyx_v_radius, CYTHON_UNUSED int __pyx_skip_dispatch) {
+static PyObject *__pyx_pw_5utils_7is_in_circle(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_f_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Pyx_memviewslice __pyx_v_c_pos, double __pyx_v_size, double __pyx_v_radius, CYTHON_UNUSED int __pyx_skip_dispatch) {
   __Pyx_memviewslice __pyx_v_tmp = { 0, 0, { 0 }, { 0 }, { 0 } };
   double __pyx_v_r_sqruared;
   long __pyx_v_i;
@@ -3832,7 +3832,7 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("is_in_circle", 0);
 
-  /* "DLA/utils.pyx":89
+  /* "utils.pyx":89
  * cpdef bint is_in_circle(double[::1] pos, double[::1] c_pos, double size, double radius):
  *     cdef double[::1] tmp
  *     cdef double r_sqruared = radius * radius             # <<<<<<<<<<<<<<
@@ -3841,7 +3841,7 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
  */
   __pyx_v_r_sqruared = (__pyx_v_radius * __pyx_v_radius);
 
-  /* "DLA/utils.pyx":90
+  /* "utils.pyx":90
  *     cdef double[::1] tmp
  *     cdef double r_sqruared = radius * radius
  *     for i in range(4):             # <<<<<<<<<<<<<<
@@ -3851,20 +3851,20 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
   for (__pyx_t_1 = 0; __pyx_t_1 < 4; __pyx_t_1+=1) {
     __pyx_v_i = __pyx_t_1;
 
-    /* "DLA/utils.pyx":91
+    /* "utils.pyx":91
  *     cdef double r_sqruared = radius * radius
  *     for i in range(4):
  *         tmp = _one_subchunk_coords(pos, size, i)             # <<<<<<<<<<<<<<
  *         tmp[0] -= c_pos[0]
  *         tmp[1] -= c_pos[1]
  */
-    __pyx_t_2 = __pyx_f_3DLA_5utils__one_subchunk_coords(__pyx_v_pos, __pyx_v_size, __pyx_v_i); if (unlikely(!__pyx_t_2.memview)) __PYX_ERR(0, 91, __pyx_L1_error)
+    __pyx_t_2 = __pyx_f_5utils__one_subchunk_coords(__pyx_v_pos, __pyx_v_size, __pyx_v_i); if (unlikely(!__pyx_t_2.memview)) __PYX_ERR(0, 91, __pyx_L1_error)
     __PYX_XDEC_MEMVIEW(&__pyx_v_tmp, 1);
     __pyx_v_tmp = __pyx_t_2;
     __pyx_t_2.memview = NULL;
     __pyx_t_2.data = NULL;
 
-    /* "DLA/utils.pyx":92
+    /* "utils.pyx":92
  *     for i in range(4):
  *         tmp = _one_subchunk_coords(pos, size, i)
  *         tmp[0] -= c_pos[0]             # <<<<<<<<<<<<<<
@@ -3875,7 +3875,7 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
     __pyx_t_4 = 0;
     *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_tmp.data) + __pyx_t_4)) )) -= (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_c_pos.data) + __pyx_t_3)) )));
 
-    /* "DLA/utils.pyx":93
+    /* "utils.pyx":93
  *         tmp = _one_subchunk_coords(pos, size, i)
  *         tmp[0] -= c_pos[0]
  *         tmp[1] -= c_pos[1]             # <<<<<<<<<<<<<<
@@ -3886,17 +3886,17 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
     __pyx_t_4 = 1;
     *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_tmp.data) + __pyx_t_4)) )) -= (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_c_pos.data) + __pyx_t_3)) )));
 
-    /* "DLA/utils.pyx":94
+    /* "utils.pyx":94
  *         tmp[0] -= c_pos[0]
  *         tmp[1] -= c_pos[1]
  *         if _dot_self(tmp) > r_sqruared:             # <<<<<<<<<<<<<<
  *             return False
  *     return True
  */
-    __pyx_t_5 = ((__pyx_f_3DLA_5utils__dot_self(__pyx_v_tmp) > __pyx_v_r_sqruared) != 0);
+    __pyx_t_5 = ((__pyx_f_5utils__dot_self(__pyx_v_tmp) > __pyx_v_r_sqruared) != 0);
     if (__pyx_t_5) {
 
-      /* "DLA/utils.pyx":95
+      /* "utils.pyx":95
  *         tmp[1] -= c_pos[1]
  *         if _dot_self(tmp) > r_sqruared:
  *             return False             # <<<<<<<<<<<<<<
@@ -3906,7 +3906,7 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
       __pyx_r = 0;
       goto __pyx_L0;
 
-      /* "DLA/utils.pyx":94
+      /* "utils.pyx":94
  *         tmp[0] -= c_pos[0]
  *         tmp[1] -= c_pos[1]
  *         if _dot_self(tmp) > r_sqruared:             # <<<<<<<<<<<<<<
@@ -3916,7 +3916,7 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
     }
   }
 
-  /* "DLA/utils.pyx":96
+  /* "utils.pyx":96
  *         if _dot_self(tmp) > r_sqruared:
  *             return False
  *     return True             # <<<<<<<<<<<<<<
@@ -3926,7 +3926,7 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
   __pyx_r = 1;
   goto __pyx_L0;
 
-  /* "DLA/utils.pyx":87
+  /* "utils.pyx":87
  * 
  * 
  * cpdef bint is_in_circle(double[::1] pos, double[::1] c_pos, double size, double radius):             # <<<<<<<<<<<<<<
@@ -3937,7 +3937,7 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
   /* function exit code */
   __pyx_L1_error:;
   __PYX_XDEC_MEMVIEW(&__pyx_t_2, 1);
-  __Pyx_WriteUnraisable("DLA.utils.is_in_circle", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __Pyx_WriteUnraisable("utils.is_in_circle", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_r = 0;
   __pyx_L0:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_tmp, 1);
@@ -3946,8 +3946,8 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3DLA_5utils_7is_in_circle(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_3DLA_5utils_7is_in_circle(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_5utils_7is_in_circle(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_5utils_7is_in_circle(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __Pyx_memviewslice __pyx_v_pos = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_c_pos = { 0, 0, { 0 }, { 0 }, { 0 } };
   double __pyx_v_size;
@@ -4020,18 +4020,18 @@ static PyObject *__pyx_pw_3DLA_5utils_7is_in_circle(PyObject *__pyx_self, PyObje
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("is_in_circle", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 87, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("DLA.utils.is_in_circle", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils.is_in_circle", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3DLA_5utils_6is_in_circle(__pyx_self, __pyx_v_pos, __pyx_v_c_pos, __pyx_v_size, __pyx_v_radius);
+  __pyx_r = __pyx_pf_5utils_6is_in_circle(__pyx_self, __pyx_v_pos, __pyx_v_c_pos, __pyx_v_size, __pyx_v_radius);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3DLA_5utils_6is_in_circle(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_pos, __Pyx_memviewslice __pyx_v_c_pos, double __pyx_v_size, double __pyx_v_radius) {
+static PyObject *__pyx_pf_5utils_6is_in_circle(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_pos, __Pyx_memviewslice __pyx_v_c_pos, double __pyx_v_size, double __pyx_v_radius) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4042,7 +4042,7 @@ static PyObject *__pyx_pf_3DLA_5utils_6is_in_circle(CYTHON_UNUSED PyObject *__py
   __Pyx_XDECREF(__pyx_r);
   if (unlikely(!__pyx_v_pos.memview)) { __Pyx_RaiseUnboundLocalError("pos"); __PYX_ERR(0, 87, __pyx_L1_error) }
   if (unlikely(!__pyx_v_c_pos.memview)) { __Pyx_RaiseUnboundLocalError("c_pos"); __PYX_ERR(0, 87, __pyx_L1_error) }
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_f_3DLA_5utils_is_in_circle(__pyx_v_pos, __pyx_v_c_pos, __pyx_v_size, __pyx_v_radius, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_f_5utils_is_in_circle(__pyx_v_pos, __pyx_v_c_pos, __pyx_v_size, __pyx_v_radius, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 87, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -4051,7 +4051,7 @@ static PyObject *__pyx_pf_3DLA_5utils_6is_in_circle(CYTHON_UNUSED PyObject *__py
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("DLA.utils.is_in_circle", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils.is_in_circle", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_pos, 1);
@@ -4061,7 +4061,7 @@ static PyObject *__pyx_pf_3DLA_5utils_6is_in_circle(CYTHON_UNUSED PyObject *__py
   return __pyx_r;
 }
 
-/* "DLA/utils.pyx":99
+/* "utils.pyx":99
  * 
  * @cython.cdivision(True)
  * cdef double _get_collision_time(double[::1] static_part, double[::1] moving_part, double[::1] move_vec, double radius):             # <<<<<<<<<<<<<<
@@ -4069,7 +4069,7 @@ static PyObject *__pyx_pf_3DLA_5utils_6is_in_circle(CYTHON_UNUSED PyObject *__py
  *     cdef double tmp_1 = moving_part[0] - static_part[0]
  */
 
-static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v_static_part, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius) {
+static double __pyx_f_5utils__get_collision_time(__Pyx_memviewslice __pyx_v_static_part, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius) {
   double __pyx_v_a;
   double __pyx_v_tmp_1;
   double __pyx_v_tmp_2;
@@ -4090,16 +4090,16 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
   double __pyx_t_6;
   __Pyx_RefNannySetupContext("_get_collision_time", 0);
 
-  /* "DLA/utils.pyx":100
+  /* "utils.pyx":100
  * @cython.cdivision(True)
  * cdef double _get_collision_time(double[::1] static_part, double[::1] moving_part, double[::1] move_vec, double radius):
  *     cdef double a = _dot_self(move_vec)             # <<<<<<<<<<<<<<
  *     cdef double tmp_1 = moving_part[0] - static_part[0]
  *     cdef double tmp_2 = moving_part[1] - static_part[1]
  */
-  __pyx_v_a = __pyx_f_3DLA_5utils__dot_self(__pyx_v_move_vec);
+  __pyx_v_a = __pyx_f_5utils__dot_self(__pyx_v_move_vec);
 
-  /* "DLA/utils.pyx":101
+  /* "utils.pyx":101
  * cdef double _get_collision_time(double[::1] static_part, double[::1] moving_part, double[::1] move_vec, double radius):
  *     cdef double a = _dot_self(move_vec)
  *     cdef double tmp_1 = moving_part[0] - static_part[0]             # <<<<<<<<<<<<<<
@@ -4110,7 +4110,7 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
   __pyx_t_2 = 0;
   __pyx_v_tmp_1 = ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_moving_part.data) + __pyx_t_1)) ))) - (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_static_part.data) + __pyx_t_2)) ))));
 
-  /* "DLA/utils.pyx":102
+  /* "utils.pyx":102
  *     cdef double a = _dot_self(move_vec)
  *     cdef double tmp_1 = moving_part[0] - static_part[0]
  *     cdef double tmp_2 = moving_part[1] - static_part[1]             # <<<<<<<<<<<<<<
@@ -4121,7 +4121,7 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
   __pyx_t_1 = 1;
   __pyx_v_tmp_2 = ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_moving_part.data) + __pyx_t_2)) ))) - (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_static_part.data) + __pyx_t_1)) ))));
 
-  /* "DLA/utils.pyx":103
+  /* "utils.pyx":103
  *     cdef double tmp_1 = moving_part[0] - static_part[0]
  *     cdef double tmp_2 = moving_part[1] - static_part[1]
  *     cdef double b = move_vec[0] * tmp_1 + move_vec[1] * tmp_2             # <<<<<<<<<<<<<<
@@ -4132,7 +4132,7 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
   __pyx_t_2 = 1;
   __pyx_v_b = (((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_move_vec.data) + __pyx_t_1)) ))) * __pyx_v_tmp_1) + ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_move_vec.data) + __pyx_t_2)) ))) * __pyx_v_tmp_2));
 
-  /* "DLA/utils.pyx":105
+  /* "utils.pyx":105
  *     cdef double b = move_vec[0] * tmp_1 + move_vec[1] * tmp_2
  * 
  *     cdef double c = tmp_1 * tmp_1 + tmp_2 * tmp_2 - 4 * radius * radius             # <<<<<<<<<<<<<<
@@ -4141,7 +4141,7 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
  */
   __pyx_v_c = (((__pyx_v_tmp_1 * __pyx_v_tmp_1) + (__pyx_v_tmp_2 * __pyx_v_tmp_2)) - ((4.0 * __pyx_v_radius) * __pyx_v_radius));
 
-  /* "DLA/utils.pyx":107
+  /* "utils.pyx":107
  *     cdef double c = tmp_1 * tmp_1 + tmp_2 * tmp_2 - 4 * radius * radius
  * 
  *     cdef double delta = b * b - c * a             # <<<<<<<<<<<<<<
@@ -4150,7 +4150,7 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
  */
   __pyx_v_delta = ((__pyx_v_b * __pyx_v_b) - (__pyx_v_c * __pyx_v_a));
 
-  /* "DLA/utils.pyx":109
+  /* "utils.pyx":109
  *     cdef double delta = b * b - c * a
  * 
  *     if delta < 0:             # <<<<<<<<<<<<<<
@@ -4160,7 +4160,7 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
   __pyx_t_3 = ((__pyx_v_delta < 0.0) != 0);
   if (__pyx_t_3) {
 
-    /* "DLA/utils.pyx":110
+    /* "utils.pyx":110
  * 
  *     if delta < 0:
  *         return 2             # <<<<<<<<<<<<<<
@@ -4170,7 +4170,7 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
     __pyx_r = 2.0;
     goto __pyx_L0;
 
-    /* "DLA/utils.pyx":109
+    /* "utils.pyx":109
  *     cdef double delta = b * b - c * a
  * 
  *     if delta < 0:             # <<<<<<<<<<<<<<
@@ -4179,7 +4179,7 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
  */
   }
 
-  /* "DLA/utils.pyx":112
+  /* "utils.pyx":112
  *         return 2
  * 
  *     cdef double sqrt_delta = sqrt(delta)             # <<<<<<<<<<<<<<
@@ -4188,7 +4188,7 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
  */
   __pyx_v_sqrt_delta = sqrt(__pyx_v_delta);
 
-  /* "DLA/utils.pyx":113
+  /* "utils.pyx":113
  * 
  *     cdef double sqrt_delta = sqrt(delta)
  *     cdef double one_over_a = 1 / a             # <<<<<<<<<<<<<<
@@ -4197,7 +4197,7 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
  */
   __pyx_v_one_over_a = (1.0 / __pyx_v_a);
 
-  /* "DLA/utils.pyx":115
+  /* "utils.pyx":115
  *     cdef double one_over_a = 1 / a
  * 
  *     cdef double o1 = (-b + sqrt_delta) * one_over_a             # <<<<<<<<<<<<<<
@@ -4206,7 +4206,7 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
  */
   __pyx_v_o1 = (((-__pyx_v_b) + __pyx_v_sqrt_delta) * __pyx_v_one_over_a);
 
-  /* "DLA/utils.pyx":116
+  /* "utils.pyx":116
  * 
  *     cdef double o1 = (-b + sqrt_delta) * one_over_a
  *     cdef double o2 = (-b - sqrt_delta) * one_over_a             # <<<<<<<<<<<<<<
@@ -4215,7 +4215,7 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
  */
   __pyx_v_o2 = (((-__pyx_v_b) - __pyx_v_sqrt_delta) * __pyx_v_one_over_a);
 
-  /* "DLA/utils.pyx":118
+  /* "utils.pyx":118
  *     cdef double o2 = (-b - sqrt_delta) * one_over_a
  * 
  *     return min(o1, o2)             # <<<<<<<<<<<<<<
@@ -4232,7 +4232,7 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
   __pyx_r = __pyx_t_6;
   goto __pyx_L0;
 
-  /* "DLA/utils.pyx":99
+  /* "utils.pyx":99
  * 
  * @cython.cdivision(True)
  * cdef double _get_collision_time(double[::1] static_part, double[::1] moving_part, double[::1] move_vec, double radius):             # <<<<<<<<<<<<<<
@@ -4246,7 +4246,7 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
   return __pyx_r;
 }
 
-/* "DLA/utils.pyx":121
+/* "utils.pyx":121
  * 
  * 
  * cpdef double get_collision_time(double[:, ::1] static_parts, double[::1] moving_part, double[::1] move_vec, double radius):             # <<<<<<<<<<<<<<
@@ -4254,8 +4254,8 @@ static double __pyx_f_3DLA_5utils__get_collision_time(__Pyx_memviewslice __pyx_v
  *     cdef Py_ssize_t i
  */
 
-static PyObject *__pyx_pw_3DLA_5utils_9get_collision_time(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static double __pyx_f_3DLA_5utils_get_collision_time(__Pyx_memviewslice __pyx_v_static_parts, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius, CYTHON_UNUSED int __pyx_skip_dispatch) {
+static PyObject *__pyx_pw_5utils_9get_collision_time(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static double __pyx_f_5utils_get_collision_time(__Pyx_memviewslice __pyx_v_static_parts, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius, CYTHON_UNUSED int __pyx_skip_dispatch) {
   double __pyx_v_out_time;
   Py_ssize_t __pyx_v_i;
   Py_ssize_t __pyx_v_size;
@@ -4282,7 +4282,7 @@ static double __pyx_f_3DLA_5utils_get_collision_time(__Pyx_memviewslice __pyx_v_
   double __pyx_t_15;
   __Pyx_RefNannySetupContext("get_collision_time", 0);
 
-  /* "DLA/utils.pyx":122
+  /* "utils.pyx":122
  * 
  * cpdef double get_collision_time(double[:, ::1] static_parts, double[::1] moving_part, double[::1] move_vec, double radius):
  *     cdef double out_time = 2             # <<<<<<<<<<<<<<
@@ -4291,7 +4291,7 @@ static double __pyx_f_3DLA_5utils_get_collision_time(__Pyx_memviewslice __pyx_v_
  */
   __pyx_v_out_time = 2.0;
 
-  /* "DLA/utils.pyx":124
+  /* "utils.pyx":124
  *     cdef double out_time = 2
  *     cdef Py_ssize_t i
  *     cdef Py_ssize_t size = static_parts.shape[0]             # <<<<<<<<<<<<<<
@@ -4300,16 +4300,16 @@ static double __pyx_f_3DLA_5utils_get_collision_time(__Pyx_memviewslice __pyx_v_
  */
   __pyx_v_size = (__pyx_v_static_parts.shape[0]);
 
-  /* "DLA/utils.pyx":127
+  /* "utils.pyx":127
  *     cdef double tmp_1, tmp_2
  * 
  *     cdef double move_range = (2 * radius + _dot_self(move_vec)) ** 2             # <<<<<<<<<<<<<<
  *     cdef double r2 = 4 * radius * radius
  * 
  */
-  __pyx_v_move_range = pow(((2.0 * __pyx_v_radius) + __pyx_f_3DLA_5utils__dot_self(__pyx_v_move_vec)), 2.0);
+  __pyx_v_move_range = pow(((2.0 * __pyx_v_radius) + __pyx_f_5utils__dot_self(__pyx_v_move_vec)), 2.0);
 
-  /* "DLA/utils.pyx":128
+  /* "utils.pyx":128
  * 
  *     cdef double move_range = (2 * radius + _dot_self(move_vec)) ** 2
  *     cdef double r2 = 4 * radius * radius             # <<<<<<<<<<<<<<
@@ -4318,7 +4318,7 @@ static double __pyx_f_3DLA_5utils_get_collision_time(__Pyx_memviewslice __pyx_v_
  */
   __pyx_v_r2 = ((4.0 * __pyx_v_radius) * __pyx_v_radius);
 
-  /* "DLA/utils.pyx":130
+  /* "utils.pyx":130
  *     cdef double r2 = 4 * radius * radius
  * 
  *     for i in range(size):             # <<<<<<<<<<<<<<
@@ -4330,7 +4330,7 @@ static double __pyx_f_3DLA_5utils_get_collision_time(__Pyx_memviewslice __pyx_v_
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "DLA/utils.pyx":131
+    /* "utils.pyx":131
  * 
  *     for i in range(size):
  *         tmp_1 = ((moving_part[0] - static_parts[i][0]) ** 2 + (moving_part[1] - static_parts[i][1]) ** 2)             # <<<<<<<<<<<<<<
@@ -4345,7 +4345,7 @@ static double __pyx_f_3DLA_5utils_get_collision_time(__Pyx_memviewslice __pyx_v_
     __pyx_t_9 = 1;
     __pyx_v_tmp_1 = (pow(((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_moving_part.data) + __pyx_t_4)) ))) - (*((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_static_parts.data + __pyx_t_5 * __pyx_v_static_parts.strides[0]) )) + __pyx_t_6)) )))), 2.0) + pow(((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_moving_part.data) + __pyx_t_7)) ))) - (*((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_static_parts.data + __pyx_t_8 * __pyx_v_static_parts.strides[0]) )) + __pyx_t_9)) )))), 2.0));
 
-    /* "DLA/utils.pyx":132
+    /* "utils.pyx":132
  *     for i in range(size):
  *         tmp_1 = ((moving_part[0] - static_parts[i][0]) ** 2 + (moving_part[1] - static_parts[i][1]) ** 2)
  *         if tmp_1 <= move_range:             # <<<<<<<<<<<<<<
@@ -4355,7 +4355,7 @@ static double __pyx_f_3DLA_5utils_get_collision_time(__Pyx_memviewslice __pyx_v_
     __pyx_t_10 = ((__pyx_v_tmp_1 <= __pyx_v_move_range) != 0);
     if (__pyx_t_10) {
 
-      /* "DLA/utils.pyx":133
+      /* "utils.pyx":133
  *         tmp_1 = ((moving_part[0] - static_parts[i][0]) ** 2 + (moving_part[1] - static_parts[i][1]) ** 2)
  *         if tmp_1 <= move_range:
  *             tmp_2 = _get_collision_time(static_parts[i], moving_part, move_vec, radius)             # <<<<<<<<<<<<<<
@@ -4375,12 +4375,12 @@ __pyx_t_11.shape[0] = __pyx_v_static_parts.shape[1];
 __pyx_t_11.strides[0] = __pyx_v_static_parts.strides[1];
     __pyx_t_11.suboffsets[0] = -1;
 
-__pyx_v_tmp_2 = __pyx_f_3DLA_5utils__get_collision_time(__pyx_t_11, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius);
+__pyx_v_tmp_2 = __pyx_f_5utils__get_collision_time(__pyx_t_11, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius);
       __PYX_XDEC_MEMVIEW(&__pyx_t_11, 1);
       __pyx_t_11.memview = NULL;
       __pyx_t_11.data = NULL;
 
-      /* "DLA/utils.pyx":134
+      /* "utils.pyx":134
  *         if tmp_1 <= move_range:
  *             tmp_2 = _get_collision_time(static_parts[i], moving_part, move_vec, radius)
  *             if tmp_2 < 0 and tmp_1 >= r2:             # <<<<<<<<<<<<<<
@@ -4398,7 +4398,7 @@ __pyx_v_tmp_2 = __pyx_f_3DLA_5utils__get_collision_time(__pyx_t_11, __pyx_v_movi
       __pyx_L7_bool_binop_done:;
       if (__pyx_t_10) {
 
-        /* "DLA/utils.pyx":135
+        /* "utils.pyx":135
  *             tmp_2 = _get_collision_time(static_parts[i], moving_part, move_vec, radius)
  *             if tmp_2 < 0 and tmp_1 >= r2:
  *                 continue             # <<<<<<<<<<<<<<
@@ -4407,7 +4407,7 @@ __pyx_v_tmp_2 = __pyx_f_3DLA_5utils__get_collision_time(__pyx_t_11, __pyx_v_movi
  */
         goto __pyx_L3_continue;
 
-        /* "DLA/utils.pyx":134
+        /* "utils.pyx":134
  *         if tmp_1 <= move_range:
  *             tmp_2 = _get_collision_time(static_parts[i], moving_part, move_vec, radius)
  *             if tmp_2 < 0 and tmp_1 >= r2:             # <<<<<<<<<<<<<<
@@ -4416,7 +4416,7 @@ __pyx_v_tmp_2 = __pyx_f_3DLA_5utils__get_collision_time(__pyx_t_11, __pyx_v_movi
  */
       }
 
-      /* "DLA/utils.pyx":136
+      /* "utils.pyx":136
  *             if tmp_2 < 0 and tmp_1 >= r2:
  *                 continue
  *             out_time = min(tmp_2, out_time)             # <<<<<<<<<<<<<<
@@ -4432,7 +4432,7 @@ __pyx_v_tmp_2 = __pyx_f_3DLA_5utils__get_collision_time(__pyx_t_11, __pyx_v_movi
       }
       __pyx_v_out_time = __pyx_t_15;
 
-      /* "DLA/utils.pyx":132
+      /* "utils.pyx":132
  *     for i in range(size):
  *         tmp_1 = ((moving_part[0] - static_parts[i][0]) ** 2 + (moving_part[1] - static_parts[i][1]) ** 2)
  *         if tmp_1 <= move_range:             # <<<<<<<<<<<<<<
@@ -4443,7 +4443,7 @@ __pyx_v_tmp_2 = __pyx_f_3DLA_5utils__get_collision_time(__pyx_t_11, __pyx_v_movi
     __pyx_L3_continue:;
   }
 
-  /* "DLA/utils.pyx":137
+  /* "utils.pyx":137
  *                 continue
  *             out_time = min(tmp_2, out_time)
  *     return out_time             # <<<<<<<<<<<<<<
@@ -4453,7 +4453,7 @@ __pyx_v_tmp_2 = __pyx_f_3DLA_5utils__get_collision_time(__pyx_t_11, __pyx_v_movi
   __pyx_r = __pyx_v_out_time;
   goto __pyx_L0;
 
-  /* "DLA/utils.pyx":121
+  /* "utils.pyx":121
  * 
  * 
  * cpdef double get_collision_time(double[:, ::1] static_parts, double[::1] moving_part, double[::1] move_vec, double radius):             # <<<<<<<<<<<<<<
@@ -4468,8 +4468,8 @@ __pyx_v_tmp_2 = __pyx_f_3DLA_5utils__get_collision_time(__pyx_t_11, __pyx_v_movi
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3DLA_5utils_9get_collision_time(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_3DLA_5utils_9get_collision_time(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_5utils_9get_collision_time(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_5utils_9get_collision_time(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __Pyx_memviewslice __pyx_v_static_parts = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_moving_part = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_move_vec = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -4542,18 +4542,18 @@ static PyObject *__pyx_pw_3DLA_5utils_9get_collision_time(PyObject *__pyx_self, 
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("get_collision_time", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 121, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("DLA.utils.get_collision_time", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils.get_collision_time", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3DLA_5utils_8get_collision_time(__pyx_self, __pyx_v_static_parts, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius);
+  __pyx_r = __pyx_pf_5utils_8get_collision_time(__pyx_self, __pyx_v_static_parts, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3DLA_5utils_8get_collision_time(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_static_parts, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius) {
+static PyObject *__pyx_pf_5utils_8get_collision_time(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_static_parts, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4565,7 +4565,7 @@ static PyObject *__pyx_pf_3DLA_5utils_8get_collision_time(CYTHON_UNUSED PyObject
   if (unlikely(!__pyx_v_static_parts.memview)) { __Pyx_RaiseUnboundLocalError("static_parts"); __PYX_ERR(0, 121, __pyx_L1_error) }
   if (unlikely(!__pyx_v_moving_part.memview)) { __Pyx_RaiseUnboundLocalError("moving_part"); __PYX_ERR(0, 121, __pyx_L1_error) }
   if (unlikely(!__pyx_v_move_vec.memview)) { __Pyx_RaiseUnboundLocalError("move_vec"); __PYX_ERR(0, 121, __pyx_L1_error) }
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_3DLA_5utils_get_collision_time(__pyx_v_static_parts, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_5utils_get_collision_time(__pyx_v_static_parts, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 121, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -4574,7 +4574,7 @@ static PyObject *__pyx_pf_3DLA_5utils_8get_collision_time(CYTHON_UNUSED PyObject
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("DLA.utils.get_collision_time", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils.get_collision_time", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_static_parts, 1);
@@ -4585,7 +4585,7 @@ static PyObject *__pyx_pf_3DLA_5utils_8get_collision_time(CYTHON_UNUSED PyObject
   return __pyx_r;
 }
 
-/* "DLA/utils.pyx":140
+/* "utils.pyx":140
  * 
  * 
  * cdef double _new_get_collision_time(             # <<<<<<<<<<<<<<
@@ -4593,7 +4593,7 @@ static PyObject *__pyx_pf_3DLA_5utils_8get_collision_time(CYTHON_UNUSED PyObject
  *     double particle_plane_size,
  */
 
-static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plane, double __pyx_v_particle_plane_size, __Pyx_memviewslice __pyx_v_start_pos, double __pyx_v_plane_size, __Pyx_memviewslice __pyx_v_stuck_points, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius, __Pyx_memviewslice __pyx_v_area_check_center, double __pyx_v_area_check_radius) {
+static double __pyx_f_5utils__new_get_collision_time(PyObject *__pyx_v_plane, double __pyx_v_particle_plane_size, __Pyx_memviewslice __pyx_v_start_pos, double __pyx_v_plane_size, __Pyx_memviewslice __pyx_v_stuck_points, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius, __Pyx_memviewslice __pyx_v_area_check_center, double __pyx_v_area_check_radius) {
   double __pyx_v_time;
   PyObject *__pyx_v_sub_planes = 0;
   Py_ssize_t __pyx_v_i;
@@ -4627,7 +4627,7 @@ static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plan
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_new_get_collision_time", 0);
 
-  /* "DLA/utils.pyx":152
+  /* "utils.pyx":152
  *     double area_check_radius
  * ):
  *     cdef double time = 2.0             # <<<<<<<<<<<<<<
@@ -4636,7 +4636,7 @@ static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plan
  */
   __pyx_v_time = 2.0;
 
-  /* "DLA/utils.pyx":153
+  /* "utils.pyx":153
  * ):
  *     cdef double time = 2.0
  *     cdef list sub_planes = getattr(plane, '_sub_planes')             # <<<<<<<<<<<<<<
@@ -4649,7 +4649,7 @@ static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plan
   __pyx_v_sub_planes = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "DLA/utils.pyx":159
+  /* "utils.pyx":159
  *     cdef double[:, ::1] tmp_2
  *     cdef object sub_plane
  *     plane_size /= 2             # <<<<<<<<<<<<<<
@@ -4658,7 +4658,7 @@ static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plan
  */
   __pyx_v_plane_size = (__pyx_v_plane_size / 2.0);
 
-  /* "DLA/utils.pyx":161
+  /* "utils.pyx":161
  *     plane_size /= 2
  * 
  *     for i in range(4):             # <<<<<<<<<<<<<<
@@ -4668,7 +4668,7 @@ static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plan
   for (__pyx_t_2 = 0; __pyx_t_2 < 4; __pyx_t_2+=1) {
     __pyx_v_i = __pyx_t_2;
 
-    /* "DLA/utils.pyx":162
+    /* "utils.pyx":162
  * 
  *     for i in range(4):
  *         sub_plane = sub_planes[i]             # <<<<<<<<<<<<<<
@@ -4684,7 +4684,7 @@ static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plan
     __Pyx_XDECREF_SET(__pyx_v_sub_plane, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "DLA/utils.pyx":164
+    /* "utils.pyx":164
  *         sub_plane = sub_planes[i]
  * 
  *         if sub_plane is None:             # <<<<<<<<<<<<<<
@@ -4695,7 +4695,7 @@ static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plan
     __pyx_t_4 = (__pyx_t_3 != 0);
     if (__pyx_t_4) {
 
-      /* "DLA/utils.pyx":165
+      /* "utils.pyx":165
  * 
  *         if sub_plane is None:
  *             continue             # <<<<<<<<<<<<<<
@@ -4704,7 +4704,7 @@ static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plan
  */
       goto __pyx_L3_continue;
 
-      /* "DLA/utils.pyx":164
+      /* "utils.pyx":164
  *         sub_plane = sub_planes[i]
  * 
  *         if sub_plane is None:             # <<<<<<<<<<<<<<
@@ -4713,30 +4713,30 @@ static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plan
  */
     }
 
-    /* "DLA/utils.pyx":167
+    /* "utils.pyx":167
  *             continue
  * 
  *         tmp = _one_subchunk_coords(start_pos, plane_size, i)             # <<<<<<<<<<<<<<
  *         if circle_square_collision(tmp, area_check_center, plane_size, area_check_radius):
  * 
  */
-    __pyx_t_5 = __pyx_f_3DLA_5utils__one_subchunk_coords(__pyx_v_start_pos, __pyx_v_plane_size, __pyx_v_i); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 167, __pyx_L1_error)
+    __pyx_t_5 = __pyx_f_5utils__one_subchunk_coords(__pyx_v_start_pos, __pyx_v_plane_size, __pyx_v_i); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 167, __pyx_L1_error)
     __PYX_XDEC_MEMVIEW(&__pyx_v_tmp, 1);
     __pyx_v_tmp = __pyx_t_5;
     __pyx_t_5.memview = NULL;
     __pyx_t_5.data = NULL;
 
-    /* "DLA/utils.pyx":168
+    /* "utils.pyx":168
  * 
  *         tmp = _one_subchunk_coords(start_pos, plane_size, i)
  *         if circle_square_collision(tmp, area_check_center, plane_size, area_check_radius):             # <<<<<<<<<<<<<<
  * 
  *             if plane_size == particle_plane_size:
  */
-    __pyx_t_4 = (__pyx_f_3DLA_5utils_circle_square_collision(__pyx_v_tmp, __pyx_v_area_check_center, __pyx_v_plane_size, __pyx_v_area_check_radius) != 0);
+    __pyx_t_4 = (__pyx_f_5utils_circle_square_collision(__pyx_v_tmp, __pyx_v_area_check_center, __pyx_v_plane_size, __pyx_v_area_check_radius) != 0);
     if (__pyx_t_4) {
 
-      /* "DLA/utils.pyx":170
+      /* "utils.pyx":170
  *         if circle_square_collision(tmp, area_check_center, plane_size, area_check_radius):
  * 
  *             if plane_size == particle_plane_size:             # <<<<<<<<<<<<<<
@@ -4746,7 +4746,7 @@ static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plan
       __pyx_t_4 = ((__pyx_v_plane_size == __pyx_v_particle_plane_size) != 0);
       if (__pyx_t_4) {
 
-        /* "DLA/utils.pyx":171
+        /* "utils.pyx":171
  * 
  *             if plane_size == particle_plane_size:
  *                 tmp_1 = getattr(sub_plane, 'parts')             # <<<<<<<<<<<<<<
@@ -4762,7 +4762,7 @@ static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plan
         __pyx_t_6.memview = NULL;
         __pyx_t_6.data = NULL;
 
-        /* "DLA/utils.pyx":172
+        /* "utils.pyx":172
  *             if plane_size == particle_plane_size:
  *                 tmp_1 = getattr(sub_plane, 'parts')
  *                 k = tmp_1.shape[0]             # <<<<<<<<<<<<<<
@@ -4771,7 +4771,7 @@ static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plan
  */
         __pyx_v_k = (__pyx_v_tmp_1.shape[0]);
 
-        /* "DLA/utils.pyx":173
+        /* "utils.pyx":173
  *                 tmp_1 = getattr(sub_plane, 'parts')
  *                 k = tmp_1.shape[0]
  *                 tmp_2 = cvarray(shape=(k, 2), itemsize=sizeof(double), format='d')             # <<<<<<<<<<<<<<
@@ -4807,7 +4807,7 @@ static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plan
         __pyx_t_9.memview = NULL;
         __pyx_t_9.data = NULL;
 
-        /* "DLA/utils.pyx":175
+        /* "utils.pyx":175
  *                 tmp_2 = cvarray(shape=(k, 2), itemsize=sizeof(double), format='d')
  * 
  *                 for j in range(k):             # <<<<<<<<<<<<<<
@@ -4819,7 +4819,7 @@ static double __pyx_f_3DLA_5utils__new_get_collision_time(PyObject *__pyx_v_plan
         for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
           __pyx_v_j = __pyx_t_12;
 
-          /* "DLA/utils.pyx":176
+          /* "utils.pyx":176
  * 
  *                 for j in range(k):
  *                     tmp_2[j] = stuck_points[tmp_1[j]]             # <<<<<<<<<<<<<<
@@ -4862,14 +4862,14 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_14, 1, 1, 0) < 0)
           __pyx_t_5.data = NULL;
         }
 
-        /* "DLA/utils.pyx":178
+        /* "utils.pyx":178
  *                     tmp_2[j] = stuck_points[tmp_1[j]]
  * 
  *                 time = min(time, get_collision_time(             # <<<<<<<<<<<<<<
  *                     tmp_2,
  *                     moving_part,
  */
-        __pyx_t_15 = __pyx_f_3DLA_5utils_get_collision_time(__pyx_v_tmp_2, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius, 0);
+        __pyx_t_15 = __pyx_f_5utils_get_collision_time(__pyx_v_tmp_2, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius, 0);
         __pyx_t_16 = __pyx_v_time;
         if (((__pyx_t_15 < __pyx_t_16) != 0)) {
           __pyx_t_17 = __pyx_t_15;
@@ -4878,7 +4878,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_14, 1, 1, 0) < 0)
         }
         __pyx_v_time = __pyx_t_17;
 
-        /* "DLA/utils.pyx":170
+        /* "utils.pyx":170
  *         if circle_square_collision(tmp, area_check_center, plane_size, area_check_radius):
  * 
  *             if plane_size == particle_plane_size:             # <<<<<<<<<<<<<<
@@ -4888,7 +4888,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_14, 1, 1, 0) < 0)
         goto __pyx_L7;
       }
 
-      /* "DLA/utils.pyx":185
+      /* "utils.pyx":185
  *                 ))
  *             else:
  *                 time = min(time, _new_get_collision_time(             # <<<<<<<<<<<<<<
@@ -4897,16 +4897,16 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_14, 1, 1, 0) < 0)
  */
       /*else*/ {
 
-        /* "DLA/utils.pyx":195
+        /* "utils.pyx":195
  *                     radius,
  *                     area_check_center,
  *                     area_check_radius             # <<<<<<<<<<<<<<
  *                 ))
  * 
  */
-        __pyx_t_17 = __pyx_f_3DLA_5utils__new_get_collision_time(__pyx_v_sub_plane, __pyx_v_particle_plane_size, __pyx_v_tmp, __pyx_v_plane_size, __pyx_v_stuck_points, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius, __pyx_v_area_check_center, __pyx_v_area_check_radius);
+        __pyx_t_17 = __pyx_f_5utils__new_get_collision_time(__pyx_v_sub_plane, __pyx_v_particle_plane_size, __pyx_v_tmp, __pyx_v_plane_size, __pyx_v_stuck_points, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius, __pyx_v_area_check_center, __pyx_v_area_check_radius);
 
-        /* "DLA/utils.pyx":185
+        /* "utils.pyx":185
  *                 ))
  *             else:
  *                 time = min(time, _new_get_collision_time(             # <<<<<<<<<<<<<<
@@ -4923,7 +4923,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_14, 1, 1, 0) < 0)
       }
       __pyx_L7:;
 
-      /* "DLA/utils.pyx":168
+      /* "utils.pyx":168
  * 
  *         tmp = _one_subchunk_coords(start_pos, plane_size, i)
  *         if circle_square_collision(tmp, area_check_center, plane_size, area_check_radius):             # <<<<<<<<<<<<<<
@@ -4934,7 +4934,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_14, 1, 1, 0) < 0)
     __pyx_L3_continue:;
   }
 
-  /* "DLA/utils.pyx":198
+  /* "utils.pyx":198
  *                 ))
  * 
  *     return time             # <<<<<<<<<<<<<<
@@ -4944,7 +4944,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_14, 1, 1, 0) < 0)
   __pyx_r = __pyx_v_time;
   goto __pyx_L0;
 
-  /* "DLA/utils.pyx":140
+  /* "utils.pyx":140
  * 
  * 
  * cdef double _new_get_collision_time(             # <<<<<<<<<<<<<<
@@ -4961,7 +4961,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_14, 1, 1, 0) < 0)
   __Pyx_XDECREF(__pyx_t_8);
   __PYX_XDEC_MEMVIEW(&__pyx_t_9, 1);
   __PYX_XDEC_MEMVIEW(&__pyx_t_14, 1);
-  __Pyx_WriteUnraisable("DLA.utils._new_get_collision_time", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __Pyx_WriteUnraisable("utils._new_get_collision_time", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_sub_planes);
@@ -4973,7 +4973,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_14, 1, 1, 0) < 0)
   return __pyx_r;
 }
 
-/* "DLA/utils.pyx":202
+/* "utils.pyx":202
  * 
  * @cython.cdivision(True)
  * cpdef double new_get_collision_time(object plane, double particle_plane_size, double[::1] moving_part, double[::1] move_vec, double radius):             # <<<<<<<<<<<<<<
@@ -4981,8 +4981,8 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_5, __pyx_t_14, 1, 1, 0) < 0)
  *     cdef double area_check_radius = sqrt(_dot_self(move_vec)) / 2 + 1.5 * radius
  */
 
-static PyObject *__pyx_pw_3DLA_5utils_11new_get_collision_time(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static double __pyx_f_3DLA_5utils_new_get_collision_time(PyObject *__pyx_v_plane, double __pyx_v_particle_plane_size, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius, CYTHON_UNUSED int __pyx_skip_dispatch) {
+static PyObject *__pyx_pw_5utils_11new_get_collision_time(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static double __pyx_f_5utils_new_get_collision_time(PyObject *__pyx_v_plane, double __pyx_v_particle_plane_size, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius, CYTHON_UNUSED int __pyx_skip_dispatch) {
   __Pyx_memviewslice __pyx_v_area_check_center = { 0, 0, { 0 }, { 0 }, { 0 } };
   double __pyx_v_area_check_radius;
   __Pyx_memviewslice __pyx_v_start_pos = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -5002,7 +5002,7 @@ static double __pyx_f_3DLA_5utils_new_get_collision_time(PyObject *__pyx_v_plane
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("new_get_collision_time", 0);
 
-  /* "DLA/utils.pyx":203
+  /* "utils.pyx":203
  * @cython.cdivision(True)
  * cpdef double new_get_collision_time(object plane, double particle_plane_size, double[::1] moving_part, double[::1] move_vec, double radius):
  *     cdef double[::1] area_check_center = moving_part.copy()             # <<<<<<<<<<<<<<
@@ -5014,16 +5014,16 @@ static double __pyx_f_3DLA_5utils_new_get_collision_time(PyObject *__pyx_v_plane
   __pyx_t_1.memview = NULL;
   __pyx_t_1.data = NULL;
 
-  /* "DLA/utils.pyx":204
+  /* "utils.pyx":204
  * cpdef double new_get_collision_time(object plane, double particle_plane_size, double[::1] moving_part, double[::1] move_vec, double radius):
  *     cdef double[::1] area_check_center = moving_part.copy()
  *     cdef double area_check_radius = sqrt(_dot_self(move_vec)) / 2 + 1.5 * radius             # <<<<<<<<<<<<<<
  *     cdef double[::1] start_pos = getattr(plane, 'start_pos')
  *     cdef double plane_size = getattr(plane, 'size')
  */
-  __pyx_v_area_check_radius = ((sqrt(__pyx_f_3DLA_5utils__dot_self(__pyx_v_move_vec)) / 2.0) + (1.5 * __pyx_v_radius));
+  __pyx_v_area_check_radius = ((sqrt(__pyx_f_5utils__dot_self(__pyx_v_move_vec)) / 2.0) + (1.5 * __pyx_v_radius));
 
-  /* "DLA/utils.pyx":205
+  /* "utils.pyx":205
  *     cdef double[::1] area_check_center = moving_part.copy()
  *     cdef double area_check_radius = sqrt(_dot_self(move_vec)) / 2 + 1.5 * radius
  *     cdef double[::1] start_pos = getattr(plane, 'start_pos')             # <<<<<<<<<<<<<<
@@ -5038,7 +5038,7 @@ static double __pyx_f_3DLA_5utils_new_get_collision_time(PyObject *__pyx_v_plane
   __pyx_t_1.memview = NULL;
   __pyx_t_1.data = NULL;
 
-  /* "DLA/utils.pyx":206
+  /* "utils.pyx":206
  *     cdef double area_check_radius = sqrt(_dot_self(move_vec)) / 2 + 1.5 * radius
  *     cdef double[::1] start_pos = getattr(plane, 'start_pos')
  *     cdef double plane_size = getattr(plane, 'size')             # <<<<<<<<<<<<<<
@@ -5051,7 +5051,7 @@ static double __pyx_f_3DLA_5utils_new_get_collision_time(PyObject *__pyx_v_plane
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_plane_size = __pyx_t_3;
 
-  /* "DLA/utils.pyx":207
+  /* "utils.pyx":207
  *     cdef double[::1] start_pos = getattr(plane, 'start_pos')
  *     cdef double plane_size = getattr(plane, 'size')
  *     cdef double[:, ::1] stuck_points = getattr(getattr(plane, '_stuck_points'), 'view')             # <<<<<<<<<<<<<<
@@ -5069,7 +5069,7 @@ static double __pyx_f_3DLA_5utils_new_get_collision_time(PyObject *__pyx_v_plane
   __pyx_t_5.memview = NULL;
   __pyx_t_5.data = NULL;
 
-  /* "DLA/utils.pyx":208
+  /* "utils.pyx":208
  *     cdef double plane_size = getattr(plane, 'size')
  *     cdef double[:, ::1] stuck_points = getattr(getattr(plane, '_stuck_points'), 'view')
  *     area_check_center[0] += move_vec[0] / 2             # <<<<<<<<<<<<<<
@@ -5080,7 +5080,7 @@ static double __pyx_f_3DLA_5utils_new_get_collision_time(PyObject *__pyx_v_plane
   __pyx_t_7 = 0;
   *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_area_check_center.data) + __pyx_t_7)) )) += ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_move_vec.data) + __pyx_t_6)) ))) / 2.0);
 
-  /* "DLA/utils.pyx":209
+  /* "utils.pyx":209
  *     cdef double[:, ::1] stuck_points = getattr(getattr(plane, '_stuck_points'), 'view')
  *     area_check_center[0] += move_vec[0] / 2
  *     area_check_center[1] += move_vec[1] / 2             # <<<<<<<<<<<<<<
@@ -5091,15 +5091,15 @@ static double __pyx_f_3DLA_5utils_new_get_collision_time(PyObject *__pyx_v_plane
   __pyx_t_7 = 1;
   *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_area_check_center.data) + __pyx_t_7)) )) += ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_move_vec.data) + __pyx_t_6)) ))) / 2.0);
 
-  /* "DLA/utils.pyx":211
+  /* "utils.pyx":211
  *     area_check_center[1] += move_vec[1] / 2
  * 
  *     return _new_get_collision_time(plane, particle_plane_size, start_pos, plane_size, stuck_points, moving_part, move_vec, radius, area_check_center, area_check_radius)             # <<<<<<<<<<<<<<
  */
-  __pyx_r = __pyx_f_3DLA_5utils__new_get_collision_time(__pyx_v_plane, __pyx_v_particle_plane_size, __pyx_v_start_pos, __pyx_v_plane_size, __pyx_v_stuck_points, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius, __pyx_v_area_check_center, __pyx_v_area_check_radius);
+  __pyx_r = __pyx_f_5utils__new_get_collision_time(__pyx_v_plane, __pyx_v_particle_plane_size, __pyx_v_start_pos, __pyx_v_plane_size, __pyx_v_stuck_points, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius, __pyx_v_area_check_center, __pyx_v_area_check_radius);
   goto __pyx_L0;
 
-  /* "DLA/utils.pyx":202
+  /* "utils.pyx":202
  * 
  * @cython.cdivision(True)
  * cpdef double new_get_collision_time(object plane, double particle_plane_size, double[::1] moving_part, double[::1] move_vec, double radius):             # <<<<<<<<<<<<<<
@@ -5113,7 +5113,7 @@ static double __pyx_f_3DLA_5utils_new_get_collision_time(PyObject *__pyx_v_plane
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_4);
   __PYX_XDEC_MEMVIEW(&__pyx_t_5, 1);
-  __Pyx_WriteUnraisable("DLA.utils.new_get_collision_time", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __Pyx_WriteUnraisable("utils.new_get_collision_time", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_r = 0;
   __pyx_L0:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_area_check_center, 1);
@@ -5124,8 +5124,8 @@ static double __pyx_f_3DLA_5utils_new_get_collision_time(PyObject *__pyx_v_plane
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3DLA_5utils_11new_get_collision_time(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_3DLA_5utils_11new_get_collision_time(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_5utils_11new_get_collision_time(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_5utils_11new_get_collision_time(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_plane = 0;
   double __pyx_v_particle_plane_size;
   __Pyx_memviewslice __pyx_v_moving_part = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -5209,18 +5209,18 @@ static PyObject *__pyx_pw_3DLA_5utils_11new_get_collision_time(PyObject *__pyx_s
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("new_get_collision_time", 1, 5, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 202, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("DLA.utils.new_get_collision_time", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils.new_get_collision_time", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3DLA_5utils_10new_get_collision_time(__pyx_self, __pyx_v_plane, __pyx_v_particle_plane_size, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius);
+  __pyx_r = __pyx_pf_5utils_10new_get_collision_time(__pyx_self, __pyx_v_plane, __pyx_v_particle_plane_size, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3DLA_5utils_10new_get_collision_time(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_plane, double __pyx_v_particle_plane_size, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius) {
+static PyObject *__pyx_pf_5utils_10new_get_collision_time(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_plane, double __pyx_v_particle_plane_size, __Pyx_memviewslice __pyx_v_moving_part, __Pyx_memviewslice __pyx_v_move_vec, double __pyx_v_radius) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -5231,7 +5231,7 @@ static PyObject *__pyx_pf_3DLA_5utils_10new_get_collision_time(CYTHON_UNUSED PyO
   __Pyx_XDECREF(__pyx_r);
   if (unlikely(!__pyx_v_moving_part.memview)) { __Pyx_RaiseUnboundLocalError("moving_part"); __PYX_ERR(0, 202, __pyx_L1_error) }
   if (unlikely(!__pyx_v_move_vec.memview)) { __Pyx_RaiseUnboundLocalError("move_vec"); __PYX_ERR(0, 202, __pyx_L1_error) }
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_3DLA_5utils_new_get_collision_time(__pyx_v_plane, __pyx_v_particle_plane_size, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 202, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_5utils_new_get_collision_time(__pyx_v_plane, __pyx_v_particle_plane_size, __pyx_v_moving_part, __pyx_v_move_vec, __pyx_v_radius, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 202, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5240,7 +5240,7 @@ static PyObject *__pyx_pf_3DLA_5utils_10new_get_collision_time(CYTHON_UNUSED PyO
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("DLA.utils.new_get_collision_time", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("utils.new_get_collision_time", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_moving_part, 1);
@@ -20059,7 +20059,7 @@ static PyBufferProcs __pyx_tp_as_buffer_array = {
 
 static PyTypeObject __pyx_type___pyx_array = {
   PyVarObject_HEAD_INIT(0, 0)
-  "DLA.utils.array", /*tp_name*/
+  "utils.array", /*tp_name*/
   sizeof(struct __pyx_array_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_array, /*tp_dealloc*/
@@ -20178,7 +20178,7 @@ static PyMethodDef __pyx_methods_Enum[] = {
 
 static PyTypeObject __pyx_type___pyx_MemviewEnum = {
   PyVarObject_HEAD_INIT(0, 0)
-  "DLA.utils.Enum", /*tp_name*/
+  "utils.Enum", /*tp_name*/
   sizeof(struct __pyx_MemviewEnum_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_Enum, /*tp_dealloc*/
@@ -20439,7 +20439,7 @@ static PyBufferProcs __pyx_tp_as_buffer_memoryview = {
 
 static PyTypeObject __pyx_type___pyx_memoryview = {
   PyVarObject_HEAD_INIT(0, 0)
-  "DLA.utils.memoryview", /*tp_name*/
+  "utils.memoryview", /*tp_name*/
   sizeof(struct __pyx_memoryview_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_memoryview, /*tp_dealloc*/
@@ -20577,7 +20577,7 @@ static struct PyGetSetDef __pyx_getsets__memoryviewslice[] = {
 
 static PyTypeObject __pyx_type___pyx_memoryviewslice = {
   PyVarObject_HEAD_INIT(0, 0)
-  "DLA.utils._memoryviewslice", /*tp_name*/
+  "utils._memoryviewslice", /*tp_name*/
   sizeof(struct __pyx_memoryviewslice_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc__memoryviewslice, /*tp_dealloc*/
@@ -20653,12 +20653,12 @@ static PyTypeObject __pyx_type___pyx_memoryviewslice = {
 };
 
 static PyMethodDef __pyx_methods[] = {
-  {"one_subchunk_coords", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3DLA_5utils_1one_subchunk_coords, METH_VARARGS|METH_KEYWORDS, 0},
-  {"circle_in_subchunks", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3DLA_5utils_3circle_in_subchunks, METH_VARARGS|METH_KEYWORDS, 0},
-  {"dot_self", (PyCFunction)__pyx_pw_3DLA_5utils_5dot_self, METH_O, 0},
-  {"is_in_circle", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3DLA_5utils_7is_in_circle, METH_VARARGS|METH_KEYWORDS, 0},
-  {"get_collision_time", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3DLA_5utils_9get_collision_time, METH_VARARGS|METH_KEYWORDS, 0},
-  {"new_get_collision_time", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_3DLA_5utils_11new_get_collision_time, METH_VARARGS|METH_KEYWORDS, 0},
+  {"one_subchunk_coords", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_5utils_1one_subchunk_coords, METH_VARARGS|METH_KEYWORDS, 0},
+  {"circle_in_subchunks", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_5utils_3circle_in_subchunks, METH_VARARGS|METH_KEYWORDS, 0},
+  {"dot_self", (PyCFunction)__pyx_pw_5utils_5dot_self, METH_O, 0},
+  {"is_in_circle", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_5utils_7is_in_circle, METH_VARARGS|METH_KEYWORDS, 0},
+  {"get_collision_time", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_5utils_9get_collision_time, METH_VARARGS|METH_KEYWORDS, 0},
+  {"new_get_collision_time", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_5utils_11new_get_collision_time, METH_VARARGS|METH_KEYWORDS, 0},
   {0, 0, 0, 0}
 };
 
@@ -20835,7 +20835,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "DLA/utils.pyx":54
+  /* "utils.pyx":54
  * 
  * cdef double[:, ::1] _subchunk_coords(double[::1] coords, double size):
  *     cdef double[:, ::1] out = cvarray(shape=(4, 2), itemsize=sizeof(double), format='d')             # <<<<<<<<<<<<<<
@@ -21512,14 +21512,14 @@ if (!__Pyx_RefNanny) {
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_DLA__utils) {
+  if (__pyx_module_is_main_utils) {
     if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name_2, __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "DLA.utils")) {
-      if (unlikely(PyDict_SetItemString(modules, "DLA.utils", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "utils")) {
+      if (unlikely(PyDict_SetItemString(modules, "utils", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -21540,7 +21540,7 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "DLA/utils.pyx":6
+  /* "utils.pyx":6
  * #cython: nonecheck=False
  * 
  * import numpy as np             # <<<<<<<<<<<<<<
@@ -21552,7 +21552,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 6, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "DLA/utils.pyx":14
+  /* "utils.pyx":14
  * from cython.view cimport array as cvarray
  * 
  * import array             # <<<<<<<<<<<<<<
@@ -21564,7 +21564,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_array, __pyx_t_1) < 0) __PYX_ERR(0, 14, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "DLA/utils.pyx":1
+  /* "utils.pyx":1
  * #cython: language_level=3             # <<<<<<<<<<<<<<
  * #cython: wraparound=False
  * #cython: boundscheck=False
@@ -21734,11 +21734,11 @@ if (!__Pyx_RefNanny) {
   __Pyx_XDECREF(__pyx_t_1);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init DLA.utils", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init utils", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     Py_CLEAR(__pyx_m);
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init DLA.utils");
+    PyErr_SetString(PyExc_ImportError, "init utils");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();

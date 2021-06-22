@@ -474,7 +474,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.10"
-content-hash = "eb2b5ddcaf84b14df9a1f845078133b6bbe4653288b9e756936c3cfef72b4763"
+content-hash = "2fcbc79bdc3f99d1c583d6f999ab7750b3cac8faddc14ff7b8b02417b9fd0b70"
 
 [metadata.files]
 appnope = [
