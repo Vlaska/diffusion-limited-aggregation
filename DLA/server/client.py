@@ -66,6 +66,7 @@ async def run_work() -> bool:
     start_time = time.time()
 
     out_file = await execute_work(config)
+    out_file_encoded = out_file.encode('utf-8')
 
     delta_time = time.time() - start_time
 
@@ -78,8 +79,8 @@ async def run_work() -> bool:
             writer.close()
             return False
 
-        writer.write(len(out_file).to_bytes(1, 'big'))
-        writer.write(out_file.encode('utf-8'))
+        writer.write(len(out_file_encoded).to_bytes(1, 'big'))
+        writer.write(out_file_encoded)
 
         writer.write(Path(out_file).absolute().read_bytes())
         await writer.drain()
