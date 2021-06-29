@@ -32,7 +32,7 @@ class Handler:
 
     async def send_config(self, conn_data: ConnData) -> None:
         config = CONFIG_TEMPLATE.copy()
-        config['memory'] = conn_data.beta
+        config['simulation']['memory'] = conn_data.beta
 
         config_dump = cast(str, yaml.dump(config)).encode('utf-8')
         await conn_data.write(

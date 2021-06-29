@@ -6,20 +6,26 @@ server:
   wait_for: 600
 
 simulation:
-  window_size: 512
-  particle_radius: 3.0
-  num_of_particles: 1000
+  display:
+    fps: 120
+    window_size: 512
+    use_pygame: false
+    print_results: false
 
-  fps: 120
-  min_box_size: 0.015625
+  particles:
+    radius: 3.0
+    num: 1000
+    start_pos: !!python/tuple [256, 256]
 
-  start_pos: !!python/tuple [256, 256]
-  push_out_tries: 10
-  use_pygame: false
-  print_results: false
-  max_steps: 200
+  system:
+    push_out_tries: 10
+    max_steps: 200
+    # remove NaN's from walking population after:
+    regen_after_updates: 200
 
-  # remove NaN's from walking population after:
-  regen_after_updates: 200
-  step_strength: 2
-  particle_plane_size: 32
+  planes:
+    min_box_size: 0.015625
+    particle_collision_plane_size: 32
+
+  simulation:
+    step_strength: 2
