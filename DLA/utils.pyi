@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import array
 from typing import List, Tuple
 
 import numpy as np
@@ -32,3 +33,10 @@ def get_collision_time(
     move_vec: np.ndarray,
     radius: float
 ) -> float: ...
+
+
+def check_particle_outside_plane(
+    particle: np.ndarray,
+    radius: float,
+    plane_size: float
+) -> array.array[int]: ...
