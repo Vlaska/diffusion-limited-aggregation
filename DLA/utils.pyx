@@ -95,6 +95,20 @@ cpdef bint is_in_circle(double[::1] pos, double[::1] c_pos, double size, double 
             return False
     return True
 
+
+cpdef array.array check_particle_outside_plane(double[::1] particle, double radius, double plane_size):
+    cdef array.array out = array.array('B', (0, 0, 0, 0, 0, 0, 0, 0))
+    cdef double[::1] tmp = particle.copy()
+    cdef double tmp2 = 2.2 * radius
+    tmp[0] = tmp2
+    tmp[1] = tmp2
+    tmp2 = plane_size - tmp2
+
+    if not circle_square_collision(tmp, particle, tmp2, radius):
+        pass
+
+    return out
+
 @cython.cdivision(True)
 cdef double calc_collision_time(double[::1] static_part, double[::1] moving_part, double[::1] move_vec, double radius):
     cdef double a = _dot_self(move_vec)
