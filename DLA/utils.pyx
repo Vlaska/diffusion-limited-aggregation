@@ -18,6 +18,18 @@ cdef extern from "math.h":
     double sqrt(double m)
 
 
+cdef inline double dot(double[::1] a, double[::1] b):
+    return a[0] * b[0] + a[1] * b[1]
+
+
+cdef double _dot_self(double[::1] a):
+    return a[0] * a[0] + a[1] * a[1]
+
+
+cpdef double dot_self(double[::1] a):
+    return _dot_self(a)
+
+
 cdef bint circle_square_collision(double[::1] s_pos, double[::1] c_pos, double s_size, double radius):
     cdef double tX = c_pos[0], tY = c_pos[1]
     cdef double dX, dY
@@ -72,18 +84,6 @@ cpdef list circle_in_subchunks(double[::1] start, double[::1] circle_pos, double
     return out
 
 
-cdef inline double dot(double[::1] a, double[::1] b):
-    return a[0] * b[0] + a[1] * b[1]
-
-
-cdef double _dot_self(double[::1] a):
-    return a[0] * a[0] + a[1] * a[1]
-
-
-cpdef double dot_self(double[::1] a):
-    return _dot_self(a)
-
-
 cpdef bint is_in_circle(double[::1] pos, double[::1] c_pos, double size, double radius):
     cdef double[::1] tmp
     cdef double r_sqruared = radius * radius
@@ -96,7 +96,7 @@ cpdef bint is_in_circle(double[::1] pos, double[::1] c_pos, double size, double 
     return True
 
 @cython.cdivision(True)
-cdef double _get_collision_time(double[::1] static_part, double[::1] moving_part, double[::1] move_vec, double radius):
+cdef double calc_collision_time(double[::1] static_part, double[::1] moving_part, double[::1] move_vec, double radius):
     cdef double a = _dot_self(move_vec)
     cdef double tmp_1 = moving_part[0] - static_part[0]
     cdef double tmp_2 = moving_part[1] - static_part[1]
@@ -118,7 +118,7 @@ cdef double _get_collision_time(double[::1] static_part, double[::1] moving_part
     return min(o1, o2)
 
 
-cpdef double get_collision_time(double[:, ::1] static_parts, double[::1] moving_part, double[::1] move_vec, double radius):
+cdef double check_collision_times(double[:, ::1] static_parts, double[::1] moving_part, double[::1] move_vec, double radius):
     cdef double out_time = 2
     cdef Py_ssize_t i
     cdef Py_ssize_t size = static_parts.shape[0]
@@ -130,14 +130,14 @@ cpdef double get_collision_time(double[:, ::1] static_parts, double[::1] moving_
     for i in range(size):
         tmp_1 = ((moving_part[0] - static_parts[i][0]) ** 2 + (moving_part[1] - static_parts[i][1]) ** 2)
         if tmp_1 <= move_range:
-            tmp_2 = _get_collision_time(static_parts[i], moving_part, move_vec, radius)
+            tmp_2 = calc_collision_time(static_parts[i], moving_part, move_vec, radius)
             if tmp_2 < 0 and tmp_1 >= r2:
                 continue
             out_time = min(tmp_2, out_time)
     return out_time
 
 
-cdef double _new_get_collision_time(
+cdef double _get_collision_time(
     object plane,
     double particle_plane_size,
     double[::1] start_pos,
@@ -175,14 +175,14 @@ cdef double _new_get_collision_time(
                 for j in range(k):
                     tmp_2[j] = stuck_points[tmp_1[j]]
 
-                time = min(time, get_collision_time(
+                time = min(time, check_collision_times(
                     tmp_2,
                     moving_part,
                     move_vec,
                     radius
                 ))
             else:
-                time = min(time, _new_get_collision_time(
+                time = min(time, _get_collision_time(
                     sub_plane,
                     particle_plane_size,
                     tmp,
@@ -199,7 +199,7 @@ cdef double _new_get_collision_time(
 
 
 @cython.cdivision(True)
-cpdef double new_get_collision_time(object plane, double particle_plane_size, double[::1] moving_part, double[::1] move_vec, double radius):
+cpdef double get_collision_time(object plane, double particle_plane_size, double[::1] moving_part, double[::1] move_vec, double radius):
     cdef double[::1] area_check_center = moving_part.copy()
     cdef double area_check_radius = sqrt(_dot_self(move_vec)) / 2 + 1.5 * radius
     cdef double[::1] start_pos = getattr(plane, 'start_pos')
@@ -208,4 +208,4 @@ cpdef double new_get_collision_time(object plane, double particle_plane_size, do
     area_check_center[0] += move_vec[0] / 2
     area_check_center[1] += move_vec[1] / 2
 
-    return _new_get_collision_time(plane, particle_plane_size, start_pos, plane_size, stuck_points, moving_part, move_vec, radius, area_check_center, area_check_radius)
+    return _get_collision_time(plane, particle_plane_size, start_pos, plane_size, stuck_points, moving_part, move_vec, radius, area_check_center, area_check_radius)

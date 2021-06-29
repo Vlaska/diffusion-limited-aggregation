@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Final, Iterator
+from typing import TYPE_CHECKING, Iterator
 
 import numpy as np
 
 from DLA import GREEN, RGB, Vec, Vec2
-from DLA.config import (NUM_OF_PARTICLES, PARTICLE_PLANE_SIZE, RADIUS,
-                        RADIUS_CHECK, WINDOW_CENTER)
-from DLA.utils import dot_self, new_get_collision_time
+from DLA.config import NUM_OF_PARTICLES, PARTICLE_PLANE_SIZE, RADIUS
+from DLA.utils import get_collision_time
 
 from .walker import Walker
 
@@ -17,13 +16,9 @@ if TYPE_CHECKING:
     from .walker_population import WalkerPopulation
 
 
-SQUARED_PARTICLE_DISTANCE: Final[float] = 4 * RADIUS * RADIUS
-
-
 class StuckWalkers(Walker):
     color: RGB = GREEN
     _plane: BasePlane
-    radius: float
 
     def __init__(
         self,
@@ -35,7 +30,6 @@ class StuckWalkers(Walker):
         self.pos[0] = start_pos
         self.filled = 1
         self._plane = plane
-        self.raw_radius = 0
 
     def __iter__(self) -> Iterator[np.ndarray]:
         return iter(self.pos[:self.filled])
@@ -44,17 +38,8 @@ class StuckWalkers(Walker):
     def view(self) -> np.ndarray:
         return self.pos[:self.filled]
 
-    @property
-    def raw_radius(self):
-        return self._raw_radius
-
-    @raw_radius.setter
-    def raw_radius(self, value: float) -> None:
-        self._raw_radius = value
-        self.radius = (value + RADIUS_CHECK) ** 2
-
     def does_collide(self, point: Vec, move_vec: Vec) -> float:
-        return new_get_collision_time(
+        return get_collision_time(
             self._plane, PARTICLE_PLANE_SIZE, point, move_vec, RADIUS
         )
 
@@ -62,9 +47,6 @@ class StuckWalkers(Walker):
         self.pos[self.filled] = new_point
         self._plane.add_point(self.filled)
         self.filled += 1
-
-        if (dist := dot_self(new_point - WINDOW_CENTER)) > self.raw_radius:
-            self.raw_radius = dist
 
     def is_complete(self) -> bool:
         return self.filled > NUM_OF_PARTICLES

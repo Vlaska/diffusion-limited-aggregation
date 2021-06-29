@@ -27,7 +27,6 @@ if USE_PYGAME or TYPE_CHECKING:
     import pygame.time as time
 
 p = plane.Plane.new()
-random_generator_state = np.random.get_state()
 num_of_iterations = 0
 
 

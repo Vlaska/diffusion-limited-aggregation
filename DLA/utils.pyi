@@ -6,7 +6,6 @@ import numpy as np
 
 from DLA.plane.base_plane import BasePlane
 
-
 def one_subchunk_coords(start: np.ndarray, size: float,
                         idx: int) -> Tuple[float, float]: ...
 
@@ -27,14 +26,6 @@ def is_in_circle(
 
 
 def get_collision_time(
-    static_parts: np.ndarray,
-    moving_part: np.ndarray,
-    move_vec: np.ndarray,
-    radius: float
-) -> float: ...
-
-
-def new_get_collision_time(
     plane: BasePlane,
     particle_plane_size: float,
     moving_part: np.ndarray,

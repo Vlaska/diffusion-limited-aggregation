@@ -37,10 +37,6 @@ RADIUS: Final[float] = config_dict['particle_radius']
 SECOND_MIN_BOX_SIZE: Final[float] = \
     2 ** (np.log2(config_dict['min_box_size']) + 1)
 WINDOW_SIZE: Final[int] = config_dict['window_size']
-WINDOW_CENTER: Final[float] = WINDOW_SIZE // 2
-EPSILON: Final[float] = config_dict['epsilon']
-# + 1 to include radius of single particle
-RADIUS_CHECK: Final[float] = (max(0, config_dict['radius_check']) + 1) * RADIUS
 PUSH_OUT_TRIES: Final[int] = config_dict['push_out_tries']
 REGENERATE_AFTER: Final[int] = config_dict['regen_after_updates']
 ALPHA: Final[float] = config_dict['step_strength']
