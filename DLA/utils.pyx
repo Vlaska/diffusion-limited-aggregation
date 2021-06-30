@@ -97,7 +97,7 @@ cpdef bint is_in_circle(double[::1] pos, double[::1] c_pos, double size, double 
 
 
 cpdef array.array check_particle_outside_plane(double[::1] particle, double radius, double plane_size):
-    cdef array.array out = array.array('B', (0, 0, 0, 0, 0, 0, 0, 0))
+    cdef array.array out = array.array('B', (0, 0, 0, 0, 0, 0, 0, 0, 0))
     cdef double[::1] tmp = particle.copy()
     cdef double[::1] tmp3 = particle.copy()
     cdef double tmp2 = 2.2 * radius
@@ -116,6 +116,7 @@ cpdef array.array check_particle_outside_plane(double[::1] particle, double radi
             tmp3 = _one_subchunk_coords(tmp, plane_size, i)
             if circle_square_collision(tmp3, particle, plane_size, radius):
                 out[idx] = 1
+                out[8] = 1
             idx += 1
         
         tmp[0] = 0
@@ -125,19 +126,21 @@ cpdef array.array check_particle_outside_plane(double[::1] particle, double radi
             tmp3 = _one_subchunk_coords(tmp, plane_size, i)
             if circle_square_collision(tmp3, particle, plane_size, radius):
                 out[idx] = 1
+                out[8] = 1
             idx += 1
 
         tmp3[0] = plane_size
         tmp3[1] = -plane_size
         if circle_square_collision(tmp3, particle, plane_size, radius):
             out[idx] = 1
+            out[8] = 1
         idx += 1
 
         tmp3[0] = -plane_size
         tmp3[1] = plane_size
         if circle_square_collision(tmp3, particle, plane_size, radius):
             out[idx] = 1
-        idx += 1
+            out[8] = 1
 
     return out
 
