@@ -4,7 +4,7 @@ from typing import Dict, List, Type
 
 import numpy as np
 from DLA import Vec, Vec2
-from DLA.config import (NUM_OF_PARTICLES, PARTICLE_PLANE_SIZE,
+from DLA.config import (NUM_OF_PARTICLES, PARTICLE_PLANE_SIZE, RADIUS,
                         SECOND_MIN_BOX_SIZE, STARTING_POS, WINDOW_SIZE)
 from DLA.exceptions import StopSimulation
 from DLA.plane.base_plane import BasePlane
@@ -12,7 +12,7 @@ from DLA.plane.indivisible_plane import IndivisiblePlane
 from DLA.plane.particle_plane import ParticlePlane
 from DLA.plane.plane_fullness import FullablePlane, NotFullablePlane
 from DLA.plane.sub_planes import SubPlane
-from DLA.utils import one_subchunk_coords
+from DLA.utils import one_subchunk_coords, check_particle_outside_plane
 from DLA.walker import StuckWalkers, WalkerPopulation
 
 
@@ -71,6 +71,20 @@ class Plane(NotFullablePlane):
         self._walking_points.update(self._stuck_points)
         if self._stuck_points.is_complete():
             raise StopSimulation
+
+    def add_point(self, point: int) -> None:
+        super().add_point(point)
+        colliding = check_particle_outside_plane(
+            self._stuck_points[point],
+            RADIUS,
+            WINDOW_SIZE
+        )
+        if not colliding[-1]:
+            return
+
+        for neighbour, collides in zip(self.neighbours, colliding):
+            if collides:
+                neighbour.add_point(point)
 
     @classmethod
     def new(cls) -> Plane:
