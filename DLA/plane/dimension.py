@@ -38,6 +38,8 @@ class Dimension(OrderedDict[_KT, _VT]):
 
     def count(self):
         self._count(self.plane)
+        for i in self.plane.neighbours:
+            self._count(i)
 
     def _count(self, plane: BasePlane):
 

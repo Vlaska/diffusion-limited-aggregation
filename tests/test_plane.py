@@ -43,13 +43,23 @@ def test_add_point(monkeypatch: MonkeyPatch) -> None:
 def test_calc_dimension(
     monkeypatch: MonkeyPatch, points: int, results: List[int]
 ) -> None:
+    from DLA.plane import particle_plane
     monkeypatch.setattr(plane, 'WINDOW_SIZE', 128)
     monkeypatch.setattr(plane, 'SECOND_MIN_BOX_SIZE', 1/32)
     monkeypatch.setattr(plane, 'NUM_OF_PARTICLES', 8)
+    monkeypatch.setattr(plane, 'RADIUS', 2)
     monkeypatch.setattr(plane, 'STARTING_POS', (64, 64))
+    monkeypatch.setattr(
+        plane.NeighbouringPlanes,
+        '_size_for_alt_plane_type',
+        1 / 32)
     monkeypatch.setattr(base_plane, 'RADIUS', 2)
     monkeypatch.setattr(dimension, 'MIN_BOX_SIZE', 1/64)
     monkeypatch.setattr(dimension, 'SECOND_MIN_BOX_SIZE', 1/32)
+    monkeypatch.setattr(
+        particle_plane.SubPlaneParticlesAndIndivisible,
+        '_size_for_alt_plane_type',
+        1 / 32)
 
     p = plane.Plane.new()
     stuck_points = p._stuck_points.pos
