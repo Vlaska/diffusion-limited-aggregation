@@ -7,7 +7,7 @@ import numpy as np
 
 from DLA import LIGHT_GRAY, Vec2
 from DLA.config import RADIUS, USE_PYGAME
-from DLA.utils import circle_in_subchunks, is_in_circle, one_subchunk_coords
+from DLA.utils import circle_in_sub_plane, is_in_circle, one_sub_plane_coords
 from DLA.walker import StuckWalkers, WalkerPopulation
 
 if USE_PYGAME or TYPE_CHECKING:
@@ -46,7 +46,7 @@ class BasePlane:
             self.set_full()
             return None
 
-        sub_chunks = circle_in_subchunks(
+        sub_chunks = circle_in_sub_plane(
             self.start_pos, self._stuck_points[point], self.size, RADIUS
         )
 
@@ -58,7 +58,7 @@ class BasePlane:
         for i in chunks:
             if not self._sub_planes[i]:
                 self._sub_planes[i] = self._new_plane_type(
-                    one_subchunk_coords(self.start_pos, self.size, i),
+                    one_sub_plane_coords(self.start_pos, self.size, i),
                     self.size / 2
                 )
 

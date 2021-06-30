@@ -7,11 +7,12 @@ import numpy as np
 
 from DLA.plane.base_plane import BasePlane
 
-def one_subchunk_coords(start: np.ndarray, size: float,
-                        idx: int) -> Tuple[float, float]: ...
+
+def one_sub_plane_coords(sub: np.ndarray, size: float,
+                         idx: int) -> Tuple[float, float]: ...
 
 
-def circle_in_subchunks(start: np.ndarray, circle_pos: np.ndarray,
+def circle_in_sub_plane(sub_plane_coords: np.ndarray, circle_pos: np.ndarray,
                         size: float, radius: float) -> List[int]: ...
 
 

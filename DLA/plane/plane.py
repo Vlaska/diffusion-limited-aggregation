@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Dict, List, Type
 
 import numpy as np
+
 from DLA import Vec, Vec2
 from DLA.config import (NUM_OF_PARTICLES, PARTICLE_PLANE_SIZE, RADIUS,
                         SECOND_MIN_BOX_SIZE, STARTING_POS, WINDOW_SIZE)
@@ -12,7 +13,7 @@ from DLA.plane.indivisible_plane import IndivisiblePlane
 from DLA.plane.particle_plane import ParticlePlane
 from DLA.plane.plane_fullness import FullablePlane, NotFullablePlane
 from DLA.plane.sub_planes import SubPlane
-from DLA.utils import one_subchunk_coords, check_particle_outside_plane
+from DLA.utils import check_particle_outside_plane, one_sub_plane_coords
 from DLA.walker import StuckWalkers, WalkerPopulation
 
 
@@ -51,14 +52,14 @@ class Plane(NotFullablePlane):
         tmp = self.size * 2
         self.neighbours.extend(
             NeighbouringPlanes(
-                one_subchunk_coords(
+                one_sub_plane_coords(
                     np.array((-self.size, -self.size), dtype=np.double), tmp, i
                 ), self.size
             ) for i in range(3)
         )
         self.neighbours.extend(
             NeighbouringPlanes(
-                one_subchunk_coords(np.zeros(2, dtype=np.double), tmp, i),
+                one_sub_plane_coords(np.zeros(2, dtype=np.double), tmp, i),
                 self.size
             ) for i in range(1, 4)
         )

@@ -1,4 +1,4 @@
-from DLA.utils import one_subchunk_coords
+from DLA.utils import one_sub_plane_coords
 import pytest
 import numpy as np
 
@@ -10,5 +10,5 @@ import numpy as np
     [3, (256.0, 256.0)],
 ])
 def test_one_subchunk_coords(idx, result):
-    assert one_subchunk_coords(
+    assert one_sub_plane_coords(
         np.array((0, 0), dtype=np.double), 512, idx) == result

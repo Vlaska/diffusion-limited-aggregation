@@ -30,51 +30,51 @@ cpdef double dot_self(double[::1] a):
     return _dot_self(a)
 
 
-cdef bint circle_square_collision(double[::1] s_pos, double[::1] c_pos, double s_size, double radius):
-    cdef double tX = c_pos[0], tY = c_pos[1]
+cdef bint circle_square_collision(double[::1] square_coords, double[::1] particle_pos, double square_size, double radius):
+    cdef double tX = particle_pos[0], tY = particle_pos[1]
     cdef double dX, dY
 
-    if c_pos[0] < s_pos[0]:
-        tX = s_pos[0]
-    elif c_pos[0] > s_pos[0] + s_size:
-        tX = s_pos[0] + s_size
+    if particle_pos[0] < square_coords[0]:
+        tX = square_coords[0]
+    elif particle_pos[0] > square_coords[0] + square_size:
+        tX = square_coords[0] + square_size
 
-    if c_pos[1] < s_pos[1]:
-        tY = s_pos[1]
-    elif c_pos[1] > s_pos[1] + s_size:
-        tY = s_pos[1] + s_size
+    if particle_pos[1] < square_coords[1]:
+        tY = square_coords[1]
+    elif particle_pos[1] > square_coords[1] + square_size:
+        tY = square_coords[1] + square_size
 
-    dX = c_pos[0] - tX
-    dY = c_pos[1] - tY
+    dX = particle_pos[0] - tX
+    dY = particle_pos[1] - tY
 
     return (dX * dX) + (dY * dY) < radius * radius
 
 
-cdef double[::1] _one_subchunk_coords(double[::1] coords, double size, int idx):
+cdef double[::1] _one_sub_plane_coords(double[::1] coords, double size, int idx):
     cdef double[::1] out = coords.copy()
     out[0] += size * (idx & 0b1)
     out[1] += size * ((idx & 0b10) >> 1)
     return out
 
 
-cpdef (double, double) one_subchunk_coords(double[::1] coords, double size, int idx):
-    cdef double[::1] tmp = _one_subchunk_coords(coords, size / 2, idx)
+cpdef (double, double) one_sub_plane_coords(double[::1] coords, double size, int idx):
+    cdef double[::1] tmp = _one_sub_plane_coords(coords, size / 2, idx)
     return tuple(tmp)
 
 
-cdef double[:, ::1] _subchunk_coords(double[::1] coords, double size):
+cdef double[:, ::1] _sub_plane_coords(double[::1] coords, double size):
     cdef double[:, ::1] out = cvarray(shape=(4, 2), itemsize=sizeof(double), format='d')
     cdef int i
     for i in range(4):
-        out[i] = _one_subchunk_coords(coords, size, i)
+        out[i] = _one_sub_plane_coords(coords, size, i)
     return out
 
 
-cpdef list circle_in_subchunks(double[::1] start, double[::1] circle_pos, double size, double radius):
+cpdef list circle_in_sub_plane(double[::1] sub_plane_coords, double[::1] circle_pos, double size, double radius):
     cdef list out = []
     cdef int idx = 0
     size /= 2
-    cdef double[:, ::1] subchunks = _subchunk_coords(start, size)
+    cdef double[:, ::1] subchunks = _sub_plane_coords(sub_plane_coords, size)
 
     for i in range(4):
         if circle_square_collision(subchunks[i], circle_pos, size, radius):
@@ -84,13 +84,13 @@ cpdef list circle_in_subchunks(double[::1] start, double[::1] circle_pos, double
     return out
 
 
-cpdef bint is_in_circle(double[::1] pos, double[::1] c_pos, double size, double radius):
+cpdef bint is_in_circle(double[::1] pos, double[::1] particle_pos, double size, double radius):
     cdef double[::1] tmp
     cdef double r_sqruared = radius * radius
     for i in range(4):
-        tmp = _one_subchunk_coords(pos, size, i)
-        tmp[0] -= c_pos[0]
-        tmp[1] -= c_pos[1]
+        tmp = _one_sub_plane_coords(pos, size, i)
+        tmp[0] -= particle_pos[0]
+        tmp[1] -= particle_pos[1]
         if _dot_self(tmp) > r_sqruared:
             return False
     return True
@@ -98,47 +98,47 @@ cpdef bint is_in_circle(double[::1] pos, double[::1] c_pos, double size, double 
 
 cpdef array.array check_particle_outside_plane(double[::1] particle, double radius, double plane_size):
     cdef array.array out = array.array('B', (0, 0, 0, 0, 0, 0, 0, 0, 0))
-    cdef double[::1] tmp = particle.copy()
-    cdef double[::1] tmp3 = particle.copy()
-    cdef double tmp2 = 2.2 * radius
+    cdef double[::1] plane_start_coords = particle.copy()
+    cdef double[::1] sub_plane_coords = particle.copy()
+    cdef double helper = 2.2 * radius
     cdef int i
     cdef int idx = 0
-    tmp[0] = tmp2
-    tmp[1] = tmp2
-    tmp2 = plane_size - tmp2
+    plane_start_coords[0] = helper
+    plane_start_coords[1] = helper
+    helper = plane_size - helper
 
     # If collides (True), it means that it's to far from the outside of main plane
-    if not circle_square_collision(tmp, particle, tmp2, radius):
-        tmp[0] = -plane_size
-        tmp[1] = -plane_size
+    if not circle_square_collision(plane_start_coords, particle, helper, radius):
+        plane_start_coords[0] = -plane_size
+        plane_start_coords[1] = -plane_size
         
         for i in range(3):
-            tmp3 = _one_subchunk_coords(tmp, plane_size, i)
-            if circle_square_collision(tmp3, particle, plane_size, radius):
+            sub_plane_coords = _one_sub_plane_coords(plane_start_coords, plane_size, i)
+            if circle_square_collision(sub_plane_coords, particle, plane_size, radius):
                 out[idx] = 1
                 out[8] = 1
             idx += 1
         
-        tmp[0] = 0
-        tmp[1] = 0
+        plane_start_coords[0] = 0
+        plane_start_coords[1] = 0
 
         for i in range(1, 4):
-            tmp3 = _one_subchunk_coords(tmp, plane_size, i)
-            if circle_square_collision(tmp3, particle, plane_size, radius):
+            sub_plane_coords = _one_sub_plane_coords(plane_start_coords, plane_size, i)
+            if circle_square_collision(sub_plane_coords, particle, plane_size, radius):
                 out[idx] = 1
                 out[8] = 1
             idx += 1
 
-        tmp3[0] = plane_size
-        tmp3[1] = -plane_size
-        if circle_square_collision(tmp3, particle, plane_size, radius):
+        sub_plane_coords[0] = plane_size
+        sub_plane_coords[1] = -plane_size
+        if circle_square_collision(sub_plane_coords, particle, plane_size, radius):
             out[idx] = 1
             out[8] = 1
         idx += 1
 
-        tmp3[0] = -plane_size
-        tmp3[1] = plane_size
-        if circle_square_collision(tmp3, particle, plane_size, radius):
+        sub_plane_coords[0] = -plane_size
+        sub_plane_coords[1] = plane_size
+        if circle_square_collision(sub_plane_coords, particle, plane_size, radius):
             out[idx] = 1
             out[8] = 1
 
@@ -171,18 +171,19 @@ cdef double check_collision_times(double[:, ::1] static_parts, double[::1] movin
     cdef double out_time = 2
     cdef Py_ssize_t i
     cdef Py_ssize_t size = static_parts.shape[0]
-    cdef double tmp_1, tmp_2
+    cdef double distance_between_particles
+    cdef double time_to_collision
 
     cdef double move_range = (2 * radius + _dot_self(move_vec)) ** 2
     cdef double r2 = 4 * radius * radius
 
     for i in range(size):
-        tmp_1 = ((moving_part[0] - static_parts[i][0]) ** 2 + (moving_part[1] - static_parts[i][1]) ** 2)
-        if tmp_1 <= move_range:
-            tmp_2 = calc_collision_time(static_parts[i], moving_part, move_vec, radius)
-            if tmp_2 < 0 and tmp_1 >= r2:
+        distance_between_particles = ((moving_part[0] - static_parts[i][0]) ** 2 + (moving_part[1] - static_parts[i][1]) ** 2)
+        if distance_between_particles <= move_range:
+            time_to_collision = calc_collision_time(static_parts[i], moving_part, move_vec, radius)
+            if time_to_collision < 0 and distance_between_particles >= r2:
                 continue
-            out_time = min(tmp_2, out_time)
+            out_time = min(time_to_collision, out_time)
     return out_time
 
 
@@ -201,9 +202,9 @@ cdef double _get_collision_time(
     cdef double time = 2.0
     cdef list sub_planes = getattr(plane, '_sub_planes')
     cdef Py_ssize_t i, j, k
-    cdef double[::1] tmp
-    cdef unsigned int[::1] tmp_1
-    cdef double[:, ::1] tmp_2
+    cdef double[::1] sub_plane_coords
+    cdef unsigned int[::1] particles_in_sub_plane
+    cdef double[:, ::1] can_collide_with
     cdef object sub_plane
     plane_size /= 2
     
@@ -213,19 +214,19 @@ cdef double _get_collision_time(
         if sub_plane is None:
             continue
 
-        tmp = _one_subchunk_coords(start_pos, plane_size, i)
-        if circle_square_collision(tmp, area_check_center, plane_size, area_check_radius):
+        sub_plane_coords = _one_sub_plane_coords(start_pos, plane_size, i)
+        if circle_square_collision(sub_plane_coords, area_check_center, plane_size, area_check_radius):
 
             if plane_size == particle_plane_size:
-                tmp_1 = getattr(sub_plane, 'parts')
-                k = tmp_1.shape[0]
-                tmp_2 = cvarray(shape=(k, 2), itemsize=sizeof(double), format='d')
+                particles_in_sub_plane = getattr(sub_plane, 'parts')
+                k = particles_in_sub_plane.shape[0]
+                can_collide_with = cvarray(shape=(k, 2), itemsize=sizeof(double), format='d')
 
                 for j in range(k):
-                    tmp_2[j] = stuck_points[tmp_1[j]]
+                    can_collide_with[j] = stuck_points[particles_in_sub_plane[j]]
 
                 time = min(time, check_collision_times(
-                    tmp_2,
+                    can_collide_with,
                     moving_part,
                     move_vec,
                     radius
@@ -234,7 +235,7 @@ cdef double _get_collision_time(
                 time = min(time, _get_collision_time(
                     sub_plane,
                     particle_plane_size,
-                    tmp,
+                    sub_plane_coords,
                     plane_size,
                     stuck_points,
                     moving_part,
