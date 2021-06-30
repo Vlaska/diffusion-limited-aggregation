@@ -76,9 +76,6 @@ def at_end(*_):
     sys.exit(0)
 
 
-signal.signal(signal.SIGINT, at_end)
-
-
 # region Pygame stuff
 def init_pygame() -> Tuple[surface.Surface, time.Clock]:
     pygame.init()
@@ -161,6 +158,7 @@ def main_no_pygame() -> NoReturn:
 
 
 def main() -> NoReturn:
+    signal.signal(signal.SIGINT, at_end)
     if USE_PYGAME:
         main_pygame()
     else:
