@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Iterator
+from typing import TYPE_CHECKING, Iterable, Iterator
 
 import numpy as np
 
@@ -50,3 +50,15 @@ class StuckWalkers(Walker):
 
     def is_complete(self) -> bool:
         return self.filled > NUM_OF_PARTICLES
+
+    @classmethod
+    def load_for_render(
+        cls,
+        walkers: WalkerPopulation,
+        particles: Iterable[Vec]
+    ) -> StuckWalkers:
+        obj = cls(walkers, (0, 0), None)  # type: ignore
+        obj.pos = np.array(particles)
+        obj.size = obj.pos.shape[0]
+        obj.filled = obj.size
+        return obj

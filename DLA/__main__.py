@@ -110,5 +110,36 @@ def client(clients) -> None:
     asyncio.run(run_clients(clients))
 
 
+@cli.command()
+@click.argument(
+    'sim_file',
+    required=True,
+    nargs=1,
+    type=click.Path(
+        exists=True,
+        dir_okay=False,
+        resolve_path=True,
+        allow_dash=False
+    )
+)
+@click.option(
+    '-o',
+    '--only-stuck',
+    default=False,
+    show_default=True,
+    is_flag=True,
+)
+def render(sim_file: str, only_stuck: bool) -> None:
+    """Render particles from past simulation.
+    """
+    import DLA
+    DLA.GREEN = (0, 0, 0)  # type: ignore
+    DLA.WHITE = (151, 151, 151, 150)  # type: ignore
+    from DLA import config
+    config.USE_PYGAME = True  # type: ignore
+    from DLA import renderer
+    renderer.render(Path(sim_file), only_stuck)
+
+
 if __name__ == '__main__':
     cli()

@@ -7,7 +7,6 @@ import numpy as np
 
 from DLA.plane.base_plane import BasePlane
 
-
 def one_sub_plane_coords(sub: np.ndarray, size: float,
                          idx: int) -> Tuple[float, float]: ...
 

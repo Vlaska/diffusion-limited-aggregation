@@ -77,12 +77,14 @@ def at_end(*_):
 
 
 # region Pygame stuff
-def init_pygame() -> Tuple[surface.Surface, time.Clock]:
+def init_pygame(
+    window_size: Tuple[int, int] = WINDOW_SIZE_FOR_RENDERING
+) -> Tuple[surface.Surface, time.Clock]:
     pygame.init()
     clock = time.Clock()
 
     display.set_caption("Diffusion Limited Aggregation")
-    screen = display.set_mode(WINDOW_SIZE_FOR_RENDERING)
+    screen = display.set_mode(window_size)
 
     display.flip()
 

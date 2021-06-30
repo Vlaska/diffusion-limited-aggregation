@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Final
+from typing import Final, Iterable
 
 import numpy as np
 from numpy import NaN
@@ -23,6 +23,13 @@ class WalkerPopulation(Walker):
         self.pos[:, :] = random_in_range(BORDER_U_L, BORDER_D_R, (size, 2))
         self.last_step: np.ndarray = np.zeros((size, 2))
         self.last_regen = 0
+
+    @classmethod
+    def load_for_render(cls, particles: Iterable[Vec]) -> WalkerPopulation:
+        obj = cls(0)
+        obj.pos = np.array(particles)
+        obj.size = obj.pos.shape[0]
+        return obj
 
     def walk(self) -> None:
         self.last_step = (
