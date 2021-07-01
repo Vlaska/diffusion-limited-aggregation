@@ -104,7 +104,7 @@ def pygame_loop(
     if update:
         num_of_iterations += 1
         display.set_caption(
-            f"Diffusion Limited Aggregation - {num_of_iterations}"
+            f"Diffusion Limited Aggregation - {BETA} - {num_of_iterations}"
         )
     for event in events.get():
         if event.type == pygame.QUIT:
