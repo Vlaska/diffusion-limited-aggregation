@@ -42,7 +42,6 @@ class Dimension(OrderedDict[_KT, _VT]):
             self._count(i)
 
     def _count(self, plane: BasePlane):
-
         if plane.full:
             self._count_full(plane.size)
             return

@@ -9,15 +9,15 @@ from DLA import Vec
 from DLA.config import (ALPHA, BETA, PUSH_OUT_TRIES, RADIUS, REGENERATE_AFTER,
                         WINDOW_SIZE)
 
-from .stuck_walkers import StuckWalkers
+from .particles_base import ParticlesBase
+from .stuck_particles import StuckParticles
 from .utils import random_in_range
-from .walker import Walker
 
 BORDER_U_L: Final[float] = RADIUS
 BORDER_D_R: Final[float] = WINDOW_SIZE - RADIUS
 
 
-class WalkerPopulation(Walker):
+class WalkingParticles(ParticlesBase):
     def __init__(self, size: int) -> None:
         super().__init__(size)
         self.pos[:, :] = random_in_range(BORDER_U_L, BORDER_D_R, (size, 2))
@@ -25,7 +25,7 @@ class WalkerPopulation(Walker):
         self.last_regen = 0
 
     @classmethod
-    def load_for_render(cls, particles: Iterable[Vec]) -> WalkerPopulation:
+    def load_for_render(cls, particles: Iterable[Vec]) -> WalkingParticles:
         obj = cls(0)
         obj.pos = np.array(particles)
         obj.size = obj.pos.shape[0]
@@ -39,7 +39,8 @@ class WalkerPopulation(Walker):
 
     def finish_walk(self) -> None:
         self.pos += self.last_step
-        out_of_main_plain = ~((BORDER_U_L < self.pos) & (self.pos < BORDER_D_R))
+        out_of_main_plain = ~((BORDER_U_L < self.pos) &
+                              (self.pos < BORDER_D_R))
         self.last_step[out_of_main_plain] *= -1
         np.clip(
             self.pos,
@@ -50,29 +51,29 @@ class WalkerPopulation(Walker):
 
     def try_to_push_out(
         self,
-        free_part: Vec,
+        free_particle: Vec,
         last_step: Vec,
         time: float,
-        other: StuckWalkers
+        other: StuckParticles
     ) -> None:
         for _ in range(PUSH_OUT_TRIES):
-            free_part = free_part + last_step * time
-            time = other.does_collide(free_part, last_step)
+            free_particle = free_particle + last_step * time
+            time = other.does_collide(free_particle, last_step)
             if time >= 0:
                 break
 
-        self.pass_to_stuck(free_part, last_step, 0, other)
+        self.pass_to_stuck(free_particle, last_step, 0, other)
 
     @staticmethod
     def pass_to_stuck(
         point: Vec,
         step: Vec,
         time: float,
-        other: StuckWalkers
+        other: StuckParticles
     ) -> None:
         other.add_stuck(point + step * time)
 
-    def _is_stuck(self, other: StuckWalkers) -> bool:
+    def _is_stuck(self, other: StuckParticles) -> bool:
         for i, v in enumerate(self.pos):
             if not np.isnan(v[0]):
                 t = other.does_collide(v, self.last_step[i])
@@ -88,7 +89,7 @@ class WalkerPopulation(Walker):
                     return True
         return False
 
-    def is_stuck(self, other: StuckWalkers) -> None:
+    def is_stuck(self, other: StuckParticles) -> None:
         # * replacement for tail recursion
         while self._is_stuck(other):
             pass
@@ -104,7 +105,7 @@ class WalkerPopulation(Walker):
             self.size = self.pos.shape[0]
         self.last_regen += 1
 
-    def update(self, other: StuckWalkers) -> None:
+    def update(self, other: StuckParticles) -> None:
         self.walk()
         self.is_stuck(other)
         self.finish_walk()

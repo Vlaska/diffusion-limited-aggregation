@@ -6,7 +6,7 @@ from pathlib import Path
 
 from loguru import logger
 
-from DLA.server.connections import Connections
+from DLA.server.connection_tracker import ConnectionTracker
 from DLA.server.server_handler import Handler
 from DLA.server.work_generator import WorkGenerator
 
@@ -20,7 +20,7 @@ logger.add('server_{time}.log', format='{time} | {level} | {message}')
 async def server(out_dir: Path) -> None:
     work_gen = WorkGenerator(START, END, STEP, NUM_OF_SAMPLES)
     close_server = asyncio.Event()
-    conn = Connections(close_server)
+    conn = ConnectionTracker(close_server)
 
     handler = Handler(out_dir, conn, work_gen)
 

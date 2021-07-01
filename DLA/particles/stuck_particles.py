@@ -8,21 +8,21 @@ from DLA import GREEN, RGB, Vec, Vec2
 from DLA.config import NUM_OF_PARTICLES, PARTICLE_PLANE_SIZE, RADIUS
 from DLA.utils import get_collision_time
 
-from .walker import Walker
+from .particles_base import ParticlesBase
 
 if TYPE_CHECKING:
     from DLA.plane.base_plane import BasePlane
 
-    from .walker_population import WalkerPopulation
+    from .walking_particles import WalkingParticles
 
 
-class StuckWalkers(Walker):
+class StuckParticles(ParticlesBase):
     color: RGB = GREEN
     _plane: BasePlane
 
     def __init__(
         self,
-        walkers: WalkerPopulation,
+        walkers: WalkingParticles,
         start_pos: Vec2,
         plane: BasePlane
     ) -> None:
@@ -54,9 +54,9 @@ class StuckWalkers(Walker):
     @classmethod
     def load_for_render(
         cls,
-        walkers: WalkerPopulation,
+        walkers: WalkingParticles,
         particles: Iterable[Vec]
-    ) -> StuckWalkers:
+    ) -> StuckParticles:
         obj = cls(walkers, (0, 0), None)  # type: ignore
         obj.pos = np.array(particles)
         obj.size = obj.pos.shape[0]

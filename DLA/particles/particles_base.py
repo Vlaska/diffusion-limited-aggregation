@@ -12,7 +12,7 @@ if USE_PYGAME or TYPE_CHECKING:
     from pygame import surface as surface
 
 
-class Walker:
+class ParticlesBase:
     color: RGB = WHITE
 
     def __init__(self, size: int) -> None:

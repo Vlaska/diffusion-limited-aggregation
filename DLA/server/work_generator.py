@@ -79,7 +79,7 @@ class WorkGenerator:
         async with self.lock:
             self.waiting_for_results[val] -= 1
 
-    async def work_timeouted(self, val: float) -> None:
+    async def work_timed_out(self, val: float) -> None:
         async with self.lock:
             self.to_distribute[val] += 1
             self.waiting_for_results[val] -= 1

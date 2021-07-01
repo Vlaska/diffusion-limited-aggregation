@@ -8,26 +8,26 @@ from DLA import Vec, Vec2
 from DLA.config import (NUM_OF_PARTICLES, PARTICLE_PLANE_SIZE, RADIUS,
                         SECOND_MIN_BOX_SIZE, STARTING_POS, WINDOW_SIZE)
 from DLA.exceptions import StopSimulation
+from DLA.particles import StuckParticles, WalkingParticles
 from DLA.plane.base_plane import BasePlane
+from DLA.plane.collision_plane import CollisionPlane
+from DLA.plane.fullnes import CanBeFull, CannotBeFull
 from DLA.plane.indivisible_plane import IndivisiblePlane
-from DLA.plane.particle_plane import ParticlePlane
-from DLA.plane.plane_fullness import FullablePlane, NotFullablePlane
 from DLA.plane.sub_planes import SubPlane
 from DLA.utils import check_particle_outside_plane, one_sub_plane_coords
-from DLA.walker import StuckWalkers, WalkerPopulation
 
 
-class SubPlanePlaneAndParticles(NotFullablePlane, SubPlane):
-    _alt_plane_type = ParticlePlane
+class SubPlanePlaneAndParticles(CannotBeFull, SubPlane):
+    _alt_plane_type = CollisionPlane
     _size_for_alt_plane_type = PARTICLE_PLANE_SIZE
 
 
-class NeighbouringPlanes(FullablePlane, SubPlane):
+class NeighbouringPlanes(CanBeFull, SubPlane):
     _alt_plane_type = IndivisiblePlane
     _size_for_alt_plane_type = SECOND_MIN_BOX_SIZE
 
 
-class Plane(NotFullablePlane):
+class Plane(CannotBeFull):
     """
     Sub planes assignment
     ┌───────┬───────┐
@@ -46,9 +46,9 @@ class Plane(NotFullablePlane):
     def __init__(self, start: Vec2, size: float) -> None:
         super().__init__(start, size)
         self.neighbours: List[NeighbouringPlanes] = []
-        self.setupNeighbours()
+        self.setup_neighbours()
 
-    def setupNeighbours(self) -> None:
+    def setup_neighbours(self) -> None:
         tmp = self.size * 2
         self.neighbours.extend(
             NeighbouringPlanes(
@@ -91,8 +91,8 @@ class Plane(NotFullablePlane):
     def new(cls) -> Plane:
         obj = cls((0, 0), WINDOW_SIZE)
 
-        BasePlane._walking_points = WalkerPopulation(NUM_OF_PARTICLES)
-        BasePlane._stuck_points = StuckWalkers(
+        BasePlane._walking_points = WalkingParticles(NUM_OF_PARTICLES)
+        BasePlane._stuck_points = StuckParticles(
             cls._walking_points, STARTING_POS, obj
         )
 

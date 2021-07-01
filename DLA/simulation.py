@@ -45,7 +45,6 @@ def print_dim():
 
 def get_data() -> Dict[str, Union[Vec, float]]:
     out: Dict[str, Union[float, np.ndarray]] = {
-        # 'starting_state': random_generator_state
         'radius': RADIUS,
         'window_size': WINDOW_SIZE,
         'num_of_particles': NUM_OF_PARTICLES,

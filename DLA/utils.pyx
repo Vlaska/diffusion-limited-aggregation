@@ -74,10 +74,10 @@ cpdef list circle_in_sub_plane(double[::1] sub_plane_coords, double[::1] circle_
     cdef list out = []
     cdef int idx = 0
     size /= 2
-    cdef double[:, ::1] subchunks = _sub_plane_coords(sub_plane_coords, size)
+    cdef double[:, ::1] sub_planes = _sub_plane_coords(sub_plane_coords, size)
 
     for i in range(4):
-        if circle_square_collision(subchunks[i], circle_pos, size, radius):
+        if circle_square_collision(sub_planes[i], circle_pos, size, radius):
             out.append(idx)
         idx += 1
 
@@ -86,12 +86,12 @@ cpdef list circle_in_sub_plane(double[::1] sub_plane_coords, double[::1] circle_
 
 cpdef bint is_in_circle(double[::1] pos, double[::1] particle_pos, double size, double radius):
     cdef double[::1] tmp
-    cdef double r_sqruared = radius * radius
+    cdef double r_squared = radius * radius
     for i in range(4):
         tmp = _one_sub_plane_coords(pos, size, i)
         tmp[0] -= particle_pos[0]
         tmp[1] -= particle_pos[1]
-        if _dot_self(tmp) > r_sqruared:
+        if _dot_self(tmp) > r_squared:
             return False
     return True
 

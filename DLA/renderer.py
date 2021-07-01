@@ -4,9 +4,8 @@ import pickle
 import sys
 from pathlib import Path
 
-from DLA import BLACK, WHITE
+from DLA.particles import StuckParticles, WalkingParticles
 from DLA.simulation import init_pygame
-from DLA.walker import stuck_walkers, walker_population
 
 try:
     import pygame
@@ -22,10 +21,10 @@ def render(pickle_file: Path, only_stuck: bool = False) -> None:
     window_size: int = sim_data['window_size']
     surface, clock = init_pygame((window_size, window_size))
 
-    walking_particles = walker_population.WalkerPopulation.load_for_render(
+    walking_particles = WalkingParticles.load_for_render(
         sim_data['free_particles']
     )
-    stuck_particles = stuck_walkers.StuckWalkers.load_for_render(
+    stuck_particles = StuckParticles.load_for_render(
         walking_particles,
         sim_data['stuck_particles']
     )

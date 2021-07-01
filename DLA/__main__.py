@@ -56,7 +56,7 @@ def simulate(config: Optional[str]) -> None:
     """Run Diffusion Limited Aggregations with provided configuration
     """
 
-    # Supress pygame banner
+    # Suppress pygame banner
     sys.stdout = open(os.devnull, 'w')
     try:
         import pygame  # noqa
@@ -102,8 +102,8 @@ def server(out: Path, config: Optional[str]) -> None:
     '-c', '--clients',
     nargs=1, default=1, type=int, show_default=True
 )
-def client(clients) -> None:
-    """Start symulation based on configuration from server and return results
+def client(clients: int) -> None:
+    """Start simulation based on configuration from server and return results
     to it.
     """
     from DLA.server.client import run_clients

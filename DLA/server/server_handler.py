@@ -8,8 +8,8 @@ from typing import cast
 import yaml
 
 from DLA.server.config import CONFIG_TEMPLATE, TIMEOUT
-from DLA.server.connection_data import ConnData
-from DLA.server.connections import Connections
+from DLA.server.connection import Connection
+from DLA.server.connection_tracker import ConnectionTracker
 from DLA.server.work_generator import WorkGenerator
 
 
@@ -19,18 +19,18 @@ class Disconnected(Exception):
 
 class Handler:
     def __init__(
-        self, out_dir: Path, conn: Connections, work_gen: WorkGenerator
+        self, out_dir: Path, conn: ConnectionTracker, work_gen: WorkGenerator
     ) -> None:
         self.out_dir = out_dir
         self.conn = conn
         self.work_gen = work_gen
         self.out_dir.mkdir(parents=True, exist_ok=True)
 
-    async def gen_beta(self, conn_data: ConnData):
+    async def gen_beta(self, conn_data: Connection):
         beta = await self.work_gen.get()
         conn_data.beta = beta
 
-    async def send_config(self, conn_data: ConnData) -> None:
+    async def send_config(self, conn_data: Connection) -> None:
         config = CONFIG_TEMPLATE.copy()
         config['simulation']['memory'] = conn_data.beta
 
@@ -39,7 +39,7 @@ class Handler:
             len(config_dump).to_bytes(4, 'big') + config_dump
         )
 
-    async def save_results(self, conn_data: ConnData) -> bool:
+    async def save_results(self, conn_data: Connection) -> bool:
         try:
             name_len = int.from_bytes(await conn_data.read(1), 'big')
             filename = (await conn_data.read(name_len)).decode('utf-8')
@@ -65,7 +65,7 @@ class Handler:
 
         return False
 
-    async def _handle_request(self, conn_data: ConnData) -> None:
+    async def _handle_request(self, conn_data: Connection) -> None:
         sock: socket = conn_data.writer.transport._sock  # type: ignore
         client_ip = sock.getpeername()[0]
 
@@ -108,14 +108,14 @@ class Handler:
         except asyncio.TimeoutError:
             await conn_data.failed()
             conn_data.warning('Work timed out.')
-            await self.work_gen.work_timeouted(conn_data.beta)
+            await self.work_gen.work_timed_out(conn_data.beta)
         except Disconnected:
             conn_data.warning('Client got disconnected.')
-            await self.work_gen.work_timeouted(conn_data.beta)
+            await self.work_gen.work_timed_out(conn_data.beta)
         else:
             await conn_data.success()
             if not await self.save_results(conn_data):
-                await self.work_gen.work_timeouted(conn_data.beta)
+                await self.work_gen.work_timed_out(conn_data.beta)
 
         await conn_data.close()
         await self.conn.disconnect()
@@ -125,7 +125,7 @@ class Handler:
         reader: asyncio.StreamReader,
         writer: asyncio.StreamWriter,
     ) -> None:
-        conn_data = ConnData(reader, writer)
+        conn_data = Connection(reader, writer)
         await self._handle_request(conn_data)
         if not (
             self.conn.is_closed() or await self.work_gen.are_values_left(False)

@@ -12,7 +12,7 @@ from DLA.server import FAIL, SUCCESS
 
 
 @dataclass
-class ConnData:
+class Connection:
     reader: asyncio.StreamReader
     writer: asyncio.StreamWriter
     work_id: str = field(default_factory=lambda: uuid4().hex, init=False)

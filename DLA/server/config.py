@@ -25,6 +25,6 @@ STEP: Final[float] = server_config['step']
 NUM_OF_SAMPLES: Final[int] = server_config['num_of_samples']
 TIMEOUT: Final[int] = server_config['wait_for']
 
-# Client breaks, when something else beside output file's name is printed to stdout.
+# Client breaks, when something else beside output file's name
+# is printed to stdout.
 CONFIG_TEMPLATE['display']['print_results'] = False
-

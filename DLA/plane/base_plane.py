@@ -7,8 +7,8 @@ import numpy as np
 
 from DLA import LIGHT_GRAY, Vec2
 from DLA.config import RADIUS, USE_PYGAME
+from DLA.particles import StuckParticles, WalkingParticles
 from DLA.utils import circle_in_sub_plane, is_in_circle, one_sub_plane_coords
-from DLA.walker import StuckWalkers, WalkerPopulation
 
 if USE_PYGAME or TYPE_CHECKING:
     import pygame
@@ -17,8 +17,8 @@ if USE_PYGAME or TYPE_CHECKING:
 
 
 class BasePlane:
-    _stuck_points: StuckWalkers
-    _walking_points: WalkerPopulation
+    _stuck_points: StuckParticles
+    _walking_points: WalkingParticles
     _new_plane_type: Type[BasePlane]
 
     can_be_full: bool = True
@@ -46,16 +46,16 @@ class BasePlane:
             self.set_full()
             return None
 
-        sub_chunks = circle_in_sub_plane(
+        sub_planes = circle_in_sub_plane(
             self.start_pos, self._stuck_points[point], self.size, RADIUS
         )
 
-        self.add_sub_chunks(sub_chunks)
+        self.add_sub_planes(sub_planes)
 
-        return sub_chunks
+        return sub_planes
 
-    def add_sub_chunks(self, chunks: Iterable[int]) -> None:
-        for i in chunks:
+    def add_sub_planes(self, planes: Iterable[int]) -> None:
+        for i in planes:
             if not self._sub_planes[i]:
                 self._sub_planes[i] = self._new_plane_type(
                     one_sub_plane_coords(self.start_pos, self.size, i),
@@ -72,7 +72,7 @@ class BasePlane:
             cast(BasePlane, self._sub_planes[i]).add_point(point)
 
     # region Abstract Methods
-    def are_full(self) -> bool:
+    def is_full(self) -> bool:
         pass
     # endregion
 

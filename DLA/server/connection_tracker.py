@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 
 
-class Connections:
+class ConnectionTracker:
     def __init__(self, event: asyncio.Event) -> None:
         self.lock = asyncio.Lock()
         self.connections = 0
