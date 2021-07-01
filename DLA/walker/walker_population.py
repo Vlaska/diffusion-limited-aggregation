@@ -38,8 +38,11 @@ class WalkerPopulation(Walker):
         )
 
     def finish_walk(self) -> None:
+        self.pos += self.last_step
+        out_of_main_plain = ~((BORDER_U_L < self.pos) & (self.pos < BORDER_D_R))
+        self.last_step[out_of_main_plain] *= -1
         np.clip(
-            self.pos + self.last_step,
+            self.pos,
             BORDER_U_L,
             BORDER_D_R,
             out=self.pos
