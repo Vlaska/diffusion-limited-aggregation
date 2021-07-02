@@ -11,7 +11,7 @@ except ImportError:
 ext = '.pyx' if USE_CYTHON else '.c'
 
 MSVC_FLAGS = ['/Ox']
-REST_OF_COMPILERS_FLAGS = ['-O3', '--ffast-math']
+REST_OF_COMPILERS_FLAGS = ['-O3', '-ffast-math']
 
 extensions = [
     Extension(
@@ -29,7 +29,7 @@ if USE_CYTHON:
 
 setup(
     name='DLA',
-    version='1.0.0',
+    version='1.1.2',
     ext_modules=extensions,
     package_dir={'': '.'},
     packages=find_packages(where='.'),
