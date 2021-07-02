@@ -106,5 +106,5 @@ class Plane(CannotBeFull):
         nan_mask = np.isnan(self._walking_points.pos)[:, 0]
         return {
             'stuck_particles': self._stuck_points[:self._stuck_points.filled],
-            'free_particles': self._walking_points.pos[~nan_mask],
+            'walking_particles': self._walking_points.pos[~nan_mask],
         }

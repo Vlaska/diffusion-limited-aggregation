@@ -22,7 +22,7 @@ def render(pickle_file: Path, only_stuck: bool = False) -> None:
     surface, clock = init_pygame((window_size, window_size))
 
     walking_particles = WalkingParticles.load_for_render(
-        sim_data['free_particles']
+        sim_data['walking_particles']
     )
     stuck_particles = StuckParticles.load_for_render(
         walking_particles,
