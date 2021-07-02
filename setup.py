@@ -40,5 +40,12 @@ setup(
     },
     extras_require={
         'display': ["pygame >= 2.0.1"],
-    }
+    },
+    install_requires=[
+        "numpy>=1.20.2",
+        "PyYAML>=5.4.1",
+        "beautifultable>=1.0.1",
+        "click>=8.0.1",
+        "loguru>=0.5.3",
+    ]
 )
