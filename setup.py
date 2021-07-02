@@ -1,6 +1,6 @@
-from setuptools import setup, Extension
+from platform import system
+from setuptools import setup, Extension, find_packages
 import numpy as np
-from distutils.command.build_ext import build_ext  # type: ignore
 
 try:
     from Cython.Build import cythonize
@@ -10,34 +10,34 @@ except ImportError:
 
 ext = '.pyx' if USE_CYTHON else '.c'
 
+MSVC_FLAGS = ['/Ox']
+REST_OF_COMPILERS_FLAGS = ['-O3', '--ffast-math']
+
 extensions = [
     Extension(
         'DLA.utils',
         [f'DLA/utils{ext}'],
-        extra_compile_args=[]
+        extra_compile_args=(
+            MSVC_FLAGS if system() == 'Windows' else REST_OF_COMPILERS_FLAGS
+        )
     )
 ]
-
-MSVC_FLAGS = ['/Ox']
-REST_OF_COMPILERS_FLAGS = ['-O3', '--ffast-math']
-
-
-class build_ext_compiler_check(build_ext):
-    def build_extensions(self):
-        compiler = self.compiler.compiler_type
-
-        flags = MSVC_FLAGS if 'msvc' in compiler else REST_OF_COMPILERS_FLAGS
-
-        for extension in self.extensions:
-            if extension in extensions:
-                extension.extra_compile_args.extend(flags)
 
 
 if USE_CYTHON:
     extensions = cythonize(extensions)
 
 setup(
-    name="DLA",
+    name='DLA',
     ext_modules=extensions,
+    package_dir={'': '.'},
+    packages=find_packages(where='.'),
     include_dirs=[np.get_include()],
+    package_data={
+        '': ['*.yml'],
+        '**': ['*.yml'],
+    },
+    extras_require={
+        'display': ["pygame >= 2.0.1"],
+    }
 )
