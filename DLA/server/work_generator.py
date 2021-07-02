@@ -1,9 +1,15 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Optional, Tuple
+from pathlib import Path
+import pickle
+import shutil
+from typing import Dict, Optional, Tuple
+from loguru import logger
+from DLA.server import config_dict
 
 import numpy as np
+import yaml
 
 
 class WorkGenerator:
@@ -17,12 +23,14 @@ class WorkGenerator:
             _points *= 10
             points = int(_points)
         tmp = np.arange(start, end, step)
-        self.to_distribute = {
+        self.to_distribute: Dict[float, int] = {
             i: num for i in tmp
         }
-        self.waiting_for_results = {
+        self.waiting_for_results: Dict[float, int] = {
             i: 0 for i in tmp
         }
+        self.num_of_done_works = 0
+        self.state_loaded_from_file = False
 
     def _gather_beta_values(self) -> Tuple[float, ...]:
         return tuple(k for k, v in self.to_distribute.items() if v)
@@ -78,8 +86,83 @@ class WorkGenerator:
     async def work_completed(self, val: float) -> None:
         async with self.lock:
             self.waiting_for_results[val] -= 1
+            self.save_state()
 
     async def work_timed_out(self, val: float) -> None:
         async with self.lock:
             self.to_distribute[val] += 1
             self.waiting_for_results[val] -= 1
+
+    def save_state(self) -> None:
+        data = pickle.dumps(self.to_distribute)
+        (
+            self.state_folder / f'{self.num_of_done_works}.state'
+        ).write_bytes(data)
+        self.num_of_done_works += 1
+
+    def try_load_saved_state(self, out_dir: Path) -> None:
+        saved_state_folder = out_dir / 'state'
+        if not saved_state_folder.exists():
+            logger.info('No states were found.')
+            return
+
+        try:
+            config_data = yaml.full_load(
+                (saved_state_folder / 'config.yml').read_text('utf-8')
+            )
+        except FileNotFoundError:
+            logger.info('Last config doesn\'t exists.')
+            return
+
+        if config_data != config_dict:
+            logger.warning(
+                'Current configuration doesn\'t match last one. '
+                'Reseting state.'
+            )
+            return
+
+        sorted_saved_state_files = sorted(
+            saved_state_folder.glob('*.state')
+        )
+
+        if not len(sorted_saved_state_files):
+            logger.info('No states were found.')
+            return
+
+        last_state = sorted_saved_state_files[-1]
+        state_data: Dict[float, int] = pickle.loads(
+            last_state.read_bytes()
+        )
+
+        self.to_distribute = state_data
+        self.state_loaded_from_file = True
+        self.num_of_done_works = int(last_state.stem)
+
+        logger.info(
+            'Successfully loaded last state. '
+            f'State: {self.to_distribute}, '
+            f'number of completed works: {self.num_of_done_works}'
+        )
+
+    def set_up_state_saving(self, out_dir: Path) -> None:
+        self.state_folder = out_dir / 'state'
+
+        if self.state_loaded_from_file:
+            return
+
+        self.clean_states(self.state_folder)
+
+        self.state_folder.mkdir(parents=True)
+
+        (self.state_folder / 'config.yml').write_text(yaml.dump(config_dict))
+        logger.info('Saved current configuration.')
+
+    @staticmethod
+    def clean_states(state_folder: Path) -> None:
+        if state_folder.exists():
+            shutil.rmtree(state_folder)
+            logger.info('Removed states folder.')
+
+    def configure(self, out_dir: Path) -> None:
+        self.try_load_saved_state(out_dir)
+        self.set_up_state_saving(out_dir)

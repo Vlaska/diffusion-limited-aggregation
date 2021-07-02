@@ -22,6 +22,8 @@ async def server(out_dir: Path) -> None:
     close_server = asyncio.Event()
     conn = ConnectionTracker(close_server)
 
+    work_gen.configure(out_dir)
+
     handler = Handler(out_dir, conn, work_gen)
 
     serv = await asyncio.start_server(
@@ -44,6 +46,7 @@ async def server(out_dir: Path) -> None:
     serv.close()
     await serv.wait_closed()
     logger.info('Server closed.')
+    work_gen.clean_states(work_gen.state_folder)
 
 
 if __name__ == '__main__':
