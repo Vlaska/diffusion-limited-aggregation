@@ -55,6 +55,8 @@ def cli() -> None:
 )
 def simulate(config: Optional[str]) -> None:
     """Run Diffusion Limited Aggregations with provided configuration
+
+    CONFIG - simulation configuration file
     """
 
     # Suppress pygame banner
@@ -75,7 +77,8 @@ def simulate(config: Optional[str]) -> None:
 @cli.command()
 @click.option(
     '-o', '--out',
-    nargs=1, default=Path('.'), type=Path, show_default=True
+    nargs=1, default=Path('.'), type=Path, show_default=True,
+    help='output folder'
 )
 @click.argument(
     'config',
@@ -90,6 +93,8 @@ def simulate(config: Optional[str]) -> None:
 )
 def server(out: Path, config: Optional[str]) -> None:
     """Run server to initialize simulations running on clients.
+
+    CONFIG - server configuration file
     """
     config_dict = load_config(config, 'DLA.server', 'server_config.yml')
     import DLA.server as s
@@ -101,7 +106,8 @@ def server(out: Path, config: Optional[str]) -> None:
 @cli.command()
 @click.option(
     '-c', '--clients',
-    nargs=1, default=1, type=int, show_default=True
+    nargs=1, default=1, type=int, show_default=True,
+    help='number of maxiumum connections at ot once'
 )
 def client(clients: int) -> None:
     """Start simulation based on configuration from server and return results
@@ -133,6 +139,8 @@ def client(clients: int) -> None:
 )
 def render(sim_file: str, only_stuck: bool) -> None:
     """Render particles from past simulation.
+
+    SIM_FILE - path to `.pickle` file
     """
     import DLA
     DLA.GREEN = (0, 0, 0)  # type: ignore
