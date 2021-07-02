@@ -4,6 +4,9 @@
 {
     "distutils": {
         "depends": [],
+        "extra_compile_args": [
+            "/Ox"
+        ],
         "name": "DLA.utils",
         "sources": [
             "DLA/utils.pyx"
@@ -3551,7 +3554,7 @@ static PyObject *__pyx_pw_3DLA_5utils_5circle_in_sub_plane(PyObject *__pyx_self,
 static PyObject *__pyx_f_3DLA_5utils_circle_in_sub_plane(__Pyx_memviewslice __pyx_v_sub_plane_coords, __Pyx_memviewslice __pyx_v_circle_pos, double __pyx_v_size, double __pyx_v_radius, CYTHON_UNUSED int __pyx_skip_dispatch) {
   PyObject *__pyx_v_out = 0;
   int __pyx_v_idx;
-  __Pyx_memviewslice __pyx_v_subchunks = { 0, 0, { 0 }, { 0 }, { 0 } };
+  __Pyx_memviewslice __pyx_v_sub_planes = { 0, 0, { 0 }, { 0 }, { 0 } };
   long __pyx_v_i;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -3583,7 +3586,7 @@ static PyObject *__pyx_f_3DLA_5utils_circle_in_sub_plane(__Pyx_memviewslice __py
  *     cdef list out = []
  *     cdef int idx = 0             # <<<<<<<<<<<<<<
  *     size /= 2
- *     cdef double[:, ::1] subchunks = _sub_plane_coords(sub_plane_coords, size)
+ *     cdef double[:, ::1] sub_planes = _sub_plane_coords(sub_plane_coords, size)
  */
   __pyx_v_idx = 0;
 
@@ -3591,7 +3594,7 @@ static PyObject *__pyx_f_3DLA_5utils_circle_in_sub_plane(__Pyx_memviewslice __py
  *     cdef list out = []
  *     cdef int idx = 0
  *     size /= 2             # <<<<<<<<<<<<<<
- *     cdef double[:, ::1] subchunks = _sub_plane_coords(sub_plane_coords, size)
+ *     cdef double[:, ::1] sub_planes = _sub_plane_coords(sub_plane_coords, size)
  * 
  */
   __pyx_v_size = (__pyx_v_size / 2.0);
@@ -3599,20 +3602,20 @@ static PyObject *__pyx_f_3DLA_5utils_circle_in_sub_plane(__Pyx_memviewslice __py
   /* "DLA/utils.pyx":77
  *     cdef int idx = 0
  *     size /= 2
- *     cdef double[:, ::1] subchunks = _sub_plane_coords(sub_plane_coords, size)             # <<<<<<<<<<<<<<
+ *     cdef double[:, ::1] sub_planes = _sub_plane_coords(sub_plane_coords, size)             # <<<<<<<<<<<<<<
  * 
  *     for i in range(4):
  */
   __pyx_t_2 = __pyx_f_3DLA_5utils__sub_plane_coords(__pyx_v_sub_plane_coords, __pyx_v_size); if (unlikely(!__pyx_t_2.memview)) __PYX_ERR(0, 77, __pyx_L1_error)
-  __pyx_v_subchunks = __pyx_t_2;
+  __pyx_v_sub_planes = __pyx_t_2;
   __pyx_t_2.memview = NULL;
   __pyx_t_2.data = NULL;
 
   /* "DLA/utils.pyx":79
- *     cdef double[:, ::1] subchunks = _sub_plane_coords(sub_plane_coords, size)
+ *     cdef double[:, ::1] sub_planes = _sub_plane_coords(sub_plane_coords, size)
  * 
  *     for i in range(4):             # <<<<<<<<<<<<<<
- *         if circle_square_collision(subchunks[i], circle_pos, size, radius):
+ *         if circle_square_collision(sub_planes[i], circle_pos, size, radius):
  *             out.append(idx)
  */
   for (__pyx_t_3 = 0; __pyx_t_3 < 4; __pyx_t_3+=1) {
@@ -3621,21 +3624,21 @@ static PyObject *__pyx_f_3DLA_5utils_circle_in_sub_plane(__Pyx_memviewslice __py
     /* "DLA/utils.pyx":80
  * 
  *     for i in range(4):
- *         if circle_square_collision(subchunks[i], circle_pos, size, radius):             # <<<<<<<<<<<<<<
+ *         if circle_square_collision(sub_planes[i], circle_pos, size, radius):             # <<<<<<<<<<<<<<
  *             out.append(idx)
  *         idx += 1
  */
-    __pyx_t_4.data = __pyx_v_subchunks.data;
-    __pyx_t_4.memview = __pyx_v_subchunks.memview;
+    __pyx_t_4.data = __pyx_v_sub_planes.data;
+    __pyx_t_4.memview = __pyx_v_sub_planes.memview;
     __PYX_INC_MEMVIEW(&__pyx_t_4, 0);
     {
     Py_ssize_t __pyx_tmp_idx = __pyx_v_i;
-    Py_ssize_t __pyx_tmp_stride = __pyx_v_subchunks.strides[0];
+    Py_ssize_t __pyx_tmp_stride = __pyx_v_sub_planes.strides[0];
         __pyx_t_4.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
 
-__pyx_t_4.shape[0] = __pyx_v_subchunks.shape[1];
-__pyx_t_4.strides[0] = __pyx_v_subchunks.strides[1];
+__pyx_t_4.shape[0] = __pyx_v_sub_planes.shape[1];
+__pyx_t_4.strides[0] = __pyx_v_sub_planes.strides[1];
     __pyx_t_4.suboffsets[0] = -1;
 
 __pyx_t_5 = (__pyx_f_3DLA_5utils_circle_square_collision(__pyx_t_4, __pyx_v_circle_pos, __pyx_v_size, __pyx_v_radius) != 0);
@@ -3646,7 +3649,7 @@ __pyx_t_5 = (__pyx_f_3DLA_5utils_circle_square_collision(__pyx_t_4, __pyx_v_circ
 
       /* "DLA/utils.pyx":81
  *     for i in range(4):
- *         if circle_square_collision(subchunks[i], circle_pos, size, radius):
+ *         if circle_square_collision(sub_planes[i], circle_pos, size, radius):
  *             out.append(idx)             # <<<<<<<<<<<<<<
  *         idx += 1
  * 
@@ -3659,14 +3662,14 @@ __pyx_t_5 = (__pyx_f_3DLA_5utils_circle_square_collision(__pyx_t_4, __pyx_v_circ
       /* "DLA/utils.pyx":80
  * 
  *     for i in range(4):
- *         if circle_square_collision(subchunks[i], circle_pos, size, radius):             # <<<<<<<<<<<<<<
+ *         if circle_square_collision(sub_planes[i], circle_pos, size, radius):             # <<<<<<<<<<<<<<
  *             out.append(idx)
  *         idx += 1
  */
     }
 
     /* "DLA/utils.pyx":82
- *         if circle_square_collision(subchunks[i], circle_pos, size, radius):
+ *         if circle_square_collision(sub_planes[i], circle_pos, size, radius):
  *             out.append(idx)
  *         idx += 1             # <<<<<<<<<<<<<<
  * 
@@ -3704,7 +3707,7 @@ __pyx_t_5 = (__pyx_f_3DLA_5utils_circle_square_collision(__pyx_t_4, __pyx_v_circ
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_out);
-  __PYX_XDEC_MEMVIEW(&__pyx_v_subchunks, 1);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_sub_planes, 1);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
@@ -3831,13 +3834,13 @@ static PyObject *__pyx_pf_3DLA_5utils_4circle_in_sub_plane(CYTHON_UNUSED PyObjec
  * 
  * cpdef bint is_in_circle(double[::1] pos, double[::1] particle_pos, double size, double radius):             # <<<<<<<<<<<<<<
  *     cdef double[::1] tmp
- *     cdef double r_sqruared = radius * radius
+ *     cdef double r_squared = radius * radius
  */
 
 static PyObject *__pyx_pw_3DLA_5utils_7is_in_circle(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Pyx_memviewslice __pyx_v_particle_pos, double __pyx_v_size, double __pyx_v_radius, CYTHON_UNUSED int __pyx_skip_dispatch) {
   __Pyx_memviewslice __pyx_v_tmp = { 0, 0, { 0 }, { 0 }, { 0 } };
-  double __pyx_v_r_sqruared;
+  double __pyx_v_r_squared;
   long __pyx_v_i;
   int __pyx_r;
   __Pyx_RefNannyDeclarations
@@ -3854,15 +3857,15 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
   /* "DLA/utils.pyx":89
  * cpdef bint is_in_circle(double[::1] pos, double[::1] particle_pos, double size, double radius):
  *     cdef double[::1] tmp
- *     cdef double r_sqruared = radius * radius             # <<<<<<<<<<<<<<
+ *     cdef double r_squared = radius * radius             # <<<<<<<<<<<<<<
  *     for i in range(4):
  *         tmp = _one_sub_plane_coords(pos, size, i)
  */
-  __pyx_v_r_sqruared = (__pyx_v_radius * __pyx_v_radius);
+  __pyx_v_r_squared = (__pyx_v_radius * __pyx_v_radius);
 
   /* "DLA/utils.pyx":90
  *     cdef double[::1] tmp
- *     cdef double r_sqruared = radius * radius
+ *     cdef double r_squared = radius * radius
  *     for i in range(4):             # <<<<<<<<<<<<<<
  *         tmp = _one_sub_plane_coords(pos, size, i)
  *         tmp[0] -= particle_pos[0]
@@ -3871,7 +3874,7 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
     __pyx_v_i = __pyx_t_1;
 
     /* "DLA/utils.pyx":91
- *     cdef double r_sqruared = radius * radius
+ *     cdef double r_squared = radius * radius
  *     for i in range(4):
  *         tmp = _one_sub_plane_coords(pos, size, i)             # <<<<<<<<<<<<<<
  *         tmp[0] -= particle_pos[0]
@@ -3888,7 +3891,7 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
  *         tmp = _one_sub_plane_coords(pos, size, i)
  *         tmp[0] -= particle_pos[0]             # <<<<<<<<<<<<<<
  *         tmp[1] -= particle_pos[1]
- *         if _dot_self(tmp) > r_sqruared:
+ *         if _dot_self(tmp) > r_squared:
  */
     __pyx_t_3 = 0;
     __pyx_t_4 = 0;
@@ -3898,7 +3901,7 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
  *         tmp = _one_sub_plane_coords(pos, size, i)
  *         tmp[0] -= particle_pos[0]
  *         tmp[1] -= particle_pos[1]             # <<<<<<<<<<<<<<
- *         if _dot_self(tmp) > r_sqruared:
+ *         if _dot_self(tmp) > r_squared:
  *             return False
  */
     __pyx_t_3 = 1;
@@ -3908,16 +3911,16 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
     /* "DLA/utils.pyx":94
  *         tmp[0] -= particle_pos[0]
  *         tmp[1] -= particle_pos[1]
- *         if _dot_self(tmp) > r_sqruared:             # <<<<<<<<<<<<<<
+ *         if _dot_self(tmp) > r_squared:             # <<<<<<<<<<<<<<
  *             return False
  *     return True
  */
-    __pyx_t_5 = ((__pyx_f_3DLA_5utils__dot_self(__pyx_v_tmp) > __pyx_v_r_sqruared) != 0);
+    __pyx_t_5 = ((__pyx_f_3DLA_5utils__dot_self(__pyx_v_tmp) > __pyx_v_r_squared) != 0);
     if (__pyx_t_5) {
 
       /* "DLA/utils.pyx":95
  *         tmp[1] -= particle_pos[1]
- *         if _dot_self(tmp) > r_sqruared:
+ *         if _dot_self(tmp) > r_squared:
  *             return False             # <<<<<<<<<<<<<<
  *     return True
  * 
@@ -3928,7 +3931,7 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
       /* "DLA/utils.pyx":94
  *         tmp[0] -= particle_pos[0]
  *         tmp[1] -= particle_pos[1]
- *         if _dot_self(tmp) > r_sqruared:             # <<<<<<<<<<<<<<
+ *         if _dot_self(tmp) > r_squared:             # <<<<<<<<<<<<<<
  *             return False
  *     return True
  */
@@ -3936,7 +3939,7 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
   }
 
   /* "DLA/utils.pyx":96
- *         if _dot_self(tmp) > r_sqruared:
+ *         if _dot_self(tmp) > r_squared:
  *             return False
  *     return True             # <<<<<<<<<<<<<<
  * 
@@ -3950,7 +3953,7 @@ static int __pyx_f_3DLA_5utils_is_in_circle(__Pyx_memviewslice __pyx_v_pos, __Py
  * 
  * cpdef bint is_in_circle(double[::1] pos, double[::1] particle_pos, double size, double radius):             # <<<<<<<<<<<<<<
  *     cdef double[::1] tmp
- *     cdef double r_sqruared = radius * radius
+ *     cdef double r_squared = radius * radius
  */
 
   /* function exit code */
