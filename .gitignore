@@ -221,3 +221,6 @@ fabric.properties
 *.html
 *.pickle
 *.ipy
+
+/server_config.yml
+/config.yml
