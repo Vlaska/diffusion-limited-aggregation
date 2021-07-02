@@ -13,7 +13,7 @@ system:
   push_out_tries: 10
   max_steps: 4000
   # remove NaN's from walking population after:
-  regen_after_updates: 200
+  regen_after_updates: 4000
 
 planes:
   min_box_size: 0.015625
