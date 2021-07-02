@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import os
 from pathlib import Path
+from typing import Final
 
 from loguru import logger
 
@@ -14,6 +15,7 @@ from .config import END, NUM_OF_SAMPLES, START, STEP
 
 logger.add('server_{time}.log', format='{time} | {level} | {message}')
 
+SERVER_PORT: Final[int] = int(os.environ.get('DLA_PORT', 1025))
 
 # src: https://docs.python.org/3/library/asyncio-stream.html
 @logger.catch
@@ -29,7 +31,7 @@ async def server(out_dir: Path) -> None:
     serv = await asyncio.start_server(
         handler.handle_request,
         '0.0.0.0',
-        os.environ.get('DLA_PORT', 1025)
+        os.environ.get('DLA_PORT', SERVER_PORT)
     )
 
     addr = serv.sockets[0].getsockname()  # type: ignore
