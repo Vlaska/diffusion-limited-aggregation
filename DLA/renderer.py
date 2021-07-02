@@ -37,6 +37,8 @@ def render(pickle_file: Path, only_stuck: bool = False) -> None:
         for event in events.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                only_stuck = not only_stuck
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:

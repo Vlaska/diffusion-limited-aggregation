@@ -129,6 +129,7 @@ def client(clients: int) -> None:
     default=False,
     show_default=True,
     is_flag=True,
+    help='turn off rendering of walking particles; can be toggled using space'
 )
 def render(sim_file: str, only_stuck: bool) -> None:
     """Render particles from past simulation.
