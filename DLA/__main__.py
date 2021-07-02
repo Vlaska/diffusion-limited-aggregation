@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import asyncio
 import os
+import pkgutil
 import sys
 from pathlib import Path
 from pkgutil import get_data
 from typing import Any, Dict, List, Optional, Union, cast
-import pkgutil
 
 import click
 import yaml
