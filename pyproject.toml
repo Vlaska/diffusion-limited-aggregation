@@ -1,12 +1,37 @@
+[project]
+name = "DLA"
+version = "1.0.0"
+author = "Kamil Gierada"
+author_email = "vlaska8888@gmail.com"
+description = "Program for generation of data for calculating fractal dimension of structures created DLA process."
+long_description = """Program for observing fractal dimensions of structures created using process called
+Diffusion Limited Aggregation (DLA), depending on memory parameter used in autoregressive process."""
+long_description_content_type = "text/plain"
+python_requires = ">=3.8"
+keywords = "diffusion-limited-aggregation,dla,fractal-dimension"
+url = "https://github.com/Vlaska/diffusion-limited-aggregation"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: C",
+    "Programming Language :: Cython",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+
 [tool.poetry]
 name = "DLA"
-version = "0.1.0"
-description = ""
+version = "1.0.0"
 authors = ["Kamil Gierada <vlaska8888@gmail.com>"]
 build = "setup.py"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.10"
+python = ">=3.8"
 numpy = "^1.20.2"
 PyYAML = "^5.4.1"
 beautifultable = "^1.0.1"

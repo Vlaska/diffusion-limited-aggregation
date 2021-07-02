@@ -29,6 +29,7 @@ if USE_CYTHON:
 
 setup(
     name='DLA',
+    version='1.0.0',
     ext_modules=extensions,
     package_dir={'': '.'},
     packages=find_packages(where='.'),
