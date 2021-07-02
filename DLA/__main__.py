@@ -5,7 +5,8 @@ import os
 import sys
 from pathlib import Path
 from pkgutil import get_data
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, cast
+import pkgutil
 
 import click
 import yaml
@@ -139,6 +140,26 @@ def render(sim_file: str, only_stuck: bool) -> None:
     config.USE_PYGAME = True  # type: ignore
     from DLA import renderer
     renderer.render(Path(sim_file), only_stuck)
+
+
+@cli.command()
+def configs() -> None:
+    """Copy default simulation and server configuration files.
+
+    server_config.yml - configuration file for use with `server`
+    config.yml - configuration file for use with `simulate`
+    """
+    config_data = cast(bytes, pkgutil.get_data('DLA', 'config.yml'))
+    server_config_data = cast(
+        bytes, pkgutil.get_data('DLA.server', 'server_config.yml')
+    )
+
+    current_path = Path('.')
+
+    (current_path / 'config.yml').write_bytes(config_data)
+    (current_path / 'server_config.yml').write_bytes(server_config_data)
+
+    click.echo('Copied default configuration files.')
 
 
 if __name__ == '__main__':
