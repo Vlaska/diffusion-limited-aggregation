@@ -12,10 +12,10 @@ Diffusion Limited Aggregation (DLA), depending on memory parameter used in autor
 ## How to run
 
 1. Install using one of listed below methods:
-    1. `pip install git+https://github.com/Vlaska/diffusion-limited-aggregation`
-    2. `pip install git+https://github.com/Vlaska/diffusion-limited-aggregation[display]` when you want to visualize simulations.
-    3. Download the repository and use `pip install .` or `python setup.py install`
-    4. For development option: install `pip install poetry`, download repository and unpack it, `poetry install --dev`, `python setup.py develop`
+   1. `pip install git+https://github.com/Vlaska/diffusion-limited-aggregation`
+   2. `pip install git+https://github.com/Vlaska/diffusion-limited-aggregation[display]` when you want to visualize simulations.
+   3. Download the repository and use `pip install .` or `python setup.py install`
+   4. For development option: install `pip install poetry`, download repository and unpack it, `poetry install --dev`, `python setup.py develop`
 2. Get configuration files: `python -m DLA configs`
 3. Modify configuration files
 4. Start simulation
@@ -25,6 +25,13 @@ Diffusion Limited Aggregation (DLA), depending on memory parameter used in autor
 
 Get more information by using `python -m DLA --help` or `python -m [simulate|server|client|render|configs]`.
 
+## Server/client connection
+
+Server by default runs at port `1025`. It's broadcasted on the network.
+
+Port of the server/client can be changed by settings environmental variable `DLA_PORT`.
+
+To set ip address of the server for clients, set environmental variable `DLA_SERVER`.
 
 ## `.pickle` files
 
@@ -49,11 +56,11 @@ You can also use `python -m DLA render <file>.pickle`, to render end result of s
 - `stuck_particles` - positions of all stuck particles at the end of simulation
 - `walking_particles` - positions of all walking particles at the end of simulation
 - `box_size`
-    - sizes of boxes used for calculating fractal dimension
-    - every power of 2 in range \[[min_box_size](#min_box_size), [window_size](#window-size) // 2]
+  - sizes of boxes used for calculating fractal dimension
+  - every power of 2 in range \[[min_box_size](#min_box_size), [window_size](#window-size) // 2]
 - `num_of_boxes`
-    - number of boxes of a given size
-    - stored in the same order as values of `box_size`
+  - number of boxes of a given size
+  - stored in the same order as values of `box_size`
 
 ## Configuration file structure
 
@@ -107,16 +114,16 @@ You can also use `python -m DLA render <file>.pickle`, to render end result of s
   - `display.print_results` is always `False`
   - `simulation.memory` isn't necessary
 - `server`
-    - `start`
-        - lower value for memory values distributed between clients
-        - inclusive value
-        - [more info](#memory)
-    - `end`
-        - upper value for memory values distributed between clients
-        - exclusive value
-        - [more info](#memory)
-    - `step` - step, at which new memory values are generated
-    - `num_of_samples` - number of times each memory value is run in simulation
-    - `wait_for`
-        - time in which server is waiting for simulation end on client side
-        - in seconds \[s]
+  - `start`
+    - lower value for memory values distributed between clients
+    - inclusive value
+    - [more info](#memory)
+  - `end`
+    - upper value for memory values distributed between clients
+    - exclusive value
+    - [more info](#memory)
+  - `step` - step, at which new memory values are generated
+  - `num_of_samples` - number of times each memory value is run in simulation
+  - `wait_for`
+    - time in which server is waiting for simulation end on client side
+    - in seconds \[s]
