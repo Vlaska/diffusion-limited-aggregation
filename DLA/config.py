@@ -39,9 +39,17 @@ except ImportError:
         },
     }
 
+try:
+    import pygame
+    pygame_available = True
+except ImportError:
+    pygame_available = False
+
 FPS: Final[int] = config_dict['display']['fps']
 WINDOW_SIZE: Final[int] = config_dict['display']['window_size']
-USE_PYGAME: Final[bool] = config_dict['display']['use_pygame']
+USE_PYGAME: Final[bool] = (
+    config_dict['display']['use_pygame'] and pygame_available
+)
 PRINT_RESULTS: Final[bool] = config_dict['display']['print_results']
 WINDOW_SIZE_FOR_RENDERING: Final[Tuple[int, int]] = (WINDOW_SIZE, WINDOW_SIZE)
 
