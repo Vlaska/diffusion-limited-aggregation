@@ -123,7 +123,8 @@ class WorkGenerator:
             return
 
         sorted_saved_state_files = sorted(
-            saved_state_folder.glob('*.state')
+            saved_state_folder.glob('*.state'),
+            key=lambda x: int(x.stem)
         )
 
         if not len(sorted_saved_state_files):
