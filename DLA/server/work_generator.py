@@ -138,7 +138,7 @@ class WorkGenerator:
 
         self.to_distribute = state_data
         self.state_loaded_from_file = True
-        self.num_of_done_works = int(last_state.stem)
+        self.num_of_done_works = int(last_state.stem) + 1
 
         logger.info(
             'Successfully loaded last state. '
