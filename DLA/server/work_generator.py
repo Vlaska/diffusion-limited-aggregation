@@ -5,6 +5,7 @@ import pickle
 import shutil
 from pathlib import Path
 from typing import Dict, Optional, Tuple
+from collections import Counter
 
 import numpy as np
 import yaml
@@ -24,6 +25,7 @@ class WorkGenerator:
             _points *= 10
             points = int(_points)
         tmp = np.arange(start, end, step)
+        self.num_of_samples_per_memory = num
         self.to_distribute: Dict[float, int] = {
             i: num for i in tmp
         }
@@ -143,7 +145,7 @@ class WorkGenerator:
         logger.info(
             'Successfully loaded last state. '
             f'State: {self.to_distribute}, '
-            f'number of completed works: {self.num_of_done_works}'
+            f'id of state: {self.num_of_done_works - 1}'
         )
 
     def set_up_state_saving(self, out_dir: Path) -> None:
@@ -168,3 +170,16 @@ class WorkGenerator:
     def configure(self, out_dir: Path) -> None:
         self.try_load_saved_state(out_dir)
         self.set_up_state_saving(out_dir)
+
+    def get_missing_works(self, out_dir: Path) -> None:
+        logger.info('Checking for missing work files.')
+        data_files = out_dir.glob('*.pickle')
+        loaded_memory_values = [
+            pickle.loads(i.read_bytes())['memory'] for i in data_files
+        ]
+        missing_memory_values = {
+            k: self.num_of_samples_per_memory - v
+            for k, v in Counter(loaded_memory_values).items()
+            if v < self.num_of_samples_per_memory
+        }
+        self.to_distribute = missing_memory_values

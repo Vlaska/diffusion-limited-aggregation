@@ -6,11 +6,11 @@ from socket import socket
 from typing import cast
 
 import yaml
-
 from DLA.server.config import CONFIG_TEMPLATE, TIMEOUT
 from DLA.server.connection import Connection
 from DLA.server.connection_tracker import ConnectionTracker
 from DLA.server.work_generator import WorkGenerator
+from loguru import logger
 
 
 class Disconnected(Exception):
@@ -128,10 +128,17 @@ class Handler:
         conn_data = Connection(reader, writer)
         await self._handle_request(conn_data)
         if not (
-            self.conn.is_closed() or await self.work_gen.are_values_left(False)
+            await self.work_gen.are_values_left(False) or self.conn.is_closed()
         ):
-            conn_data.info(
-                'There are no more work to assign. '
-                'Starting to close the server'
-            )
-            self.conn.close()
+            self.work_gen.get_missing_works(self.out_dir)
+            if self.work_gen.to_distribute:
+                logger.warning(
+                    'All assigned jobs done, but missing memory values were '
+                    'found. Filling in missing memory values.'
+                )
+            else:
+                logger.info(
+                    'There are no more work to assign. '
+                    'Starting to close the server'
+                )
+                self.conn.close()
