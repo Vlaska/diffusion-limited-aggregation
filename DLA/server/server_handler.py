@@ -6,11 +6,12 @@ from socket import socket
 from typing import cast
 
 import yaml
+from loguru import logger
+
 from DLA.server.config import CONFIG_TEMPLATE, TIMEOUT
 from DLA.server.connection import Connection
 from DLA.server.connection_tracker import ConnectionTracker
 from DLA.server.work_generator import WorkGenerator
-from loguru import logger
 
 
 class Disconnected(Exception):

@@ -3,9 +3,9 @@ from __future__ import annotations
 import asyncio
 import pickle
 import shutil
+from collections import Counter
 from pathlib import Path
 from typing import Dict, Optional, Tuple
-from collections import Counter
 
 import numpy as np
 import yaml

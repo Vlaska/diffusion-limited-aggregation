@@ -17,9 +17,11 @@ logger.add('server_{time}.log', format='{time} | {level} | {message}')
 
 SERVER_PORT: Final[int] = int(os.environ.get('DLA_PORT', 1025))
 
-# src: https://docs.python.org/3/library/asyncio-stream.html
+
 @logger.catch
 async def server(out_dir: Path) -> None:
+    '''src: https://docs.python.org/3/library/asyncio-stream.html'''
+
     work_gen = WorkGenerator(START, END, STEP, NUM_OF_SAMPLES)
     close_server = asyncio.Event()
     conn = ConnectionTracker(close_server)
